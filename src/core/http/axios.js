@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://react-students-api-eleven-code.vercel.app/api";
+const baseURL = "https://eleven-code-api-laura-sabiote.vercel.app/api";
 
 export const api = axios.create({
     baseURL,

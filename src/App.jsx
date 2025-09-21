@@ -1,9 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 import { Header } from './components/Header';
-import { ProductsPage } from './pages/ProductsPage';
 import { Home } from './pages/Home';
 import { AboutUsPage } from './pages/AboutUsPage';
-import { CommercePage } from './pages/CommercePage';
+import { Register } from './pages/Register';
 
 export const App = () => {
   return (
@@ -14,8 +13,10 @@ export const App = () => {
         <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/aboutUs" element={<AboutUsPage />} />
-          <Route path="/commerce" element={<CommercePage />} />
-          <Route path="/products" element={<ProductsPage />} />
+          {/* <Route path="/commerce" element={<CommercePage />} /> */}
+          {/* <Route path="/products" element={<ProductsPage />} /> */}
+          <Route path="/register" element={<Register />} />
+
 
         </Routes>
       </main>

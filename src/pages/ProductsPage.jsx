@@ -1,35 +1,36 @@
-import { useEffect, useState } from "react"
-import { api } from '../core/axios';
+// import { useEffect, useState } from "react"
+// import { api } from './../core/axios';
 
 
-export const ProductsPage = () => {
-    const [ products, setProducts ] = useState([]);
 
-    useEffect (() => {
-        api.get("/products")
-        .then((response) => {
-                console.log("response", response);
-                console.log("Products data:", response.data);
-                setProducts(response.data);
-            })
-            .catch((error) => {
-                console.error("Error fetching products:", error);
-            });
-    }, [])
+// export const ProductsPage = () => {
+//     const [ products, setProducts ] = useState([]);
 
-    return (
-        <div>
-            <h1>Productos</h1>
+//     useEffect (() => {
+//         api.get("/products")
+//         .then((response) => {
+//                 console.log("response", response);
+//                 console.log("Products data:", response.data);
+//                 setProducts(response.data);
+//             })
+//             .catch((error) => {
+//                 console.error("Error fetching products:", error);
+//             });
+//     }, [])
 
-            <div>
-                {products.map((product) => (
-                    <div key={product.id}>
-                    <h2>{product.name}</h2>
-                    <p>{product.decription}</p>
-                    <p>{product.price}</p>
-                    </div>
-                ))}
-            </div>
-        </div>
-    )
-}
+//     return (
+//         <div>
+//             <h1>Productos</h1>
+
+//             <div>
+//                 {products.map((product) => (
+//                     <div key={product.id}>
+//                     <h2>{product.name}</h2>
+//                     <p>{product.decription}</p>
+//                     <p>{product.price}</p>
+//                     </div>
+//                 ))}
+//             </div>
+//         </div>
+//     )
+// }
