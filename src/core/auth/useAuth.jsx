@@ -1,13 +1,14 @@
 import { useContext } from "react"
 import { loginApi, registerApi } from "./auth.api";
 import { AuthContext } from "../../contexts/AuthContext";
+import { saveTokenInLocalStorage, saveUserInLocalStorage } from "./auth.service";
 
 
 export const useAuth = () => {
     const { setUser } = useContext(AuthContext);
 
-    const login = async ({ email }) => {
-        console.log(`${email} y ${password}`);
+    const login = async ({ email, password}) => {
+        console.log(`Datos de login exitoso: ${email} y ${password}`);
 
         const authData = await loginApi({ email, password });
 
@@ -19,7 +20,7 @@ export const useAuth = () => {
     };
 
     const register = async (user) => {
-        console.log(`${user.email}`);
+        console.log(`${user.email}, ${user.password}`);
 
         const authData = await registerApi(user);
 
@@ -31,4 +32,4 @@ export const useAuth = () => {
     };
 
     return { login, register };
-}
+};

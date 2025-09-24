@@ -1,29 +1,18 @@
 import { useState } from "react";
 import { useAuth } from "../core/auth/useAuth";
 
-const INITIAL_FORM = { username: "", firstName: "", lastName: "", email: "", bio: "", phoneNumber: "", address: "", role: "" };
+const INITIAL_FORM = { firstName: "", lastName: "", name: "", email: "", password: "", bio: "", phoneNumber: "", address: "", role: "" };
 
 const REGISTER_FORM = [
     {
         input: {
-            name: "username",
-            type: "text",
-            placeholder: "testuser",
-            required: true
-        },
-        label: {
-            text: "Nombre de usuario"
-        },
-    },
-    {
-        input: {
             name: "firstName",
             type: "text",
-            placeholder: "María",
+            placeholder: "López",
             required: true
         },
         label: {
-            text: "Nombre",
+            text: "Primer apellido",
         },
     },
     {
@@ -34,7 +23,18 @@ const REGISTER_FORM = [
             required: true
         },
         label: {
-            text: "Apellidos",
+            text: "Segundo apellido",
+        },
+    },
+        {
+        input: {
+            name: "name",
+            type: "text",
+            placeholder: "María",
+            required: true
+        },
+        label: {
+            text: "Nombre",
         },
     },
     {
@@ -46,6 +46,17 @@ const REGISTER_FORM = [
         },
         label: {
             text: "Correo electrónico",
+        },
+    },
+    {
+        input: {
+            name: "password",
+            type: "password",
+            placeholder: "Debe contener al menos 6 caracteres",
+            required: true
+        },
+        label: {
+            text: "Contraseña",
         },
     },
     {

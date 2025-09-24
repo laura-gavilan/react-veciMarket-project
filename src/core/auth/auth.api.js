@@ -1,13 +1,10 @@
 
-import { api } from './../http/axios';
+import { api } from './../http/axios.js';
 
 
-export const loginApi = async (user) => {
+export const loginApi = async ( {email, password}) => {
     try {
-        console.log(`${user.name},{${user.email}, ${user.role}`);
-        const response = await api.post("/auth/login", user);
-        console.log(response);
-
+        const response = await api.post("/auth/login", {email, password});
         return response.data;
     } catch (error) {
         console.error("Se ha producido un error al iniciar sesión", error);
@@ -17,7 +14,7 @@ export const loginApi = async (user) => {
 
 export const registerApi = async (user) => {
     try {
-        console.log(`${user.username}, ${user.firstName}, ${user.lastName}, ${user.name},{${user.email}, ${user.bio} ${user.phoneNumber},${user.address}, ${user.role}`);
+        console.log(`${user.firstName}, ${user.lastName}, ${user.name},{${user.email}, ${user.password}, ${user.bio} ${user.phoneNumber},${user.address}, ${user.role}`);
         const response = await api.post("/auth/register", user);
         console.log(response);
 

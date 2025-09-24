@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const links = [
     { text: "Sobre nosotros", to: "/aboutUs" },
-    // { text: "Productos", to: "/products" },
+    { text: "Productos", to: "/products" },
     { text: "Comercio", to: "/commerce" },
     { text: "Usuario", to: "/users" },
     { text: "Regístrate", to: "/register" },
