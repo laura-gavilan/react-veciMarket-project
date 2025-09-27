@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../core/auth/useAuth";
+import { Container } from "../components/Container";
 
 const INITIAL_FORM = { firstName: "", lastName: "", name: "", email: "", password: "", bio: "", phoneNumber: "", address: "", role: "" };
 
@@ -26,7 +27,7 @@ const REGISTER_FORM = [
             text: "Segundo apellido",
         },
     },
-        {
+    {
         input: {
             name: "name",
             type: "text",
@@ -101,7 +102,7 @@ const REGISTER_FORM = [
             required: true,
         },
         label: {
-            text: "Rol (admin/user)",
+            text: "Rol (commerce/user)",
         },
     },
 ];
@@ -127,31 +128,33 @@ export const Register = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-            <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Rellena el formulario para el registro</h2>
+        <Container className="flex items-center justify-center min-h-[70vh] max-w-element-width-md">
+            <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+                <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6">
+                    <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Rellena el formulario para el registro</h2>
 
-                <form className="flex flex-col gap-5"
-                    onSubmit={onRegisterSubmit} >
-                    {REGISTER_FORM.map(({ input, label }) => (
-                        <div key={input.name} className="text-sm flex-col gap-1">
-                            <input className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                name={input.name}
-                                type={input.type}
-                                placeholder={input.placeholder}
-                                value={form[input.name]}
-                                onChange={onInputChange}
-                                required={input.required}
-                            />
-                            <label className="text-sm font-medium text-gray-700">{label.text}</label>
-                        </div>
-                    ))}
+                    <form className="flex flex-col gap-5"
+                        onSubmit={onRegisterSubmit} >
+                        {REGISTER_FORM.map(({ input, label }) => (
+                            <div key={input.name} className="text-sm flex-col gap-1">
+                                <input className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    name={input.name}
+                                    type={input.type}
+                                    placeholder={input.placeholder}
+                                    value={form[input.name]}
+                                    onChange={onInputChange}
+                                    required={input.required}
+                                />
+                                <label className="text-sm font-medium text-gray-700">{label.text}</label>
+                            </div>
+                        ))}
 
-                    <button type="submit" className="mt-4 bg-blue-500 text-white py-2 rounded-full hover:bg-blue-600 transition-colors duration-200">
-                        Regístrate
-                    </button>
-                </form>
+                        <button type="submit" className="mt-4 bg-blue-500 text-white py-2 rounded-full hover:bg-blue-600 transition-colors duration-200">
+                            Regístrate
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
+        </Container>
     );
 };
