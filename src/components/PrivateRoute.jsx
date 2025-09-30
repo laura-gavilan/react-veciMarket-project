@@ -6,7 +6,7 @@ export const PrivateRoute = () => {
     const {user} = useContext(AuthContext);
 
     if(!user) {
-        return <Navigate to="/" state={{ usuario: "no existe usuario"}} />
+        return <Navigate to="/" state={{ message: "Usuario no autenticado"}} />
     };
 
     return <Outlet />

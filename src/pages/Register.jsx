@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useAuth } from "../core/auth/useAuth";
 import { Container } from "../components/Container";
 
-const INITIAL_FORM = { firstName: "", lastName: "", name: "", email: "", password: "", bio: "", phoneNumber: "", address: "", role: "" };
+
+const INITIAL_FORM = { firstName: "", lastName: "", name: "", email: "", password: "", bio: "", phoneNumber: "", address: "", role:"" };
 
 const REGISTER_FORM = [
     {
@@ -102,7 +103,7 @@ const REGISTER_FORM = [
             required: true,
         },
         label: {
-            text: "Rol (commerce/user)",
+            text: "Rol (admin/user)",
         },
     },
 ];
@@ -119,25 +120,21 @@ export const Register = () => {
 
     const onRegisterSubmit = async (event) => {
         event.preventDefault();
-        try {
-            await register(form);
-            setForm(INITIAL_FORM);
-        } catch (error) {
-            console.error("Error en el registro", error);
-        }
+        register(form);
+        setForm(INITIAL_FORM);
     };
 
     return (
         <Container className="flex items-center justify-center min-h-[70vh] max-w-element-width-md">
-            <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-                <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6">
-                    <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Rellena el formulario para el registro</h2>
+            <div className="flex items-center justify-center min-h-screen bg-white px-6">
+                <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-10">
+                    <h2 className="text-3xl font-extrabold text-center mb-10 text-violet-800">Crea tu cuenta</h2>
 
-                    <form className="flex flex-col gap-5"
+                    <form className="grid grid-cols-1 md:grid-cols-2 gap-6"
                         onSubmit={onRegisterSubmit} >
                         {REGISTER_FORM.map(({ input, label }) => (
-                            <div key={input.name} className="text-sm flex-col gap-1">
-                                <input className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            <div key={input.name} className="flex flex-col text-left">
+                                <input className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500"
                                     name={input.name}
                                     type={input.type}
                                     placeholder={input.placeholder}
@@ -145,13 +142,15 @@ export const Register = () => {
                                     onChange={onInputChange}
                                     required={input.required}
                                 />
-                                <label className="text-sm font-medium text-gray-700">{label.text}</label>
+                                <label className="text-sm font-medium text-gray-700 mb-1">{label.text}</label>
                             </div>
                         ))}
 
-                        <button type="submit" className="mt-4 bg-blue-500 text-white py-2 rounded-full hover:bg-blue-600 transition-colors duration-200">
-                            Regístrate
-                        </button>
+                        <div className="pt-6 flex justify-center ">
+                            <button type="submit" className="px-8 py-3 bg-violet-700 text-white font-semibold rounded-full hover:bg-violet-600 transition-all duration-300 shadow-md">
+                                Regístrate
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

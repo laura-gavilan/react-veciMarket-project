@@ -52,29 +52,40 @@ export const Login = () => {
 
     return (
         <Container className="flex items-center justify-center min-h-[70vh] max-w-element-width-md">
-            <div className="flex items-centr justify-center bg-gray-100 dark:bg-gray-900">
-                <form
-                    onSubmit={handleSubmit} className="w-full max-w-md bg-white dar:bg-gray-800 p-8 rounded-2xl shadow-lg space-y-5">
-                    <h2 className="text-2xl font-bold text-center text-gray-800 dar:text-gray-100 mb-6">Iniciar sesión</h2>
+            <div className="flex items-center justify-center min-h-screen bg-white px-6">
+                <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl p-10">
+                    <h2 className="text-3xl font-extrabold text-center mb-10 text-violet-800">
+                        Inicia sesión
+                    </h2>
 
-                    {LOGIN.map(({ input }) => (
-                        <div key={input.name} className="flex flex-col">
-                            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{input.label}</label>
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                        {LOGIN.map(({ input }) => (
+                            <div key={input.name} className="flex flex-col text-left">
+                                <label className="text-sm font-medium text-gray-700 mb-1">
+                                    {input.label}
+                                </label>
+                                <input
+                                    className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                                    type={input.type}
+                                    name={input.name}
+                                    placeholder={input.placeholder}
+                                    value={form[input.name]}
+                                    onChange={handleChange}
+                                    required={input.required}
+                                />
+                            </div>
+                        ))}
 
-                            <input className="w-full px-4 py-2 border rounded-xl focus:ring-blue-500"
-                                type={input.type}
-                                name={input.name}
-                                placeholder={input.placeholder}
-                                value={form[input.name]}
-                                onChange={handleChange}
-                                required={input.required} />
-                        </div>
-                    ))}
+                        {error && <p className="text-red-500 text-sm">{error}</p>}
 
-                    {error && <p className="text-red-500 text-sm">{error}</p>}
-
-                    <button className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl">Entrar</button>
-                </form>
+                        <button
+                            type="submit"
+                            className="mt-4 w-full bg-violet-700 text-white py-3 rounded-full font-semibold hover:bg-violet-600 transition-all duration-300 shadow-md"
+                        >
+                            Entrar
+                        </button>
+                    </form>
+                </div>
             </div>
         </Container>
     );
