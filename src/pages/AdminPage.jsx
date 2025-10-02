@@ -10,7 +10,7 @@ export const AdminPage = () => {
     if (loading) return <p className="text-center mt-6">Cargando comercios...</p>;
 
     const myCommerces = commerces.filter(
-        commerce => commerce.ownerUserId?.id === user.id
+        commerce => commerce.ownerUserId?._id === user._id
     );
 
     const handleDelete = (id) => {
@@ -29,12 +29,12 @@ export const AdminPage = () => {
                 <p className="text-center text-gray-500">No tienes comercios aún.</p>
             ) : (
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {myCommerces.map((commerce, index) => (
+                    {myCommerces.map((commerce) => (
                         <li
-                            key={`${commerce.id}-${index}`}
-                            className="border border-gray-200 rounded-xl p-4 shadow-md flex flex-col justify-between hover:shadow-lg transition-shadow duration-300"
+                            key={commerce._id}
+                            className="border border-gray-200 rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow duration-300"
                         >
-                            <div className="mb-4">
+                            <Link to={`/admin/commerce/${commerce._id}`}>
                                 <h2 className="font-bold text-xl text-violet-900 mb-1">
                                     {commerce.name}
                                 </h2>
@@ -42,22 +42,7 @@ export const AdminPage = () => {
                                 <small className="text-gray-400 mt-2 block">
                                     Propietario: {commerce.ownerUserId?.name}
                                 </small>
-                            </div>
-
-                            <div className="flex gap-2 mt-auto">
-                                <Link
-                                    to={`/commerce/edit/${commerce.id}`}
-                                    className="flex-1 text-center bg-violet-900 text-white px-4 py-2 rounded-lg hover:bg-violet-800 transition-colors"
-                                >
-                                    Editar
-                                </Link>
-                                <button
-                                    onClick={() => handleDelete(commerce.id)}
-                                    className="flex-1 text-center bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition-colors"
-                                >
-                                    Eliminar
-                                </button>
-                            </div>
+                            </Link>
                         </li>
                     ))}
                 </ul>

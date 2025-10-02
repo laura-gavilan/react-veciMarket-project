@@ -1,14 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { api } from "../core/http/axios";
+import { CommerceContext } from "../contexts/CommerceContext";
+import { useNavigate } from "react-router-dom";
 
 export const CommercePage = () => {
-    const [commerces, setCommerces] = useState([]);
+    const {commerces} = useContext(CommerceContext); 
+    // const [commerces, setCommerces] = useState([]);
     const [search, setSearch] = useState("");
     const [filteredCommerces, setFilteredCommerces] = useState([]);
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        fetchCommerces();
-    }, []);
+    // useEffect(() => {
+    //     fetchCommerces();
+    // }, []);
 
     useEffect(() => {
         const filtered = commerces.filter((commerce) =>
@@ -17,15 +21,15 @@ export const CommercePage = () => {
         setFilteredCommerces(filtered);
     }, [search, commerces]);
 
-    const fetchCommerces = async () => {
-        try {
-            const response = await api.get("/commerces");
-            setCommerces(response.data);
-            setFilteredCommerces(response.data);
-        } catch (error) {
-            console.error("Error al cargar los comercios", error);
-        }
-    };
+    // const fetchCommerces = async () => {
+    //     try {
+    //         const response = await api.get("/commerces");
+    //         setCommerces(response.data);
+    //         setFilteredCommerces(response.data);
+    //     } catch (error) {
+    //         console.error("Error al cargar los comercios", error);
+    //     }
+    // };
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col items-center">
@@ -49,9 +53,9 @@ export const CommercePage = () => {
                     filteredCommerces.map((commerce) => (
                         <div
                             className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200 flex flex-col gap-3 hover:shadow-2xl transition-shadow duration-300"
-                            key={commerce.id || commerce.slug}
+                            key={commerce._id || commerce.slug}
                         >
-                            <h2 className="text-2xl font-bold text-violet-900 text-center">{commerce.name}</h2>
+                            <h2 onClick={() => navigate(`/commerce/${commerce._id}`)} className="text-2xl font-bold text-violet-900 text-center">{commerce.name}</h2>
                             <p className="text-gray-600 italic text-center">{commerce.description}</p>
 
                             <div className="mt-2 space-y-1 text-gray-700">

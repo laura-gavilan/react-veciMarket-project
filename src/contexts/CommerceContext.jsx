@@ -1,8 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { api } from "../core/http/axios";
 
-const CommerceContext = createContext();
-
+export const CommerceContext = createContext();
 export const useCommerce = () => useContext(CommerceContext);
 
 export const CommerceProvider = ({ children }) => {

@@ -32,7 +32,7 @@ export const useAuth = () => {
     const logout = async () => {
         console.log("Cerrando sesión");
         try {
-            await logoutApi(); // intenta cerrar sesión en el servidor
+            await logoutApi(); 
         } catch (err) {
             console.warn("No se pudo cerrar sesión en el servidor, igual se limpia localmente", err);
         }
@@ -66,7 +66,7 @@ export const useAuth = () => {
 
             if (user) {
                 console.log("Usuario actual:", user);
-                setUser(user); // opcional: sincronizar con estado global
+                setUser(user); 
             } else {
                 console.log("No hay usuario logueado");
             }

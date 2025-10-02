@@ -10,6 +10,11 @@ import { CommercePage } from './pages/CommercePage';
 import { CreateCommercePage } from './components/CreateCommercePage';
 import { AdminPage } from './pages/AdminPage';
 import { ContactPage } from './pages/ContactPage';
+import { CommerceDetailPage } from './pages/CommerceDetailPage';
+import { AdminDetailPage } from './pages/AdminDetailsPage';
+import { CreateProductPage } from './pages/CreateProductPage.jsx';
+import { EditProductPage } from './pages/EditProductPage.jsx';
+import { EditCommercePage } from './pages/EditCommercePage.jsx';
 
 
 export const App = () => {
@@ -22,12 +27,23 @@ export const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/aboutUs" element={<AboutUsPage />} />
           <Route path="/commerce" element={<CommercePage />} />
+          <Route path="/commerce/:commerceId" element={<CommerceDetailPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
 
           <Route element={<PrivateRoute />}>
+            {/* Panel de administración */}
             <Route path="/admin" element={<AdminPage />} />
+
+            {/* Detalles de un comercio y rutas anidadas */}
+            <Route path="/admin/commerce/:commerceId" element={<AdminDetailPage />}>
+              <Route path="edit" element={<EditCommercePage />} />
+              <Route path="create" element={<CreateProductPage />} />
+              <Route path="edit/:productId" element={<EditProductPage />} />
+            </Route>
+
+            {/* Crear nuevo comercio */}
             <Route path="/commerce/new" element={<CreateCommercePage />} />
           </Route>
 

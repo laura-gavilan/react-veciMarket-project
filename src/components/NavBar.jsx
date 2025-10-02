@@ -75,7 +75,7 @@ export const NavBar = () => {
                                 Comercios
                             </Link>
                             <Link className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800" to="/admin">
-                                Perfil
+                                Mis comercios
                             </Link>
                             <Link className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800" to="/commerce/new">
                                 Crear comercio
