@@ -1,153 +1,95 @@
-import { useEffect, useState, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { api } from "../core/http/axios";
 import { getTokenFromLocalStorage } from "../core/auth/auth.service";
-import { AuthContext } from "../contexts/AuthContext";
 
 export const EditProductPage = () => {
-    const { commerceId, productId } = useParams(); // productId puede ser undefined
+    const { productId } = useParams();
+    const { selectedCommerce, refreshCommerce } = useOutletContext();
     const navigate = useNavigate();
-    const { user } = useContext(AuthContext);
 
-    const [form, setForm] = useState({
-        name: "",
-        description: "",
-        price: "",
-        releaseDate: "",
-        category: "all",
-    });
-    const [loading, setLoading] = useState(false);
+    const [form, setForm] = useState({ name: "", description: "", price: 0 });
 
-    // Cargar producto si productId existe
     useEffect(() => {
-        if (!productId) return; // crear, no editar
+        const product = selectedCommerce?.products.find(p => p._id === productId);
+        if (product) {
+            setForm({
+                name: product.name,
+                description: product.description,
+                price: product.price,
+            });
+        }
+    }, [selectedCommerce, productId]);
 
-        setLoading(true);
-        const fetchProduct = async () => {
-            try {
-                const { data } = await api.get(`/products/${productId}`);
-                setForm({
-                    name: data.name,
-                    description: data.description,
-                    price: data.price,
-                    releaseDate: data.releaseDate.split("T")[0],
-                    category: data.category[0] || "all",
-                });
-            } catch (error) {
-                console.error("Error al cargar producto:", error.response?.data || error);
-                alert("Error al cargar el producto");
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProduct();
-    }, [productId]);
-
-    const handleChange = (e) => {
+    const handleChange = e => {
         const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
+        setForm(prev => ({
+            ...prev,
+            [name]: name === "price" ? parseFloat(value) : value,
+        }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async e => {
         e.preventDefault();
-        if (!user) return alert("Debes iniciar sesión");
-
         try {
-            const token = getTokenFromLocalStorage();
-            const payload = {
-                name: form.name,
-                description: form.description,
-                price: parseFloat(form.price),
-                releaseDate: new Date(form.releaseDate).toISOString(),
-                category: [form.category],
-                commerceId,
-            };
+            await api.patch(`/products/${productId}`, form, {
+                headers: { Authorization: `Bearer ${getTokenFromLocalStorage()}` },
+            });
 
-            if (productId) {
-                // EDITAR
-                await api.patch(`/products/${productId}`, payload, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                alert("Producto actualizado");
-            } else {
-                // CREAR
-                await api.post(`/products`, payload, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                alert("Producto creado");
-            }
-
-            navigate(`/admin/commerce/${commerceId}`);
+            await refreshCommerce(); // 🔹 recarga productos actualizados
+            navigate(-1);            // vuelve atrás
         } catch (error) {
-            console.error("Error al guardar producto:", error.response?.data || error);
-            alert("Error al guardar el producto");
+            console.error("Error al actualizar producto:", error);
         }
     };
 
-    if (loading) return <p className="text-center mt-6">Cargando producto...</p>;
-
     return (
-        <div className="max-w-2xl mx-auto p-6">
-            <h1 className="text-2xl font-bold mb-4">
-                {productId ? "Editar Producto" : "Crear Producto"}
-            </h1>
+        <div className="p-4 max-w-md mx-auto">
+            <h1 className="text-2xl font-bold mb-4 text-violet-900">Editar Producto</h1>
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                 <input
                     type="text"
                     name="name"
-                    placeholder="Nombre"
                     value={form.name}
                     onChange={handleChange}
-                    className="border p-2 rounded"
+                    placeholder="Nombre"
+                    className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500"
                     required
                 />
                 <textarea
                     name="description"
-                    placeholder="Descripción"
                     value={form.description}
                     onChange={handleChange}
-                    className="border p-2 rounded resize-none"
+                    placeholder="Descripción"
+                    className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500"
                     required
                 />
                 <input
                     type="number"
                     name="price"
-                    placeholder="Precio"
                     value={form.price}
                     onChange={handleChange}
-                    className="border p-2 rounded"
+                    placeholder="Precio"
+                    className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    min={0}
+                    step={0.01}
                     required
                 />
-                <input
-                    type="date"
-                    name="releaseDate"
-                    value={form.releaseDate}
-                    onChange={handleChange}
-                    className="border p-2 rounded"
-                    required
-                />
-                <select
-                    name="category"
-                    value={form.category}
-                    onChange={handleChange}
-                    className="border p-2 rounded"
-                    required
-                >
-                    <option value="all">All</option>
-                    <option value="food">Food</option>
-                    <option value="books-paper">Books & Paper</option>
-                    <option value="health-beauty">Health & Beauty</option>
-                    <option value="sports">Sports</option>
-                    <option value="pets">Pets</option>
-                    <option value="home">Home</option>
-                    <option value="other">Other</option>
-                </select>
-                <button
-                    type="submit"
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 transition"
-                >
-                    {productId ? "Actualizar" : "Crear"}
-                </button>
+                <div className="flex gap-2 mt-2">
+                    <button
+                        type="submit"
+                        className="flex-1 px-4 py-2 bg-violet-700 text-white rounded hover:bg-violet-800 transition-colors"
+                    >
+                        Guardar
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => navigate(-1)}
+                        className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors"
+                    >
+                        Cancelar
+                    </button>
+                </div>
             </form>
         </div>
     );
