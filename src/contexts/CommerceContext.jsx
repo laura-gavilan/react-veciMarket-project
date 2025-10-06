@@ -33,13 +33,26 @@ export const CommerceProvider = ({ children }) => {
         );
     };
 
+    const deleteCommerce = async (commerceId) => {
+        try {
+            await api.delete(`/commerces/${commerceId}`, {
+                headers: { Authorization: `Bearer ${getTokenFromLocalStorage()}` },
+            });
+            // eliminar del estado local
+            setCommerces((prev) => prev.filter((c) => c._id !== commerceId));
+        } catch (error) {
+            console.error("Error eliminando comercio:", error);
+            alert("No se pudo eliminar el comercio.");
+        }
+    };
+
     useEffect(() => {
         fetchCommerces();
     }, []);
 
     return (
         <CommerceContext.Provider
-            value={{ commerces, loading, fetchCommerces, addCommerce, updateCommerce }}
+            value={{ commerces, loading, fetchCommerces, addCommerce, updateCommerce, deleteCommerce }}
         >
             {children}
         </CommerceContext.Provider>

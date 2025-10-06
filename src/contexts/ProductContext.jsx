@@ -2,10 +2,11 @@ import { createContext, useContext, useState } from "react";
 import { api } from "../core/http/axios";
 import { getTokenFromLocalStorage } from "../core/auth/auth.service";
 
-const ProductContext = createContext();
+export const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     // Añadir producto a la lista
     const addProduct = (product) => {
@@ -43,9 +44,68 @@ export const ProductProvider = ({ children }) => {
         }
     };
 
+    const loadAllProducts = async () => {
+        try {
+            const { data } = await api.get("/products");
+            setProducts(data);
+        } catch (error) {
+            console.error("Error cargando todos los productos:", error);
+        }
+    };
+
+    const loadCategories = async () => {
+        try {
+            const { data } = await api.get("/products/categories");
+            setCategories(data);
+        } catch (error) {
+            console.error("Error cargando categorías:", error);
+        }
+    };
+
+    const addCategory = async (category) => {
+        try {
+            const token = getTokenFromLocalStorage();
+            const { data } = await api.post("/products/categories", category, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setCategories((prev) => [...prev, data]);
+        } catch (error) {
+            console.error("Error creando categoría:", error);
+            alert("No se pudo crear la categoría.");
+        }
+    };
+
+    const updateCategory = async (updatedCategory) => {
+        try {
+            const token = getTokenFromLocalStorage();
+            const { data } = await api.put(`/products/categories/${updatedCategory._id}`, updatedCategory, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setCategories((prev) =>
+                prev.map((c) => (c._id === data._id ? data : c))
+            );
+        } catch (error) {
+            console.error("Error actualizando categoría:", error);
+            alert("No se pudo actualizar la categoría.");
+        }
+    };
+
+    const deleteCategory = async (categoryId) => {
+        try {
+            const token = getTokenFromLocalStorage();
+            await api.delete(`/products/categories/${categoryId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setCategories((prev) => prev.filter((c) => c._id !== categoryId));
+        } catch (error) {
+            console.error("Error eliminando categoría:", error);
+            alert("No se pudo eliminar la categoría.");
+        }
+    };
+
     return (
         <ProductContext.Provider
-            value={{ products, addProduct, updateProduct, deleteProduct, loadProducts }}
+            value={{ products, addProduct, updateProduct, deleteProduct, loadProducts, loadAllProducts, categories, loadCategories, addCategory, updateCategory, deleteCategory }}
         >
             {children}
         </ProductContext.Provider>

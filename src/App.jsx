@@ -17,6 +17,7 @@ import { EditProductPage } from './pages/EditProductPage.jsx';
 import { EditCommercePage } from './pages/EditCommercePage.jsx';
 
 
+
 export const App = () => {
   return (
     <div className="min-h-screen flex flex-col">
@@ -33,17 +34,13 @@ export const App = () => {
           <Route path="/login" element={<Login />} />
 
           <Route element={<PrivateRoute />}>
-            {/* Panel de administración */}
             <Route path="/admin" element={<AdminPage />} />
-
-            {/* Detalles de un comercio y rutas anidadas */}
             <Route path="/admin/commerce/:commerceId" element={<AdminDetailPage />}>
               <Route path="edit" element={<EditCommercePage />} />
               <Route path="create" element={<CreateProductPage />} />
               <Route path="edit/:productId" element={<EditProductPage />} />
             </Route>
 
-            {/* Crear nuevo comercio */}
             <Route path="/commerce/new" element={<CreateCommercePage />} />
           </Route>
 

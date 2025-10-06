@@ -2,112 +2,19 @@ import { useState } from "react";
 import { useAuth } from "../core/auth/useAuth";
 import { Container } from "../components/Container";
 
-
-const INITIAL_FORM = { firstName: "", lastName: "", name: "", email: "", password: "", bio: "", phoneNumber: "", address: "", role:"" };
+const INITIAL_FORM = { firstName: "", lastName: "", name: "", email: "", password: "", bio: "", phoneNumber: "", address: "", role: "" };
 
 const REGISTER_FORM = [
-    {
-        input: {
-            name: "firstName",
-            type: "text",
-            placeholder: "López",
-            required: true
-        },
-        label: {
-            text: "Primer apellido",
-        },
-    },
-    {
-        input: {
-            name: "lastName",
-            type: "text",
-            placeholder: "Sáez",
-            required: true
-        },
-        label: {
-            text: "Segundo apellido",
-        },
-    },
-    {
-        input: {
-            name: "name",
-            type: "text",
-            placeholder: "María",
-            required: true
-        },
-        label: {
-            text: "Nombre",
-        },
-    },
-    {
-        input: {
-            name: "email",
-            type: "email",
-            placeholder: "maria@example.com",
-            required: true
-        },
-        label: {
-            text: "Correo electrónico",
-        },
-    },
-    {
-        input: {
-            name: "password",
-            type: "password",
-            placeholder: "Debe contener al menos 6 caracteres",
-            required: true
-        },
-        label: {
-            text: "Contraseña",
-        },
-    },
-    {
-        input: {
-            name: "bio",
-            type: "text",
-            placeholder: "Escribe tus preferencias",
-            required: false
-        },
-        label: {
-            text: "Biografía",
-        },
-    },
-    {
-        input: {
-            name: "phoneNumber",
-            type: "tel",
-            placeholder: "+34 600000000",
-            required: true
-        },
-        label: {
-            text: "Número de teléfono",
-        },
-    },
-    {
-        input: {
-            name: "address",
-            type: "text",
-            placeholder: "Dirección",
-            required: true,
-        },
-        label: {
-            text: "Dirección",
-        },
-    },
-    {
-        input: {
-            name: "role",
-            type: "text",
-            placeholder: "admin",
-            label: "Rol (admin/user)",
-            required: true,
-        },
-        label: {
-            text: "Rol (admin/user)",
-        },
-    },
+    { input: { name: "firstName", type: "text", placeholder: "López", required: true }, label: { text: "Primer apellido" } },
+    { input: { name: "lastName", type: "text", placeholder: "Sáez", required: true }, label: { text: "Segundo apellido" } },
+    { input: { name: "name", type: "text", placeholder: "María", required: true }, label: { text: "Nombre" } },
+    { input: { name: "email", type: "email", placeholder: "maria@example.com", required: true }, label: { text: "Correo electrónico" } },
+    { input: { name: "password", type: "password", placeholder: "Debe contener al menos 6 caracteres", required: true }, label: { text: "Contraseña" } },
+    { input: { name: "bio", type: "text", placeholder: "Escribe tus preferencias", required: false }, label: { text: "Biografía" } },
+    { input: { name: "phoneNumber", type: "tel", placeholder: "+34 600000000", required: true }, label: { text: "Número de teléfono" } },
+    { input: { name: "address", type: "text", placeholder: "Dirección", required: true }, label: { text: "Dirección" } },
+    { input: { name: "role", type: "text", placeholder: "admin", required: true }, label: { text: "Rol (admin/user)" } },
 ];
-
 
 export const Register = () => {
     const { register } = useAuth();
@@ -125,34 +32,37 @@ export const Register = () => {
     };
 
     return (
-        <Container className="flex items-center justify-center min-h-[70vh] max-w-element-width-md">
-            <div className="flex items-center justify-center min-h-screen bg-white px-6">
-                <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-10">
-                    <h2 className="text-3xl font-extrabold text-center mb-10 text-violet-800">Crea tu cuenta</h2>
+        <Container className="flex items-center justify-center min-h-[80vh] px-4">
+            <div className="w-full max-w-3xl bg-white rounded-3xl shadow-2xl p-10 md:p-16">
+                <h2 className="text-4xl font-extrabold text-center mb-12 text-violet-700">Crea tu cuenta</h2>
 
-                    <form className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                        onSubmit={onRegisterSubmit} >
-                        {REGISTER_FORM.map(({ input, label }) => (
-                            <div key={input.name} className="flex flex-col text-left">
-                                <input className="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500"
-                                    name={input.name}
-                                    type={input.type}
-                                    placeholder={input.placeholder}
-                                    value={form[input.name]}
-                                    onChange={onInputChange}
-                                    required={input.required}
-                                />
-                                <label className="text-sm font-medium text-gray-700 mb-1">{label.text}</label>
-                            </div>
-                        ))}
-
-                        <div className="pt-6 flex justify-center ">
-                            <button type="submit" className="px-8 py-3 bg-violet-700 text-white font-semibold rounded-full hover:bg-violet-600 transition-all duration-300 shadow-md">
-                                Regístrate
-                            </button>
+                <form className="grid grid-cols-1 md:grid-cols-2 gap-8" onSubmit={onRegisterSubmit}>
+                    {REGISTER_FORM.map(({ input, label }) => (
+                        <div key={input.name} className="relative flex flex-col">
+                            <input
+                                name={input.name}
+                                type={input.type}
+                                placeholder=" "
+                                value={form[input.name]}
+                                onChange={onInputChange}
+                                required={input.required}
+                                className="peer border border-gray-300 rounded-xl px-4 pt-6 pb-2 focus:outline-none focus:ring-2 focus:ring-violet-400 transition-all shadow-sm"
+                            />
+                            <label className="absolute left-4 top-2 text-gray-400 text-sm transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-gray-700 peer-focus:text-sm">
+                                {label.text}
+                            </label>
                         </div>
-                    </form>
-                </div>
+                    ))}
+
+                    <div className="md:col-span-2 flex justify-center pt-4">
+                        <button
+                            type="submit"
+                            className="px-10 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+                        >
+                            Regístrate
+                        </button>
+                    </div>
+                </form>
             </div>
         </Container>
     );

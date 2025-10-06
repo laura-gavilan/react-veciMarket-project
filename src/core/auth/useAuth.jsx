@@ -34,13 +34,13 @@ export const useAuth = () => {
         try {
             await logoutApi(); 
         } catch (err) {
-            console.warn("No se pudo cerrar sesión en el servidor, igual se limpia localmente", err);
+            console.warn("No se pudo cerrar sesión en el servidor, pero se limpiará localmente.", err);
+        } finally {
+            removeUserFromLocalStorage();
+            removeTokenFromLocalStorage();
+            setUser(null);
+            navigate("/");
         }
-
-        removeUserFromLocalStorage();
-        removeTokenFromLocalStorage();
-        setUser(null);
-        navigate("/");
     };
 
     const register = async (form) => {
@@ -66,7 +66,7 @@ export const useAuth = () => {
 
             if (user) {
                 console.log("Usuario actual:", user);
-                setUser(user); 
+                setUser(user);
             } else {
                 console.log("No hay usuario logueado");
             }

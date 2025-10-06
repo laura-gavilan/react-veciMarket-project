@@ -1,64 +1,178 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { CommerceContext } from "../contexts/CommerceContext";
+import { ProductContext } from "../contexts/ProductContext";
 import { useNavigate } from "react-router-dom";
 
 export const CommercePage = () => {
     const { commerces } = useContext(CommerceContext);
-    const [search, setSearch] = useState("");
-    const [filteredCommerces, setFilteredCommerces] = useState([]);
+    const { products, loadAllProducts } = useContext(ProductContext);
     const navigate = useNavigate();
 
+    const [search, setSearch] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [filteredProducts, setFilteredProducts] = useState([]);
+
+    const categories = [
+        "all",
+        "food",
+        "books-paper",
+        "health-beauty",
+        "sports",
+        "pets",
+        "home",
+        "other"
+    ];
+
     useEffect(() => {
-        const filtered = commerces.filter((commerce) =>
-            commerce.name.toLowerCase().includes(search.toLowerCase())
-        );
-        setFilteredCommerces(filtered);
-    }, [search, commerces]);
+        loadAllProducts();
+    }, []);
+
+    const filteredCommerces = commerces.filter((commerce) =>
+        commerce.name.toLowerCase().includes(search.toLowerCase())
+    );
+
+    useEffect(() => {
+        if (selectedCategory && selectedCategory !== "all") {
+            const filtered = products.filter((p) =>
+                p.category.includes(selectedCategory)
+            );
+            setFilteredProducts(filtered);
+        } else if (selectedCategory === "all") {
+            setFilteredProducts(products);
+        } else {
+            setFilteredProducts([]);
+        }
+    }, [selectedCategory, products]);
 
     return (
-        <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col items-center">
-            <h1 className="text-3xl md:text-4xl font-bold mb-6 text-violet-900 text-center">
-                Explora los comercios de tu barrio
+        <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col items-center bg-gradient-to-b from-violet-50 to-white">
+
+            {/* Título principal */}
+            <h1 className="text-3xl md:text-5xl font-extrabold mb-8 text-center text-violet-900">
+                Explora los <span className="text-violet-700">comercios</span> de tu barrio
             </h1>
 
-            <div className="mb-6 w-full md:w-1/2">
+            {/* Input de búsqueda */}
+            <div className="mb-8 w-full md:w-1/2">
                 <input
                     type="text"
                     placeholder="Buscar comercio..."
                     value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                    className="w-full px-4 py-2 border rounded-full border-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-700 focus:border-transparent shadow-sm"
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="w-full px-5 py-3 border rounded-full border-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-700 focus:border-transparent shadow-sm transition-all duration-300"
                 />
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6 justify-center w-full">
+            {/* Bloque de categorías */}
+            <div className="w-full mb-10">
+                <h2 className="text-2xl font-bold mb-5 text-violet-900 text-center">
+                    Explora productos por categoría
+                </h2>
+                <div className="flex flex-wrap gap-3 justify-center">
+                    {categories.map((cat) => (
+                        <button
+                            key={cat}
+                            onClick={() => setSelectedCategory(cat)}
+                            className={`px-5 py-2 rounded-full border font-medium transition-colors duration-300 ${selectedCategory === cat
+                                ? "bg-violet-700 text-white border-violet-700 shadow-lg"
+                                : "bg-white text-violet-700 border-violet-700 hover:bg-violet-100"
+                                }`}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                    {selectedCategory && (
+                        <button
+                            onClick={() => setSelectedCategory(null)}
+                            className="px-5 py-2 rounded-full border bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all duration-300"
+                        >
+                            Ocultar todos
+                        </button>
+                    )}
+                </div>
+
+                {/* Productos filtrados */}
+                {selectedCategory && (
+                    <div className="w-full mt-8">
+                        <h2 className="text-2xl font-bold mb-6 text-violet-900 text-center">
+                            Productos: {selectedCategory}
+                        </h2>
+
+                        {filteredProducts.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                                {filteredProducts.map((product) => {
+                                    const commerce = commerces.find(c => c._id === product.commerceId);
+                                    return (
+                                        <div
+                                            key={product._id}
+                                            className="group bg-white border border-gray-200 rounded-3xl shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300 cursor-pointer transform hover:-translate-y-1"
+                                            onClick={() => commerce && navigate(`/commerce/${commerce._id}`)}
+                                        >
+                                            <div className="relative w-full h-48 overflow-hidden">
+                                                {product.image && (
+                                                    <img
+                                                        src={product.image}
+                                                        alt={product.name}
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                    />
+                                                )}
+                                                <div className="absolute inset-0 bg-black bg-opacity-10 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                                            </div>
+                                            <div className="p-5 flex flex-col items-center text-center">
+                                                <h3 className="text-lg font-semibold text-violet-900">
+                                                    {product.name}
+                                                </h3>
+                                                <p className="text-gray-700 mt-1 font-medium">
+                                                    {product.price} €
+                                                </p>
+                                                {commerce && (
+                                                    <p className="text-gray-500 text-sm mt-1">
+                                                        {commerce.name}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <p className="text-center text-gray-500 mt-4">
+                                No hay productos en esta categoría.
+                            </p>
+                        )}
+                    </div>
+                )}
+            </div>
+
+            {/* Grid de comercios */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
                 {filteredCommerces.length > 0 ? (
                     filteredCommerces.map((commerce) => (
                         <div
                             key={commerce._id}
-                            className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200 flex flex-col gap-3 hover:shadow-2xl transition-shadow duration-300"
+                            className="group bg-white rounded-3xl shadow-lg p-6 border border-gray-200 overflow-hidden hover:shadow-2xl transition-shadow duration-300"
                         >
+                            <div className="relative w-full h-52 overflow-hidden rounded-2xl">
+                                <img
+                                    src={`/images/commerces/${commerce.slug}.jpg`}
+                                    alt={commerce.name}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    onError={(event) => (event.target.style.display = "none")}
+                                />
+                            </div>
                             <h2
                                 onClick={() => navigate(`/commerce/${commerce._id}`)}
-                                className="text-2xl font-bold text-violet-900 text-center cursor-pointer"
+                                className="text-2xl font-bold text-violet-900 text-center mt-4 cursor-pointer hover:text-violet-700 transition-colors duration-300"
                             >
                                 {commerce.name}
                             </h2>
-
-                            {/* Imagen del comercio */}
-                            <img
-                                src={`/images/commerces/${commerce.slug}.jpg`}
-                                alt={commerce.name}
-                                className="w-full h-48 object-cover rounded-lg mt-2"
-                                onError={(event) => (event.target.style.display = "none")}
-                            />
-
-                            <p className="text-gray-600 italic text-center">{commerce.description}</p>
-
+                            <p className="text-gray-600 italic text-center mt-2">{commerce.description}</p>
                         </div>
                     ))
                 ) : (
-                    <p className="col-span-2 text-center text-gray-500">No se encontraron comercios.</p>
+                    <p className="col-span-2 text-center text-gray-500">
+                        No se encontraron comercios.
+                    </p>
                 )}
             </div>
         </div>

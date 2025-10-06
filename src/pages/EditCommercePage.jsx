@@ -12,6 +12,7 @@ export const EditCommercePage = () => {
 
     const [form, setForm] = useState({
         name: "",
+        category: "all",
         description: "",
         address: { street: "", city: "", phone: "", email: "", schedule: "" },
     });
@@ -19,8 +20,9 @@ export const EditCommercePage = () => {
     useEffect(() => {
         if (selectedCommerce)
             setForm({
-                name: selectedCommerce.name,
-                description: selectedCommerce.description,
+                name: selectedCommerce.name || "",
+                category: selectedCommerce.category || "all",
+                description: selectedCommerce.description || "",
                 address: selectedCommerce.address || {
                     street: "",
                     city: "",
@@ -46,8 +48,7 @@ export const EditCommercePage = () => {
             const { data } = await api.patch(`/commerces/${commerceId}`, form, {
                 headers: { Authorization: `Bearer ${getTokenFromLocalStorage()}` },
             });
-
-            updateCommerce(data); // ✅ actualiza en el contexto global
+            updateCommerce(data);
             navigate(-1);
         } catch (error) {
             console.error("Error actualizando comercio:", error);
@@ -55,17 +56,133 @@ export const EditCommercePage = () => {
     };
 
     return (
-        <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Editar Comercio</h1>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-2 max-w-md">
-                <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Nombre" className="input input-bordered" />
-                <textarea name="description" value={form.description} onChange={handleChange} placeholder="Descripción" className="input input-bordered" />
-                <input type="text" name="street" value={form.address.street} onChange={handleChange} placeholder="Calle" className="input input-bordered" />
-                <input type="text" name="city" value={form.address.city} onChange={handleChange} placeholder="Ciudad" className="input input-bordered" />
-                <input type="text" name="phone" value={form.address.phone} onChange={handleChange} placeholder="Teléfono" className="input input-bordered" />
-                <input type="email" name="email" value={form.address.email} onChange={handleChange} placeholder="Email" className="input input-bordered" />
-                <input type="text" name="schedule" value={form.address.schedule} onChange={handleChange} placeholder="Horario" className="input input-bordered" />
-                <button type="submit" className="btn btn-primary mt-2">Guardar</button>
+        <div className="max-w-3xl mx-auto p-8 bg-white rounded-3xl shadow-xl border border-gray-100">
+            <h1 className="text-3xl md:text-4xl font-bold text-violet-900 mb-8 text-center">
+                Editar Comercio
+            </h1>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+
+                {/* Categoría */}
+                <div className="flex flex-col">
+                    <label className="text-sm font-medium text-violet-700 mb-2">Categoría</label>
+                    <select
+                        name="category"
+                        value={form.category}
+                        onChange={handleChange}
+                        className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:outline-none shadow-sm transition-all"
+                        required
+                    >
+                        <option value="all">All</option>
+                        <option value="food">Food</option>
+                        <option value="books-paper">Books & Paper</option>
+                        <option value="health-beauty">Health & Beauty</option>
+                        <option value="sports">Sports</option>
+                        <option value="pets">Pets</option>
+                        <option value="home">Home</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                {/* Nombre */}
+                <div className="flex flex-col">
+                    <label className="text-sm font-medium text-violet-700 mb-2">Nombre</label>
+                    <input
+                        type="text"
+                        name="name"
+                        value={form.name}
+                        onChange={handleChange}
+                        placeholder="Nombre del comercio"
+                        className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:outline-none shadow-sm transition-all"
+                    />
+                </div>
+
+                {/* Descripción */}
+                <div className="flex flex-col">
+                    <label className="text-sm font-medium text-violet-700 mb-2">Descripción</label>
+                    <textarea
+                        name="description"
+                        value={form.description}
+                        onChange={handleChange}
+                        placeholder="Descripción breve del comercio"
+                        className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:outline-none shadow-sm transition-all resize-none"
+                        rows={4}
+                    />
+                </div>
+
+                {/* Dirección */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="flex flex-col">
+                        <label className="text-sm font-medium text-violet-700 mb-2">Calle</label>
+                        <input
+                            type="text"
+                            name="street"
+                            value={form.address.street}
+                            onChange={handleChange}
+                            placeholder="Calle"
+                            className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:outline-none shadow-sm transition-all"
+                        />
+                    </div>
+
+                    <div className="flex flex-col">
+                        <label className="text-sm font-medium text-violet-700 mb-2">Ciudad</label>
+                        <input
+                            type="text"
+                            name="city"
+                            value={form.address.city}
+                            onChange={handleChange}
+                            placeholder="Ciudad"
+                            className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:outline-none shadow-sm transition-all"
+                        />
+                    </div>
+                </div>
+
+                {/* Teléfono */}
+                <div className="flex flex-col">
+                    <label className="text-sm font-medium text-violet-700 mb-2">Teléfono</label>
+                    <input
+                        type="text"
+                        name="phone"
+                        value={form.address.phone}
+                        onChange={handleChange}
+                        placeholder="Teléfono"
+                        className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:outline-none shadow-sm transition-all"
+                    />
+                </div>
+
+                {/* Email */}
+                <div className="flex flex-col">
+                    <label className="text-sm font-medium text-violet-700 mb-2">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={form.address.email}
+                        onChange={handleChange}
+                        placeholder="Correo electrónico"
+                        className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:outline-none shadow-sm transition-all"
+                    />
+                </div>
+
+                {/* Horario */}
+                <div className="flex flex-col">
+                    <label className="text-sm font-medium text-violet-700 mb-2">Horario</label>
+                    <input
+                        type="text"
+                        name="schedule"
+                        value={form.address.schedule}
+                        onChange={handleChange}
+                        placeholder="Horario de apertura"
+                        className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:outline-none shadow-sm transition-all"
+                    />
+                </div>
+
+                {/* Botón guardar */}
+                <button
+                    type="submit"
+                    className="w-full mt-6 py-3 bg-gradient-to-r from-violet-600 to-purple-700 text-white rounded-2xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform font-semibold"
+                >
+                    Guardar cambios
+                </button>
             </form>
         </div>
     );
