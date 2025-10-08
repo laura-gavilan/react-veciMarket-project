@@ -39,7 +39,6 @@ export const CommerceProvider = ({ children }) => {
 
     const updateCommerce = async (updatedCommerce) => {
         try {
-            // Extraer solo los campos editables
             const { _id, name, slug, image, description, address, isActive } = updatedCommerce;
             const editableData = { name, slug, image, description, address, isActive };
 

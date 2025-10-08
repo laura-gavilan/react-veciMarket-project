@@ -151,14 +151,19 @@ export const CommercePage = () => {
                             key={commerce._id}
                             className="group bg-white rounded-3xl shadow-lg p-6 border border-gray-200 overflow-hidden hover:shadow-2xl transition-shadow duration-300"
                         >
-                            {/* <div className="relative w-full h-52 overflow-hidden rounded-2xl">
+                            {(commerce.image || commerce.images?.[0]) && (
                                 <img
-                                    src={`/images/commerces/${commerce.slug}.jpg`}
+                                    src={
+                                        (commerce.image || commerce.images[0]).startsWith("http")
+                                            ? (commerce.image || commerce.images[0])
+                                            : commerce.image?.startsWith("/images/")
+                                                ? commerce.image // viene con /images/commerces/...
+                                                : `/commerces/${commerce.images?.[0] || commerce.image}`
+                                    }
                                     alt={commerce.name}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    onError={(event) => (event.target.style.display = "none")}
+                                    className="w-full h-48 object-cover rounded-2xl mb-4 transition-transform duration-300 group-hover:scale-105"
                                 />
-                            </div> */}
+                            )}
                             <h2
                                 onClick={() => navigate(`/commerce/${commerce._id}`)}
                                 className="text-2xl font-bold text-violet-900 text-center mt-4 cursor-pointer hover:text-violet-700 transition-colors duration-300"

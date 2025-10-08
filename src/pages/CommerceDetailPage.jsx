@@ -50,11 +50,19 @@ export const CommerceDetailPage = () => {
 
             <div className="bg-white rounded-3xl shadow-xl p-8 flex flex-col md:flex-row gap-10 border border-violet-100 hover:shadow-2xl transition-shadow duration-300">
                 <div className="flex-1 flex flex-col gap-6">
-                    {/* <img
-                        src={selectedCommerce.image}
-                        alt={selectedCommerce.name}
-                        className="w-full h-64 md:h-80 object-cover rounded-2xl border border-violet-200 shadow-md hover:scale-105 transition-transform duration-300"
-                    /> */}
+                    {(selectedCommerce.image || selectedCommerce.images?.[0]) && (
+                        <img
+                            src={
+                                (selectedCommerce.image || selectedCommerce.images?.[0]).startsWith("http")
+                                    ? (selectedCommerce.image || selectedCommerce.images?.[0])
+                                    : selectedCommerce.image?.startsWith("/images/")
+                                        ? selectedCommerce.image // viene ya con /images/commerces/...
+                                        : `/commerces/${selectedCommerce.images?.[0] || selectedCommerce.image}`
+                            }
+                            alt={selectedCommerce.name}
+                            className="w-full h-64 object-cover rounded-2xl mb-4 shadow-md hover:shadow-lg transition-transform duration-300"
+                        />
+                    )}
                     <h1 className="text-4xl md:text-5xl font-extrabold text-violet-900">
                         {selectedCommerce.name}
                     </h1>
