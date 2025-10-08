@@ -1,5 +1,4 @@
 import { api } from './../http/axios.js';
-import { getTokenFromLocalStorage } from './auth.service.js';
 
 export const loginApi = async ({ email, password }) => {
     try {
@@ -27,13 +26,7 @@ export const registerApi = async (user) => {
 export const logoutApi = async () => {
     try {
         console.log("logoutApi");
-        const token = getTokenFromLocalStorage(); 
-
-        const response = await api.post("/auth/logout", null, {
-            headers: {
-                Authorization: `Bearer ${token}`, 
-            },
-        });
+        const response = await api.post("/auth/logout", null);
 
         console.log("respuesta de la api", response);
         return response.data;

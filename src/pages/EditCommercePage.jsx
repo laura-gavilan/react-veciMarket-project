@@ -1,11 +1,10 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate, useOutletContext } from "react-router-dom";
-import { CommerceContext } from "../contexts/CommerceContext";
-import { getTokenFromLocalStorage } from "../core/auth/auth.service";
+import { useCommerce } from "../core/commerce/CommerceContext";
 import { api } from "../core/http/axios";
 
 export const EditCommercePage = () => {
-    const { updateCommerce } = useContext(CommerceContext);
+    const { updateCommerce } = useCommerce();;
     const { commerceId } = useParams();
     const navigate = useNavigate();
     const { selectedCommerce } = useOutletContext();
@@ -33,8 +32,8 @@ export const EditCommercePage = () => {
             });
     }, [selectedCommerce]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const handleChange = (event) => {
+        const { name, value } = event.target;
         if (name in form.address) {
             setForm((prev) => ({ ...prev, address: { ...prev.address, [name]: value } }));
         } else {
@@ -42,12 +41,10 @@ export const EditCommercePage = () => {
         }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         try {
-            const { data } = await api.patch(`/commerces/${commerceId}`, form, {
-                headers: { Authorization: `Bearer ${getTokenFromLocalStorage()}` },
-            });
+            const { data } = await api.patch(`/commerces/${commerceId}`, form);
             updateCommerce(data);
             navigate(-1);
         } catch (error) {
@@ -62,8 +59,6 @@ export const EditCommercePage = () => {
             </h1>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-
-                {/* Categoría */}
                 <div className="flex flex-col">
                     <label className="text-sm font-medium text-violet-700 mb-2">Categoría</label>
                     <select
@@ -73,18 +68,17 @@ export const EditCommercePage = () => {
                         className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:outline-none shadow-sm transition-all"
                         required
                     >
-                        <option value="all">All</option>
-                        <option value="food">Food</option>
-                        <option value="books-paper">Books & Paper</option>
-                        <option value="health-beauty">Health & Beauty</option>
-                        <option value="sports">Sports</option>
-                        <option value="pets">Pets</option>
-                        <option value="home">Home</option>
-                        <option value="other">Other</option>
+                        <option value="all">Todas</option>
+                        <option value="food">Alimentación</option>
+                        <option value="books-paper">Libros & Papelería</option>
+                        <option value="health-beauty">Salud & Belleza</option>
+                        <option value="sports">Deportes</option>
+                        <option value="pets">Animales</option>
+                        <option value="home">Hogar</option>
+                        <option value="other">Otras</option>
                     </select>
                 </div>
 
-                {/* Nombre */}
                 <div className="flex flex-col">
                     <label className="text-sm font-medium text-violet-700 mb-2">Nombre</label>
                     <input
@@ -97,7 +91,6 @@ export const EditCommercePage = () => {
                     />
                 </div>
 
-                {/* Descripción */}
                 <div className="flex flex-col">
                     <label className="text-sm font-medium text-violet-700 mb-2">Descripción</label>
                     <textarea
@@ -110,7 +103,6 @@ export const EditCommercePage = () => {
                     />
                 </div>
 
-                {/* Dirección */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="flex flex-col">
                         <label className="text-sm font-medium text-violet-700 mb-2">Calle</label>
@@ -137,7 +129,6 @@ export const EditCommercePage = () => {
                     </div>
                 </div>
 
-                {/* Teléfono */}
                 <div className="flex flex-col">
                     <label className="text-sm font-medium text-violet-700 mb-2">Teléfono</label>
                     <input
@@ -150,7 +141,6 @@ export const EditCommercePage = () => {
                     />
                 </div>
 
-                {/* Email */}
                 <div className="flex flex-col">
                     <label className="text-sm font-medium text-violet-700 mb-2">Email</label>
                     <input
@@ -163,7 +153,6 @@ export const EditCommercePage = () => {
                     />
                 </div>
 
-                {/* Horario */}
                 <div className="flex flex-col">
                     <label className="text-sm font-medium text-violet-700 mb-2">Horario</label>
                     <input
@@ -176,7 +165,6 @@ export const EditCommercePage = () => {
                     />
                 </div>
 
-                {/* Botón guardar */}
                 <button
                     type="submit"
                     className="w-full mt-6 py-3 bg-gradient-to-r from-violet-600 to-purple-700 text-white rounded-2xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform font-semibold"

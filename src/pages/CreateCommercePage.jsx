@@ -1,9 +1,8 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../core/http/axios";
-import { getTokenFromLocalStorage } from "../core/auth/auth.service";
 import { AuthContext } from "../contexts/AuthContext";
-import { useCommerce } from "../contexts/CommerceContext";
+import { useCommerce } from "../core/commerce/CommerceContext";
 
 export const CreateCommercePage = () => {
     const navigate = useNavigate();
@@ -23,6 +22,9 @@ export const CreateCommercePage = () => {
         },
     });
 
+    const [imageFile, setImageFile] = useState(null); 
+    const [preview, setPreview] = useState(null); 
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         if (name.includes("address.")) {
@@ -36,16 +38,35 @@ export const CreateCommercePage = () => {
         }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setImageFile(file);
+            setPreview(URL.createObjectURL(file)); // previsualización
+        }
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         if (!user) return alert("Debes iniciar sesión para crear un comercio");
 
         try {
-            const token = getTokenFromLocalStorage();
-            const payload = { ...form, ownerUserId: user.id };
+            const formData = new FormData();
+            formData.append("name", form.name);
+            formData.append("slug", form.slug);
+            formData.append("description", form.description);
+            formData.append("ownerUserId", user.id);
 
-            const { data } = await api.post("/commerces", payload, {
-                headers: { Authorization: `Bearer ${token}` },
+            formData.append("address[street]", form.address.street);
+            formData.append("address[city]", form.address.city);
+            formData.append("address[phone]", form.address.phone);
+            formData.append("address[email]", form.address.email);
+            formData.append("address[schedule]", form.address.schedule);
+
+            if (imageFile) formData.append("image", imageFile);
+
+            const { data } = await api.post("/commerces", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
             });
 
             addCommerce({ ...data, ownerUserId: { id: user.id, name: user.name } });
@@ -64,7 +85,6 @@ export const CreateCommercePage = () => {
                 </h1>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                    {/* Nombre y Slug */}
                     <div className="flex flex-col sm:flex-row gap-4">
                         <input
                             type="text"
@@ -86,7 +106,6 @@ export const CreateCommercePage = () => {
                         />
                     </div>
 
-                    {/* Descripción */}
                     <textarea
                         name="description"
                         placeholder="Descripción"
@@ -97,7 +116,6 @@ export const CreateCommercePage = () => {
                         required
                     />
 
-                    {/* Dirección */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <input
                             type="text"
@@ -141,6 +159,23 @@ export const CreateCommercePage = () => {
                             onChange={handleChange}
                             className="col-span-1 sm:col-span-2 border p-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 transition"
                         />
+                    </div>
+
+                    <div>
+                        <label className="block text-gray-700 font-medium mb-2">Imagen del Comercio</label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            className="border p-2 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 transition"
+                        />
+                        {preview && (
+                            <img
+                                src={preview}
+                                alt="Preview"
+                                className="mt-2 w-40 h-40 object-cover rounded-lg border"
+                            />
+                        )}
                     </div>
 
                     <button

@@ -1,9 +1,8 @@
 import { useState, useContext } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { api } from "../core/http/axios";
-import { getTokenFromLocalStorage } from "../core/auth/auth.service";
 import { AuthContext } from "../contexts/AuthContext";
-import { useCommerce } from "../contexts/CommerceContext";
+import { useCommerce } from "../core/commerce/CommerceContext";
 
 export const CreateProductPage = () => {
     const navigate = useNavigate();
@@ -19,17 +18,16 @@ export const CreateProductPage = () => {
         category: "all",
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const handleChange = (event) => {
+        const { name, value } = event.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         if (!user) return alert("Debes iniciar sesión para crear un producto");
 
         try {
-            const token = getTokenFromLocalStorage();
             const payload = {
                 ...form,
                 price: parseFloat(form.price),
@@ -38,9 +36,7 @@ export const CreateProductPage = () => {
                 commerceId: selectedCommerce._id,
             };
 
-            await api.post("/products", payload, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            await api.post("/products", payload);
 
             const { data: updatedCommerce } = await api.get(`/commerces/${selectedCommerce._id}`);
             refreshProducts();
@@ -106,14 +102,14 @@ export const CreateProductPage = () => {
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
                     required
                 >
-                    <option value="all">All</option>
-                    <option value="food">Food</option>
-                    <option value="books-paper">Books & Paper</option>
-                    <option value="health-beauty">Health & Beauty</option>
-                    <option value="sports">Sports</option>
-                    <option value="pets">Pets</option>
-                    <option value="home">Home</option>
-                    <option value="other">Other</option>
+                    <option value="all">Todas</option>
+                    <option value="food">Alimentación</option>
+                    <option value="books-paper">Libros & Papelería</option>
+                    <option value="health-beauty">Salud & Belleza</option>
+                    <option value="sports">Deportes</option>
+                    <option value="pets">Animales</option>
+                    <option value="home">Hogar</option>
+                    <option value="other">Otras</option>
                 </select>
 
                 <button

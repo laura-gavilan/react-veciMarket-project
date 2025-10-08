@@ -1,25 +1,25 @@
 import { useContext, useEffect } from "react";
 import { useParams, useNavigate, Outlet } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
-import { useProduct } from "../contexts/ProductContext";
-import { useCommerce } from "../contexts/CommerceContext";
-import { CommerceProducts } from "../components/CommerceProducts";
+import { useProduct } from "../core/products/ProductContext";
+import { useCommerce } from "../core/commerce/CommerceContext";
+import { Category } from "../components/Category";
 
 export const AdminDetailPage = () => {
     const { commerces, fetchCommerces, deleteCommerce } = useCommerce();
     const { user } = useContext(AuthContext);
-    const { products, loadProducts, deleteProduct } = useProduct();
+    const { products, loadProductsByCommerce, deleteProduct } = useProduct();
     const { commerceId } = useParams();
     const navigate = useNavigate();
 
-    const selectedCommerce = commerces.find((c) => c._id === commerceId);
+    const selectedCommerce = commerces.find((commerce) => commerce._id === commerceId);
 
     useEffect(() => {
         if (commerces.length === 0) fetchCommerces();
     }, []);
 
     useEffect(() => {
-        if (selectedCommerce) loadProducts(selectedCommerce._id);
+        if (selectedCommerce) loadProductsByCommerce(selectedCommerce._id);
     }, [selectedCommerce]);
 
     if (!selectedCommerce)
@@ -30,11 +30,10 @@ export const AdminDetailPage = () => {
         );
 
     const isOwner = user?._id === selectedCommerce?.ownerUserId?._id;
-    const refreshProducts = () => loadProducts(selectedCommerce._id);
+    const refreshProducts = () => loadProductsByCommerce(selectedCommerce._id);
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col gap-12">
-            {/* Botón Volver */}
             <button
                 onClick={() => navigate(-1)}
                 className="self-start px-5 py-2 bg-white border border-gray-300 rounded-full shadow hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
@@ -42,13 +41,11 @@ export const AdminDetailPage = () => {
                 ← Volver
             </button>
 
-            {/* Tarjeta del comercio */}
-            <div className="relative bg-gradient-to-r from-purple-500 to-violet-700 text-white rounded-3xl 
-                            p-10 shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-500">
+            <div className="relative bg-gradient-to-r from-purple-500 to-violet-700 text-white rounded-3xl p-10 shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-500">
                 <h1 className="text-4xl font-extrabold mb-4">{selectedCommerce.name}</h1>
                 <p className="text-white/90 text-lg mb-6">{selectedCommerce.description}</p>
 
-                {/* Efectos decorativos */}
+                
                 <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-white/10 blur-3xl pointer-events-none"></div>
                 <div className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-white/5 blur-3xl pointer-events-none"></div>
 
@@ -81,15 +78,13 @@ export const AdminDetailPage = () => {
                 )}
             </div>
 
-            {/* Productos del comercio */}
-            <CommerceProducts
+            <Category
                 products={products}
                 commerceId={selectedCommerce._id}
                 deleteProduct={deleteProduct}
                 refreshProducts={refreshProducts}
             />
 
-            {/* Rutas hijas */}
             <Outlet context={{ refreshProducts, selectedCommerce }} />
         </div>
     );

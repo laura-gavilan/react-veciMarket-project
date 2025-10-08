@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, Outlet, useNavigate, Link } from "react-router-dom";
-import { CommerceContext } from "../contexts/CommerceContext";
+import { CommerceContext } from "../core/commerce/CommerceContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { api } from "../core/http/axios";
 
@@ -22,7 +22,7 @@ export const CommerceDetailPage = () => {
     };
 
     useEffect(() => {
-        const commerce = commerces?.find((c) => c._id === commerceId);
+        const commerce = commerces?.find((commerce) => commerce._id === commerceId);
         if (commerce) setSelectedCommerce(commerce);
         else refreshCommerce();
     }, [commerces, commerceId]);
@@ -41,8 +41,6 @@ export const CommerceDetailPage = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-violet-50 to-white py-12 px-6 flex flex-col gap-12">
-
-            {/* Botón Volver */}
             <button
                 onClick={() => navigate(-1)}
                 className="self-start px-6 py-2 bg-gradient-to-r from-violet-700 to-purple-600 text-white rounded-full shadow-lg hover:scale-105 hover:shadow-2xl transition-all font-semibold"
@@ -50,14 +48,13 @@ export const CommerceDetailPage = () => {
                 ← Volver
             </button>
 
-            {/* Información del comercio */}
             <div className="bg-white rounded-3xl shadow-xl p-8 flex flex-col md:flex-row gap-10 border border-violet-100 hover:shadow-2xl transition-shadow duration-300">
                 <div className="flex-1 flex flex-col gap-6">
-                    <img
+                    {/* <img
                         src={selectedCommerce.image}
                         alt={selectedCommerce.name}
                         className="w-full h-64 md:h-80 object-cover rounded-2xl border border-violet-200 shadow-md hover:scale-105 transition-transform duration-300"
-                    />
+                    /> */}
                     <h1 className="text-4xl md:text-5xl font-extrabold text-violet-900">
                         {selectedCommerce.name}
                     </h1>
@@ -73,7 +70,6 @@ export const CommerceDetailPage = () => {
                 </div>
             </div>
 
-            {/* Productos */}
             <div className="bg-white rounded-3xl shadow-xl p-8 border border-violet-100">
                 <div className="flex justify-between items-center mb-8">
                     <h2 className="text-3xl md:text-4xl font-bold text-violet-900">Productos</h2>
@@ -94,13 +90,13 @@ export const CommerceDetailPage = () => {
                                 key={product._id}
                                 className="bg-gradient-to-tr from-white to-violet-50 rounded-2xl shadow-md border border-violet-100 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all flex flex-col cursor-pointer"
                             >
-                                <div className="relative w-full h-52 overflow-hidden">
+                                {product.images?.[0] && (
                                     <img
-                                        src={product.image || "https://via.placeholder.com/400x250?text=Producto"}
+                                        src={product.images[0].startsWith("/") ? product.images[0] : `/products/${product.images[0]}`}
                                         alt={product.name}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                        className="w-30 h-30 object-cover rounded-lg border"
                                     />
-                                </div>
+                                )}
                                 <div className="p-5 flex flex-col justify-between flex-1">
                                     <div>
                                         <h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
@@ -118,9 +114,7 @@ export const CommerceDetailPage = () => {
                                             <button
                                                 onClick={async () => {
                                                     if (!confirm("¿Eliminar producto?")) return;
-                                                    await api.delete(`/products/${product._id}`, {
-                                                        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-                                                    });
+                                                    await api.delete(`/products/${product._id}`);
                                                     refreshCommerce();
                                                 }}
                                                 className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-xl font-medium transition-all shadow-sm hover:shadow-md"

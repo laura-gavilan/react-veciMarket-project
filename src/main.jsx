@@ -4,8 +4,8 @@ import { App } from './App.jsx'
 import { BrowserRouter } from 'react-router-dom';
 import { StrictMode } from 'react';
 import { AuthProvider } from './contexts/AuthContext.jsx';
-import { CommerceProvider } from './contexts/CommerceContext.jsx';
-import { ProductProvider } from './contexts/ProductContext.jsx';
+import { CommerceProvider } from './core/commerce/CommerceContext.jsx';
+import { ProductProvider } from './core/products/ProductContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

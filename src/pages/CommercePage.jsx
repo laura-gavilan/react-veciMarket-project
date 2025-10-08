@@ -1,11 +1,11 @@
-import { useContext, useState, useEffect } from "react";
-import { CommerceContext } from "../contexts/CommerceContext";
-import { ProductContext } from "../contexts/ProductContext";
+import { useState, useEffect } from "react";
+import { useCommerce } from "../core/commerce/CommerceContext";
+import { useProduct } from "../core/products/ProductContext";
 import { useNavigate } from "react-router-dom";
 
 export const CommercePage = () => {
-    const { commerces } = useContext(CommerceContext);
-    const { products, loadAllProducts } = useContext(ProductContext);
+    const { commerces } = useCommerce();
+    const { products, loadAllProducts } = useProduct();
     const navigate = useNavigate();
 
     const [search, setSearch] = useState("");
@@ -23,6 +23,17 @@ export const CommercePage = () => {
         "other"
     ];
 
+    const categoryNames = {
+        all: "Todas",
+        food: "Alimentación",
+        "books-paper": "Libros & Papelería",
+        "health-beauty": "Salud & Belleza",
+        sports: "Deportes",
+        pets: "Animales",
+        home: "Hogar",
+        other: "Otras",
+    };
+
     useEffect(() => {
         loadAllProducts();
     }, []);
@@ -33,8 +44,8 @@ export const CommercePage = () => {
 
     useEffect(() => {
         if (selectedCategory && selectedCategory !== "all") {
-            const filtered = products.filter((p) =>
-                p.category.includes(selectedCategory)
+            const filtered = products.filter((product) =>
+                product.category.includes(selectedCategory)
             );
             setFilteredProducts(filtered);
         } else if (selectedCategory === "all") {
@@ -47,12 +58,10 @@ export const CommercePage = () => {
     return (
         <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col items-center bg-gradient-to-b from-violet-50 to-white">
 
-            {/* Título principal */}
             <h1 className="text-3xl md:text-5xl font-extrabold mb-8 text-center text-violet-900">
                 Explora los <span className="text-violet-700">comercios</span> de tu barrio
             </h1>
 
-            {/* Input de búsqueda */}
             <div className="mb-8 w-full md:w-1/2">
                 <input
                     type="text"
@@ -63,22 +72,21 @@ export const CommercePage = () => {
                 />
             </div>
 
-            {/* Bloque de categorías */}
             <div className="w-full mb-10">
-                <h2 className="text-2xl font-bold mb-5 text-violet-900 text-center">
-                    Explora productos por categoría
-                </h2>
+                <h3 className="text-xl md:text-3xl font-extrabold mb-6 text-center text-violet-900">
+                    O si lo prefieres, explora <span className="text-violet-700">productos</span> por categorías
+                </h3>
                 <div className="flex flex-wrap gap-3 justify-center">
-                    {categories.map((cat) => (
+                    {categories.map((category) => (
                         <button
-                            key={cat}
-                            onClick={() => setSelectedCategory(cat)}
-                            className={`px-5 py-2 rounded-full border font-medium transition-colors duration-300 ${selectedCategory === cat
+                            key={category}
+                            onClick={() => setSelectedCategory(category)}
+                            className={`px-5 py-2 rounded-full border font-medium transition-colors duration-300 ${selectedCategory === category
                                 ? "bg-violet-700 text-white border-violet-700 shadow-lg"
                                 : "bg-white text-violet-700 border-violet-700 hover:bg-violet-100"
                                 }`}
                         >
-                            {cat}
+                            {categoryNames[category]}
                         </button>
                     ))}
                     {selectedCategory && (
@@ -91,33 +99,25 @@ export const CommercePage = () => {
                     )}
                 </div>
 
-                {/* Productos filtrados */}
                 {selectedCategory && (
                     <div className="w-full mt-8">
-                        <h2 className="text-2xl font-bold mb-6 text-violet-900 text-center">
-                            Productos: {selectedCategory}
-                        </h2>
-
                         {filteredProducts.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                                 {filteredProducts.map((product) => {
-                                    const commerce = commerces.find(c => c._id === product.commerceId);
+                                    const commerce = commerces.find(commerce => commerce._id === product.commerceId);
                                     return (
                                         <div
                                             key={product._id}
                                             className="group bg-white border border-gray-200 rounded-3xl shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300 cursor-pointer transform hover:-translate-y-1"
                                             onClick={() => commerce && navigate(`/commerce/${commerce._id}`)}
                                         >
-                                            <div className="relative w-full h-48 overflow-hidden">
-                                                {product.image && (
-                                                    <img
-                                                        src={product.image}
-                                                        alt={product.name}
-                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                                    />
-                                                )}
-                                                <div className="absolute inset-0 bg-black bg-opacity-10 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-                                            </div>
+                                            {product.images?.[0] && (
+                                                <img
+                                                    src={product.images[0].startsWith("/") ? product.images[0] : `/products/${product.images[0]}`}
+                                                    alt={product.name}
+                                                    className="w-20 h-20 object-cover rounded-lg border"
+                                                />
+                                            )}
                                             <div className="p-5 flex flex-col items-center text-center">
                                                 <h3 className="text-lg font-semibold text-violet-900">
                                                     {product.name}
@@ -144,7 +144,6 @@ export const CommercePage = () => {
                 )}
             </div>
 
-            {/* Grid de comercios */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
                 {filteredCommerces.length > 0 ? (
                     filteredCommerces.map((commerce) => (
@@ -152,14 +151,14 @@ export const CommercePage = () => {
                             key={commerce._id}
                             className="group bg-white rounded-3xl shadow-lg p-6 border border-gray-200 overflow-hidden hover:shadow-2xl transition-shadow duration-300"
                         >
-                            <div className="relative w-full h-52 overflow-hidden rounded-2xl">
+                            {/* <div className="relative w-full h-52 overflow-hidden rounded-2xl">
                                 <img
                                     src={`/images/commerces/${commerce.slug}.jpg`}
                                     alt={commerce.name}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     onError={(event) => (event.target.style.display = "none")}
                                 />
-                            </div>
+                            </div> */}
                             <h2
                                 onClick={() => navigate(`/commerce/${commerce._id}`)}
                                 className="text-2xl font-bold text-violet-900 text-center mt-4 cursor-pointer hover:text-violet-700 transition-colors duration-300"

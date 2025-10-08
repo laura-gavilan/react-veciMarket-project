@@ -1,4 +1,4 @@
-import { useCommerce } from "../contexts/CommerceContext";
+import { useCommerce } from "../core/commerce/CommerceContext";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";

@@ -29,7 +29,6 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* Comercios destacados */}
             <section className="px-6 py-8 bg-gray-50">
                 <CommercePage limit={3} />
                 <div className="text-center mt-8">
@@ -42,7 +41,6 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* Contacto */}
             <section className="px-6 py-14 text-center bg-white rounded-3xl mx-6 md:mx-20 my-14 shadow-lg">
                 <h2 className="text-2xl md:text-3xl font-bold mb-6 text-violet-800">Contacto</h2>
                 <p className="text-gray-600 max-w-2xl mx-auto mb-8">

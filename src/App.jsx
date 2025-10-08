@@ -7,7 +7,7 @@ import { Login } from './pages/Login';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Footer } from './components/Footer';
 import { CommercePage } from './pages/CommercePage';
-import { CreateCommercePage } from './components/CreateCommercePage';
+import { CreateCommercePage } from './pages/CreateCommercePage.jsx';
 import { AdminPage } from './pages/AdminPage';
 import { ContactPage } from './pages/ContactPage';
 import { CommerceDetailPage } from './pages/CommerceDetailPage';
