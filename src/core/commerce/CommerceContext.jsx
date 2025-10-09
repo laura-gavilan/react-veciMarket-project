@@ -9,6 +9,7 @@ export const useCommerce = () => useContext(CommerceContext);
 export const CommerceProvider = ({ children }) => {
     const [commerces, setCommerces] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
 
 
     const fetchCommerces = async () => {
@@ -67,7 +68,7 @@ export const CommerceProvider = ({ children }) => {
 
     return (
         <CommerceContext.Provider
-            value={{ commerces, loading, fetchCommerces, addCommerce, updateCommerce, deleteCommerce }}
+            value={{ commerces, loading, search, setSearch, fetchCommerces, addCommerce, updateCommerce, deleteCommerce }}
         >
             {children}
         </CommerceContext.Provider>

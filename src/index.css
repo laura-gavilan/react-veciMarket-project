@@ -1,1 +1,86 @@
 @import "tailwindcss";
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    background-color: var(--color-bg-general);
+}
+
+/* @theme con Tailwind sustituye a :root */
+@theme {
+    --font-sans: "Roboto", sans-serif;
+    --font-title: "Roboto Slab", serif;
+
+    --text-h1: 60px;
+    --text-h2: 48px;
+    --text-h3: 32px;
+    --text-h4: 24px;
+    --text-h5: 20px;
+    --text-h6: 16px;
+
+    /* 🎨 Colores principales */
+    --color-burdeos-dark: #6B0F1A;
+    --color-burdeos-light: #A83250;
+    --color-mostaza: #F2C94C;
+    --color-mostaza-pastel: #FBE8A6;
+
+    /* 🎨 Colores de apoyo */
+    --color-gray-warm: #F5F2F0;
+    --color-burdeos-darker: #3C0D12;
+}
+
+/* Tipografía */
+h1 {
+    @apply font-title text-h1/[125%] font-semibold text-[var(--color-burdeos-dark)];
+}
+
+h2 {
+    @apply font-title text-h2/[125%] font-semibold text-[var(--color-burdeos-dark)];
+}
+
+h3 {
+    @apply font-title text-h3/[125%] font-semibold text-[var(--color-burdeos-dark)];
+}
+
+h4 {
+    @apply font-title text-h4/[125%] font-semibold text-[var(--color-burdeos-dark)];
+}
+
+h5 {
+    @apply font-title text-h5/[125%] font-semibold text-[var(--color-burdeos-dark)];
+}
+
+h6 {
+    @apply font-title text-h6/[125%] font-semibold text-[var(--color-burdeos-dark)];
+}
+
+p {
+    @apply font-sans text-base/[150%] font-normal text-[var(--color-burdeos-darker)];
+}
+
+/* Botones principales */
+.btn-primary {
+    @apply bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] font-semibold rounded-full px-6 py-3 shadow-md hover:bg-[var(--color-burdeos-light)] transition-all;
+}
+
+.btn-secondary {
+    @apply bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] font-semibold rounded-full px-6 py-3 shadow-md hover:bg-[var(--color-burdeos-light)] transition-all;
+}
+
+/* Fondos generales */
+.bg-general {
+    @apply bg-[var(--color-gray-warm)];
+}
+
+.bg-secondary {
+    @apply bg-[var(--color-mostaza-pastel)];
+}
+
+/* Elevación de tarjetas / hover */
+.elevation {
+    @apply hover:translate-y-[-4px] transition-all shadow-lg;
+}

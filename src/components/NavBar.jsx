@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import { useAuth } from "../core/auth/useAuth";
+import { useCommerce } from "../core/commerce/CommerceContext";
 
 export const NavBar = () => {
     const { user } = useContext(AuthContext);
@@ -9,154 +10,124 @@ export const NavBar = () => {
     const [open, setOpen] = useState(false);
 
     return (
-        <nav className="bg-violet-900 text-white px-6 py-4 shadow-lg">
-            <div className="flex items-center justify-between">
-                <Link
-                    to="/"
-                    className="text-2xl font-extrabold tracking-wide hover:text-gray-200 transition"
-                >
-                    VeciMarket
+        <nav className="sticky top-0 z-50 w-full bg-[var(--color-gray-warm)] shadow-md transition-all duration-300">
+
+            {/* ---------- FILA SUPERIOR: LOGO + LOGIN + MENÚ ---------- */}
+            <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
+
+                {/* Logo */}
+                <Link to="/" className="flex items-center gap-2">
+                    <span className="font-title text-h5 text-[var(--color-burdeos-dark)] font-semibold">VeciMarket</span>
                 </Link>
 
-                <button className="md:hidden block" onClick={() => setOpen(!open)}>
-                    <img
-                        src={open ? "/public/xmark-solid-full.svg" : "/public/white-burger-menu.png"}
-                        alt="Icono menú"
-                        className="w-7 h-7"
-                    />
-                </button>
-
-
-                <div className="hidden md:flex gap-3">
-                    <Link className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800" to="/">
-                        Inicio
-                    </Link>
-
+                {/* Enlaces (desktop) */}
+                <div className="hidden md:flex items-center gap-8 text-[1rem] font-semibold text-[var(--color-burdeos-dark)]">
                     {!user && (
                         <>
-                            <Link className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800" to="/aboutUs">
-                                Sobre nosotros
-                            </Link>
-                            <Link className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800" to="/commerce">
-                                Comercios
-                            </Link>
-                            <Link className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800" to="/contact">
-                                Contacto
-                            </Link>
-                            <Link className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800" to="/register">
-                                Regístrate
-                            </Link>
-                            <Link className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800" to="/login">
-                                Inicia sesión
-                            </Link>
+                            <Link className="hover:text-[var(--color-mostaza)] transition-colors duration-300" to="/">Inicio</Link>
+                            <Link className="hover:text-[var(--color-mostaza)] transition-colors duration-300" to="/aboutUs">Sobre nosotros</Link>
+                            <Link className="hover:text-[var(--color-mostaza)] transition-colors duration-300" to="/commerce">Comercios</Link>
+                            <Link className="hover:text-[var(--color-mostaza)] transition-colors duration-300" to="/contact">Contacto</Link>
+                            <Link className="hover:text-[var(--color-mostaza)] transition-colors duration-300" to="/register">Registro</Link>
                         </>
                     )}
-
                     {user && user.role !== "admin" && (
                         <>
-                            <Link className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800" to="/commerce">
-                                Comercios
-                            </Link>
-                            <Link className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800" to="/user">
-                                Perfil
-                            </Link>
+                            <Link className="hover:text-[var(--color-mostaza)] transition-colors duration-300" to="/">Inicio</Link>
+                            <Link className="hover:text-[var(--color-mostaza)] transition-colors duration-300" to="/commerce">Comercios</Link>
+                            <Link className="hover:text-[var(--color-mostaza)] transition-colors duration-300" to="/user">Perfil</Link>
+                        </>
+                    )}
+                    {user?.role === "admin" && (
+                        <>
+                            <Link className="hover:text-[var(--color-mostaza)] transition-colors duration-300" to="/">Inicio</Link>
+                            <Link className="hover:text-[var(--color-mostaza)] transition-colors duration-300" to="/commerce">Comercios</Link>
+                            <Link className="hover:text-[var(--color-mostaza)] transition-colors duration-300" to="/admin">Mis comercios</Link>
+                            <Link className="hover:text-[var(--color-mostaza)] transition-colors duration-300" to="/commerce/new">Crear comercio</Link>
+                        </>
+                    )}
+                </div>
+
+                {/* Login / Logout / Menú */}
+                <div className="flex items-center gap-4">
+                    {!user ? (
+                        <Link to="/login" className="btn-primary">
+                            Login
+                        </Link>
+                    ) : (
+                        <button
+                            onClick={logout}
+                            className="btn-secondary"
+                        >
+                            Cerrar sesión
+                        </button>
+                    )}
+
+                    {/* Botón móvil */}
+                    <button
+                        className="md:hidden focus:outline-none"
+                        onClick={() => setOpen(!open)}
+                    >
+                        <img
+                            src={
+                                open
+                                    ? "/public/xmark-solid-full.svg"
+                                    : "/public/white-burger-menu.png"
+                            }
+                            alt="Menú"
+                            className="w-10 h-10 transition-transform duration-300"
+                        />
+                    </button>
+                </div>
+            </div>
+
+            {/* ---------- MENÚ MÓVIL ---------- */}
+            {open && (
+                <div className="md:hidden flex flex-col items-center gap-4 py-4 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] shadow-inner border-t border-[var(--color-burdeos-light)] text-lg font-semibold transition-all duration-300">
+                    {!user && (
+                        <>
+                            <Link to="/" onClick={() => setOpen(false)} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">Inicio</Link>
+                            <Link to="/aboutUs" onClick={() => setOpen(false)} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">Sobre nosotros</Link>
+                            <Link to="/commerce" onClick={() => setOpen(false)} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">Comercios</Link>
+                            <Link to="/contact" onClick={() => setOpen(false)} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">Contacto</Link>
+                            <Link to="/register" onClick={() => setOpen(false)} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">Registro</Link>
+                        </>
+                    )}
+                    {user && user.role !== "admin" && (
+                        <>
+                            <Link to="/" onClick={() => setOpen(false)} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">Inicio</Link>
+                            <Link to="/commerce" onClick={() => setOpen(false)} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">Comercios</Link>
+                            <Link to="/user" onClick={() => setOpen(false)} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">Perfil</Link>
                             <button
-                                className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800"
-                                onClick={logout}
+                                onClick={() => {
+                                    logout();
+                                    setOpen(false);
+                                }}
+                                className="btn-secondary w-full"
                             >
                                 Cerrar sesión
                             </button>
                         </>
                     )}
-
                     {user?.role === "admin" && (
                         <>
-                            <Link className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800" to="/commerce">
-                                Comercios
-                            </Link>
-                            <Link className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800" to="/admin">
-                                Mis comercios
-                            </Link>
-                            <Link className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800" to="/commerce/new">
-                                Crear comercio
-                            </Link>
+                            <Link to="/" onClick={() => setOpen(false)} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">Inicio</Link>
+                            <Link to="/commerce" onClick={() => setOpen(false)} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">Comercios</Link>
+                            <Link to="/admin" onClick={() => setOpen(false)} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">Mis comercios</Link>
+                            <Link to="/commerce/new" onClick={() => setOpen(false)} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">Crear comercio</Link>
                             <button
-                                className="px-4 py-2 rounded-full hover:bg-white hover:text-violet-800"
-                                onClick={logout}
+                                onClick={() => {
+                                    logout();
+                                    setOpen(false);
+                                }}
+                                className="btn-secondary w-full"
                             >
                                 Cerrar sesión
                             </button>
                         </>
                     )}
                 </div>
-
-                {open && (
-                    <div className="flex flex-col gap-3 mt-4 md:hidden">
-                        {!user && (
-                            <>
-                                <Link className="border px-4 py-2 rounded-full" to="/aboutUs" onClick={() => setOpen(false)}>
-                                    Sobre nosotros
-                                </Link>
-                                <Link className="border px-4 py-2 rounded-full" to="/commerce" onClick={() => setOpen(false)}>
-                                    Comercios
-                                </Link>
-                                <Link className="border px-4 py-2 rounded-full" to="/contact" onClick={() => setOpen(false)}>
-                                    Contacto
-                                </Link>
-                                <Link className="border px-4 py-2 rounded-full" to="/register" onClick={() => setOpen(false)}>
-                                    Regístrate
-                                </Link>
-                                <Link className="border px-4 py-2 rounded-full" to="/login" onClick={() => setOpen(false)}>
-                                    Inicia sesión
-                                </Link>
-                            </>
-                        )}
-
-                        {user && user.role !== "admin" && (
-                            <>
-                                <Link className="border px-4 py-2 rounded-full" to="/commerce" onClick={() => setOpen(false)}>
-                                    Comercios
-                                </Link>
-                                <Link className="border px-4 py-2 rounded-full" to="/user" onClick={() => setOpen(false)}>
-                                    Perfil
-                                </Link>
-                                <button
-                                    className="border px-4 py-2 rounded-full"
-                                    onClick={() => {
-                                        logout();
-                                        setOpen(false);
-                                    }}
-                                >
-                                    Cerrar sesión
-                                </button>
-                            </>
-                        )}
-
-                        {user?.role === "admin" && (
-                            <>
-                                <Link className="border px-4 py-2 rounded-full" to="/commerce" onClick={() => setOpen(false)}>
-                                    Comercios
-                                </Link>
-                                <Link className="border px-4 py-2 rounded-full" to="/admin" onClick={() => setOpen(false)}>
-                                    Perfil
-                                </Link>
-                                <Link className="border px-4 py-2 rounded-full" to="/commerce/new" onClick={() => setOpen(false)}>
-                                    Crear comercio
-                                </Link>
-                                <button
-                                    className="border px-4 py-2 rounded-full"
-                                    onClick={() => {
-                                        logout();
-                                        setOpen(false);
-                                    }}
-                                >
-                                    Cerrar sesión
-                                </button>
-                            </>
-                        )}
-                    </div>
-                )}
-            </div>
+            )}
         </nav>
-    );
+    )
 };

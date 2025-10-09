@@ -8,20 +8,26 @@ export const AdminPage = () => {
     const { user } = useContext(AuthContext);
 
     if (loading)
-        return <p className="text-center mt-6 text-gray-500 text-lg">Cargando comercios...</p>;
+        return (
+            <div className="flex items-center justify-center min-h-screen text-gray-500">
+                <h1 className="text-2xl font-semibold animate-pulse">
+                    Cargando comercios...
+                </h1>
+            </div>
+        );
 
     const myCommerces = commerces.filter(
         commerce => commerce.ownerUserId?._id === user._id
     );
 
     return (
-        <div className="max-w-6xl mx-auto p-6">
-            <h1 className="text-4xl font-extrabold mb-10 text-center text-violet-900 tracking-tight">
+        <div className="min-h-screen bg-gradient-to-b from-violet-50 to-white py-12 px-6 flex flex-col gap-12">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-violet-900 text-center">
                 Tus Comercios
             </h1>
 
             {myCommerces.length === 0 ? (
-                <p className="text-center text-gray-500 text-lg">
+                <p className="text-gray-500 text-center text-lg mt-6">
                     No tienes comercios aún.
                 </p>
             ) : (
@@ -29,16 +35,30 @@ export const AdminPage = () => {
                     {myCommerces.map((commerce) => (
                         <li
                             key={commerce._id}
-                            className="relative bg-white rounded-3xl p-6 shadow-[0_10px_15px_rgba(0,0,0,0.05)] hover:shadow-[0_15px_25px_rgba(0,0,0,0.1)] transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 cursor-pointer"
+                            className="relative bg-white rounded-3xl p-6 shadow-xl border border-violet-100
+                                       hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
                         >
                             <Link to={`/admin/commerce/${commerce._id}`} className="block h-full">
+                                {(commerce.image || commerce.images?.[0]) && (
+                                    <img
+                                        src={
+                                            (commerce.image || commerce.images?.[0]).startsWith("http")
+                                                ? (commerce.image || commerce.images?.[0])
+                                                : commerce.image?.startsWith("/images/")
+                                                    ? commerce.image
+                                                    : `/commerces/${commerce.images?.[0] || commerce.image}`
+                                        }
+                                        alt={commerce.name}
+                                        className="w-full h-48 object-cover rounded-2xl mb-4 shadow-md hover:shadow-lg transition-transform duration-300"
+                                    />
+                                )}
                                 <h2 className="font-extrabold text-2xl text-violet-900 mb-3">
                                     {commerce.name}
                                 </h2>
-                                <p className="text-gray-600 mb-4 line-clamp-3">
+                                <p className="text-gray-700 mb-4 line-clamp-3">
                                     {commerce.description}
                                 </p>
-                                <small className="text-gray-400">
+                                <small className="text-gray-500">
                                     Propietario: {commerce.ownerUserId?.name}
                                 </small>
                                 <div className="absolute -top-2 -right-2 w-12 h-12 bg-gradient-to-br from-violet-400 to-violet-600 

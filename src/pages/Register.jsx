@@ -32,9 +32,11 @@ export const Register = () => {
     };
 
     return (
-        <Container className="flex items-center justify-center min-h-[80vh] px-4">
+        <Container className="flex items-center justify-center min-h-[140vh] px-4 bg-gradient-to-b from-gray-50 via-gray-100 to-white">
             <div className="w-full max-w-3xl bg-white rounded-3xl shadow-2xl p-10 md:p-16">
-                <h2 className="text-4xl font-extrabold text-center mb-12 text-violet-700">Crea tu cuenta</h2>
+                <h2 className="text-4xl font-extrabold text-center mb-12 text-[var(--color-burdeos-dark)]">
+                    Crea tu cuenta
+                </h2>
 
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-8" onSubmit={onRegisterSubmit}>
                     {REGISTER_FORM.map(({ input, label }) => (
@@ -46,9 +48,9 @@ export const Register = () => {
                                 value={form[input.name]}
                                 onChange={onInputChange}
                                 required={input.required}
-                                className="peer border border-gray-300 rounded-xl px-4 pt-6 pb-2 focus:outline-none focus:ring-2 focus:ring-violet-400 transition-all shadow-sm"
+                                className="peer border border-[var(--color-burdeos-light)] rounded-xl px-4 pt-6 pb-2 focus:outline-none focus:ring-2 focus:ring-gradient-burdeos-mostaza transition-all shadow-sm"
                             />
-                            <label className="absolute left-4 top-2 text-gray-400 text-sm transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-gray-700 peer-focus:text-sm">
+                            <label className="absolute left-4 top-2 text-[var(--color-burdeos-dark)] text-sm transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-[var(--color-burdeos-dark)] peer-focus:text-sm">
                                 {label.text}
                             </label>
                         </div>
@@ -57,12 +59,19 @@ export const Register = () => {
                     <div className="md:col-span-2 flex justify-center pt-4">
                         <button
                             type="submit"
-                            className="px-10 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+                            className="px-10 py-3 bg-gradient-to-r from-[var(--color-mostaza)] to-[var(--color-burdeos-light)] text-white font-semibold rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
                         >
                             Regístrate
                         </button>
                     </div>
                 </form>
+
+                <p className="text-center text-sm mt-6 text-[var(--color-burdeos-dark)]">
+                    ¿Ya tienes cuenta?{" "}
+                    <a href="/login" className="text-[var(--color-burdeos-light)] font-semibold hover:underline">
+                        Inicia sesión
+                    </a>
+                </p>
             </div>
         </Container>
     );

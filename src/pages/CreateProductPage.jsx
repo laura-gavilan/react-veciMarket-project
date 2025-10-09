@@ -49,76 +49,107 @@ export const CreateProductPage = () => {
     };
 
     return (
-        <div className="max-w-lg mx-auto p-8 bg-white rounded-2xl shadow-lg border border-gray-200">
-            <h1 className="text-3xl font-extrabold text-center text-violet-900 mb-6">
-                Crear Nuevo Producto
-            </h1>
+        <div className="min-h-screen bg-general flex items-center justify-center p-6">
+            <div className="bg-white rounded-3xl p-10 max-w-lg w-full shadow-lg elevation">
+                <h1 className="text-h3 font-title font-semibold text-[var(--color-burdeos-dark)] mb-8 text-center">
+                    Crear Nuevo Producto
+                </h1>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Nombre del producto"
-                    value={form.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
-                    required
-                />
+                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                    {/* Nombre */}
+                    <div className="flex flex-col">
+                        <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
+                            Nombre del producto
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Ej. Pan integral"
+                            value={form.name}
+                            onChange={handleChange}
+                            className="w-full px-5 py-3 rounded-3xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-[var(--color-mostaza)] focus:border-[var(--color-mostaza)] outline-none transition-all"
+                            required
+                        />
+                    </div>
 
-                <textarea
-                    name="description"
-                    placeholder="Descripción del producto"
-                    value={form.description}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 transition resize-none"
-                    rows={4}
-                    required
-                />
+                    {/* Descripción */}
+                    <div className="flex flex-col">
+                        <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
+                            Descripción
+                        </label>
+                        <textarea
+                            name="description"
+                            placeholder="Describe el producto..."
+                            value={form.description}
+                            onChange={handleChange}
+                            rows={4}
+                            className="w-full px-5 py-3 rounded-3xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-[var(--color-mostaza)] focus:border-[var(--color-mostaza)] outline-none transition-all resize-none"
+                            required
+                        />
+                    </div>
 
-                <input
-                    type="number"
-                    name="price"
-                    placeholder="Precio"
-                    value={form.price}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
-                    required
-                />
+                    {/* Precio */}
+                    <div className="flex flex-col">
+                        <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
+                            Precio (€)
+                        </label>
+                        <input
+                            type="number"
+                            name="price"
+                            placeholder="Ej. 2.50"
+                            value={form.price}
+                            onChange={handleChange}
+                            className="w-full px-5 py-3 rounded-3xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-[var(--color-mostaza)] focus:border-[var(--color-mostaza)] outline-none transition-all"
+                            min={0}
+                            step={0.01}
+                            required
+                        />
+                    </div>
 
-                <input
-                    type="date"
-                    name="releaseDate"
-                    placeholder="Fecha de lanzamiento"
-                    value={form.releaseDate}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
-                    required
-                />
+                    {/* Fecha de lanzamiento */}
+                    <div className="flex flex-col">
+                        <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
+                            Fecha de lanzamiento
+                        </label>
+                        <input
+                            type="date"
+                            name="releaseDate"
+                            value={form.releaseDate}
+                            onChange={handleChange}
+                            className="w-full px-5 py-3 rounded-3xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-[var(--color-mostaza)] focus:border-[var(--color-mostaza)] outline-none transition-all"
+                            required
+                        />
+                    </div>
 
-                <select
-                    name="category"
-                    value={form.category}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
-                    required
-                >
-                    <option value="all">Todas</option>
-                    <option value="food">Alimentación</option>
-                    <option value="books-paper">Libros & Papelería</option>
-                    <option value="health-beauty">Salud & Belleza</option>
-                    <option value="sports">Deportes</option>
-                    <option value="pets">Animales</option>
-                    <option value="home">Hogar</option>
-                    <option value="other">Otras</option>
-                </select>
+                    {/* Categoría */}
+                    <div className="flex flex-col">
+                        <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
+                            Categoría
+                        </label>
+                        <select
+                            name="category"
+                            value={form.category}
+                            onChange={handleChange}
+                            className="w-full px-5 py-3 rounded-3xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-[var(--color-mostaza)] focus:border-[var(--color-mostaza)] outline-none transition-all"
+                            required
+                        >
+                            <option value="all">Todas</option>
+                            <option value="food">Alimentación</option>
+                            <option value="books-paper">Libros & Papelería</option>
+                            <option value="health-beauty">Salud & Belleza</option>
+                            <option value="sports">Deportes</option>
+                            <option value="pets">Animales</option>
+                            <option value="home">Hogar</option>
+                            <option value="other">Otras</option>
+                        </select>
+                    </div>
 
-                <button
-                    type="submit"
-                    className="w-full py-3 bg-violet-700 text-white font-semibold rounded-full shadow-md hover:bg-violet-800 transition-colors mt-2"
-                >
-                    Crear Producto
-                </button>
-            </form>
+                    {/* Botón Crear */}
+                    <button type="submit" className="btn-primary mt-4">
+                        Crear Producto
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

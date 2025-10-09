@@ -22,8 +22,8 @@ export const CreateCommercePage = () => {
         },
     });
 
-    const [imageFile, setImageFile] = useState(null); 
-    const [preview, setPreview] = useState(null); 
+    const [imageFile, setImageFile] = useState(null);
+    const [preview, setPreview] = useState(null);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -42,7 +42,7 @@ export const CreateCommercePage = () => {
         const file = event.target.files[0];
         if (file) {
             setImageFile(file);
-            setPreview(URL.createObjectURL(file)); // previsualización
+            setPreview(URL.createObjectURL(file));
         }
     };
 
@@ -78,9 +78,9 @@ export const CreateCommercePage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-violet-100 flex items-center justify-center p-6">
-            <div className="bg-white/90 backdrop-blur-md border border-violet-200 shadow-xl rounded-3xl p-10 w-full max-w-2xl transition-all duration-300 hover:shadow-violet-300">
-                <h1 className="text-3xl font-bold text-violet-800 mb-8 text-center">
+        <div className="min-h-screen bg-general flex items-center justify-center p-6">
+            <div className="bg-white border border-[var(--color-burdeos-dark)] shadow-lg rounded-3xl p-10 w-full max-w-2xl elevation">
+                <h1 className="font-title text-h1/[125%] text-[var(--color-burdeos-dark)] font-semibold mb-8 text-center">
                     Crear Nuevo Comercio
                 </h1>
 
@@ -92,7 +92,7 @@ export const CreateCommercePage = () => {
                             placeholder="Nombre"
                             value={form.name}
                             onChange={handleChange}
-                            className="flex-1 border p-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 transition"
+                            className="flex-1 border border-gray-300 p-3 rounded-xl shadow-sm font-sans focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
                             required
                         />
                         <input
@@ -101,7 +101,7 @@ export const CreateCommercePage = () => {
                             placeholder="Slug"
                             value={form.slug}
                             onChange={handleChange}
-                            className="flex-1 border p-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 transition"
+                            className="flex-1 border border-gray-300 p-3 rounded-xl shadow-sm font-sans focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
                             required
                         />
                     </div>
@@ -112,7 +112,7 @@ export const CreateCommercePage = () => {
                         value={form.description}
                         onChange={handleChange}
                         rows="4"
-                        className="border p-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 transition resize-none"
+                        className="border border-gray-300 p-3 rounded-xl shadow-sm font-sans focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition resize-none"
                         required
                     />
 
@@ -123,7 +123,7 @@ export const CreateCommercePage = () => {
                             placeholder="Calle"
                             value={form.address.street}
                             onChange={handleChange}
-                            className="border p-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 transition"
+                            className="border border-gray-300 p-3 rounded-xl shadow-sm font-sans focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
                             required
                         />
                         <input
@@ -132,7 +132,7 @@ export const CreateCommercePage = () => {
                             placeholder="Ciudad"
                             value={form.address.city}
                             onChange={handleChange}
-                            className="border p-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 transition"
+                            className="border border-gray-300 p-3 rounded-xl shadow-sm font-sans focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
                             required
                         />
                         <input
@@ -141,7 +141,7 @@ export const CreateCommercePage = () => {
                             placeholder="Teléfono"
                             value={form.address.phone}
                             onChange={handleChange}
-                            className="border p-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 transition"
+                            className="border border-gray-300 p-3 rounded-xl shadow-sm font-sans focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
                         />
                         <input
                             type="email"
@@ -149,7 +149,7 @@ export const CreateCommercePage = () => {
                             placeholder="Email"
                             value={form.address.email}
                             onChange={handleChange}
-                            className="border p-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 transition"
+                            className="border border-gray-300 p-3 rounded-xl shadow-sm font-sans focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
                         />
                         <input
                             type="text"
@@ -157,31 +157,30 @@ export const CreateCommercePage = () => {
                             placeholder="Horario"
                             value={form.address.schedule}
                             onChange={handleChange}
-                            className="col-span-1 sm:col-span-2 border p-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 transition"
+                            className="col-span-1 sm:col-span-2 border border-gray-300 p-3 rounded-xl shadow-sm font-sans focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 font-medium mb-2">Imagen del Comercio</label>
+                        <label className="block font-sans text-[var(--color-burdeos-dark)] font-medium mb-2">
+                            Imagen del Comercio
+                        </label>
                         <input
                             type="file"
                             accept="image/*"
                             onChange={handleImageChange}
-                            className="border p-2 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 transition"
+                            className="border border-gray-300 p-2 rounded-xl shadow-sm font-sans focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
                         />
                         {preview && (
                             <img
                                 src={preview}
                                 alt="Preview"
-                                className="mt-2 w-40 h-40 object-cover rounded-lg border"
+                                className="mt-2 w-40 h-40 object-cover rounded-lg border border-gray-300"
                             />
                         )}
                     </div>
 
-                    <button
-                        type="submit"
-                        className="mt-4 bg-violet-700 hover:bg-violet-800 text-white font-semibold py-3 rounded-xl shadow-md transition-all duration-300"
-                    >
+                    <button type="submit" className="btn-primary mt-4 w-full">
                         Crear Comercio
                     </button>
                 </form>
