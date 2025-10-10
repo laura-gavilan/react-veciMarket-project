@@ -35,8 +35,7 @@ export const AdminPage = () => {
                     {myCommerces.map((commerce) => (
                         <li
                             key={commerce._id}
-                            className="relative bg-white rounded-3xl p-6 shadow-xl border border-violet-100
-                                       hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
+                            className="relative bg-white rounded-3xl p-6 shadow-xl border border-violet-100 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
                         >
                             <Link to={`/admin/commerce/${commerce._id}`} className="block h-full">
                                 {(commerce.image || commerce.images?.[0]) && (

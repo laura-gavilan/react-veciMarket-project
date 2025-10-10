@@ -15,6 +15,9 @@ import { AdminDetailPage } from './pages/AdminDetailsPage';
 import { CreateProductPage } from './pages/CreateProductPage.jsx';
 import { EditProductPage } from './pages/EditProductPage.jsx';
 import { EditCommercePage } from './pages/EditCommercePage.jsx';
+import { UserPage } from './pages/UserPage.jsx';
+import { EditUserPage } from './pages/EditUserPage.jsx';
+import { FavoritesPage } from './pages/FavoritesPage.jsx';
 
 
 
@@ -39,6 +42,13 @@ export const App = () => {
               <Route path="edit" element={<EditCommercePage />} />
               <Route path="create" element={<CreateProductPage />} />
               <Route path="edit/:productId" element={<EditProductPage />} />
+            </Route>
+
+            <Route element={<PrivateRoute />}>
+            <Route path="/user" element={<UserPage/>} />
+            <Route path="/user/edit" element={<EditUserPage />} />
+            <Route path="/favorites" element={<FavoritesPage/>} />
+
             </Route>
 
             <Route path="/commerce/new" element={<CreateCommercePage />} />

@@ -5,15 +5,16 @@ import { Container } from "../components/Container";
 const INITIAL_FORM = { firstName: "", lastName: "", name: "", email: "", password: "", bio: "", phoneNumber: "", address: "", role: "" };
 
 const REGISTER_FORM = [
+    { input: { name: "username", type: "text", placeholder: "testuser", required: true }, label: { text: "Nombre de usuario" } },
+    { input: { name: "name", type: "text", placeholder: "María", required: true }, label: { text: "Nombre" } },
     { input: { name: "firstName", type: "text", placeholder: "López", required: true }, label: { text: "Primer apellido" } },
     { input: { name: "lastName", type: "text", placeholder: "Sáez", required: true }, label: { text: "Segundo apellido" } },
-    { input: { name: "name", type: "text", placeholder: "María", required: true }, label: { text: "Nombre" } },
     { input: { name: "email", type: "email", placeholder: "maria@example.com", required: true }, label: { text: "Correo electrónico" } },
     { input: { name: "password", type: "password", placeholder: "Debe contener al menos 6 caracteres", required: true }, label: { text: "Contraseña" } },
     { input: { name: "bio", type: "text", placeholder: "Escribe tus preferencias", required: false }, label: { text: "Biografía" } },
     { input: { name: "phoneNumber", type: "tel", placeholder: "+34 600000000", required: true }, label: { text: "Número de teléfono" } },
     { input: { name: "address", type: "text", placeholder: "Dirección", required: true }, label: { text: "Dirección" } },
-    { input: { name: "role", type: "text", placeholder: "admin", required: true }, label: { text: "Rol (admin/user)" } },
+    { input: { name: "role", type: "text", placeholder: "user", required: true }, label: { text: "Rol (admin/user)" } },
 ];
 
 export const Register = () => {
