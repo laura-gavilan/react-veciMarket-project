@@ -1,11 +1,25 @@
 import { useCommerce } from "../core/commerce/CommerceContext";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 
 export const AdminPage = () => {
     const { commerces, loading } = useCommerce();
     const { user } = useContext(AuthContext);
+    const [showScrollTop, setShowScrollTop] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowScrollTop(window.scrollY > 300);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
 
     if (loading)
         return (
@@ -66,6 +80,15 @@ export const AdminPage = () => {
                         </li>
                     ))}
                 </ul>
+            )}
+
+            {showScrollTop && (
+                <button
+                    onClick={scrollToTop}
+                    className="fixed bottom-6 right-6 bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] p-3 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 z-50"
+                >
+                    ↑
+                </button>
             )}
         </div>
     );

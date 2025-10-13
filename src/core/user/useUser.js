@@ -17,9 +17,9 @@ export const useUser = () => {
 
     // Actualiza los datos del usuario tanto en el contexto como en la API
     const updateUserData = async (newData) => {
-        if (!user?.id) throw new Error("No hay usuario logueado");
+        if (!user?._id) throw new Error("No hay usuario logueado");
         try {
-            const updatedUser = await updateUserApi(user.id, newData);
+            const updatedUser = await updateUserApi(user._id, newData);
             setUser(updatedUser);
         } catch (error) {
             console.error("Error al actualizar el usuario:", error);
@@ -29,9 +29,9 @@ export const useUser = () => {
 
     // Elimina el usuario en la API y limpia el contexto
     const deleteUser = async () => {
-        if (!user?.id) throw new Error("No hay usuario logueado");
+        if (!user?._id) throw new Error("No hay usuario logueado");
         try {
-            await deleteUserApi(user.id);
+            await deleteUserApi(user._id);
             clearUser();
             navigate("/"); // Redirige al inicio tras eliminar
         } catch (error) {
@@ -42,9 +42,9 @@ export const useUser = () => {
 
     // Refresca los datos del usuario desde la API
     const refreshUser = async () => {
-        if (!user?.id) return;
+        if (!user?._id) return;
         try {
-            const freshUser = await getUserByIdApi(user.id);
+            const freshUser = await getUserByIdApi(user._id);
             setUser(freshUser);
         } catch (error) {
             console.error("Error al refrescar el usuario:", error);

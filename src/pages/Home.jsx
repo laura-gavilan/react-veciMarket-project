@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
+import { useEffect, useState } from "react";
 
 export const Home = () => {
     const { commerces } = useCommerce();
@@ -8,6 +9,20 @@ export const Home = () => {
 
     const featuredCommerces = commerces.slice(0, 5);
     const featuredProducts = products.slice(0, 5);
+    const [showScrollTop, setShowScrollTop] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowScrollTop(window.scrollY > 300);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
 
     return (
         <div className="bg-gray-50 text-gray-900 font-roboto">
@@ -40,23 +55,30 @@ export const Home = () => {
             </section>
 
             {/* CATEGORÍAS */}
-            <section className="py-16 px-6 text-center bg-gradient-to-b from-orange-70 to-yellow-70 mt-16 rounded-3xl">
+            <section className="py-16 px-6 text-center bg-gradient-to-b from-orange-100 to-yellow-100 mt-16 rounded-3xl">
                 <h2 className="text-3xl md:text-4xl font-poppins font-semibold mb-10 text-gray-800">
                     Categorías destacadas
                 </h2>
+
+                {/* Contenedor de categorías */}
                 <div className="flex flex-wrap justify-center gap-4">
                     {["Alimentación", "Libros", "Hogar", "Deportes", "Belleza"].map((cat) => (
-                        <div
+                        <Link
                             key={cat}
-                            className="px-6 py-3 bg-gradient-to-r from-orange-400 to-yellow-300 text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 cursor-pointer"
+                            to={`/commerce?category=${cat.toLowerCase()}`}
+                            className="px-6 py-3 bg-gradient-to-r from-orange-400 to-yellow-300 text-white font-semibold rounded-full shadow-lg hover:scale-105 hover:from-orange-500 hover:to-yellow-400 transition-transform duration-300 cursor-pointer"
                         >
                             {cat}
-                        </div>
+                        </Link>
                     ))}
                 </div>
 
+                {/* Botón inferior */}
                 <div className="mt-10">
-                    <Link to="/commerce" className="btn-secondary gradient-hover">
+                    <Link
+                        to="/commerce"
+                        className="btn-secondary gradient-hover"
+                    >
                         Ver todas las categorías
                     </Link>
                 </div>
@@ -68,31 +90,41 @@ export const Home = () => {
                     Comercios destacados
                 </h2>
 
+                {/* Grid de comercios */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
                     {featuredCommerces.map((commerce) => (
-                        <div
+                        <Link
                             key={commerce._id}
-                            className="bg-gradient-to-b from-orange-100/20 to-yellow-100/20 border border-orange-100 rounded-3xl shadow-2xl overflow-hidden elevation hover:scale-105 transition-transform duration-500"
+                            to={`/commerce/${commerce._id}`}
+                            className="block group"
                         >
-                            {commerce.image && (
-                                <img
-                                    src={commerce.image}
-                                    alt={commerce.name}
-                                    className="w-full h-48 object-cover"
-                                />
-                            )}
-                            <div className="p-6">
-                                <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2">
-                                    {commerce.name}
-                                </h3>
-                                <p className="text-gray-700/80 text-sm md:text-base">{commerce.description}</p>
+                            <div className="bg-gradient-to-b from-orange-100/30 to-yellow-100/30 border border-orange-100 rounded-3xl shadow-2xl overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-[0_8px_25px_rgba(255,165,0,0.4)]">
+                                {commerce.image && (
+                                    <img
+                                        src={commerce.image}
+                                        alt={commerce.name}
+                                        className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+                                    />
+                                )}
+                                <div className="p-6">
+                                    <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2 group-hover:text-orange-600 transition-colors">
+                                        {commerce.name}
+                                    </h3>
+                                    <p className="text-gray-700/80 text-sm md:text-base line-clamp-3">
+                                        {commerce.description}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
 
+                {/* Botón inferior */}
                 <div className="mt-10">
-                    <Link to="/commerce" className="btn-secondary gradient-hover">
+                    <Link
+                        to="/commerce"
+                        className="btn-secondary gradient-hover"
+                    >
                         Ver todos los comercios
                     </Link>
                 </div>
@@ -106,27 +138,35 @@ export const Home = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 max-w-6xl mx-auto">
                     {featuredProducts.map((product) => (
-                        <div
+                        <Link
                             key={product._id}
-                            className="bg-gradient-to-b from-orange-100/20 to-yellow-100/20 border border-orange-100 rounded-3xl shadow-2xl overflow-hidden elevation hover:scale-105 transition-transform duration-500"
+                            to={`/commerce/${product.commerceId}`} // ✅ enlace correcto al comercio del producto
+                            className="block group"
                         >
-                            {product.images?.[0] && (
-                                <img
-                                    src={product.images[0]}
-                                    alt={product.name}
-                                    className="w-full h-40 object-cover"
-                                />
-                            )}
-                            <div className="p-4">
-                                <h3 className="text-lg md:text-xl font-semibold text-gray-800">{product.name}</h3>
-                                <p className="text-gray-700/80 mt-1">{product.price} €</p>
+                            <div className="bg-gradient-to-b from-orange-100/20 to-yellow-100/20 border border-orange-100 rounded-3xl shadow-2xl overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-[0_8px_25px_rgba(255,165,0,0.4)]">
+                                {product.images?.[0] && (
+                                    <img
+                                        src={product.images[0]}
+                                        alt={product.name}
+                                        className="w-full h-40 object-cover transition-transform duration-500 group-hover:scale-110"
+                                    />
+                                )}
+                                <div className="p-4">
+                                    <h3 className="text-lg md:text-xl font-semibold text-gray-800 group-hover:text-orange-600 transition-colors">
+                                        {product.name}
+                                    </h3>
+                                    <p className="text-gray-700/80 mt-1 font-medium">{product.price.toFixed(2)} €</p>
+                                </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
 
                 <div className="mt-10">
-                    <Link to="/commerce" className="btn-secondary gradient-hover">
+                    <Link
+                        to="/commerce"
+                        className="btn-secondary gradient-hover"
+                    >
                         Ver más productos
                     </Link>
                 </div>
@@ -147,6 +187,15 @@ export const Home = () => {
                     </Link>
                 </div>
             </section>
+
+            {showScrollTop && (
+                <button
+                    onClick={scrollToTop}
+                    className="fixed bottom-6 right-6 bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] p-3 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 z-50"
+                >
+                    ↑
+                </button>
+            )}
         </div>
     );
 };

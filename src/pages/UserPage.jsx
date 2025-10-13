@@ -3,9 +3,10 @@ import { useUser } from "../core/user/useUser";
 
 
 export const UserPage = () => {
-    const { user, deleteUser } = useUser();
+    const { user, deleteUser, loading } = useUser();
 
-    if (!user) return <p className="text-center mt-8">Cargando usuario...</p>;
+    if (loading) return <p className="text-center mt-8">Cargando usuario...</p>;
+    if (!user) return <p className="text-center mt-8">No hay usuario logueado.</p>;
 
     const handleDelete = async () => {
         const confirmDelete = window.confirm(

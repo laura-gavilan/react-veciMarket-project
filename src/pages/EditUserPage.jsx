@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from './../core/user/useUser';
 
 export const EditUserPage = () => {
-    const { user, updateUserData } = useUser();
+    const { user, updateUserData, loading } = useUser();
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
@@ -16,6 +16,7 @@ export const EditUserPage = () => {
         address: user?.address || "",
     });
 
+    if (loading) return <p className="text-center mt-8">Cargando usuario...</p>;
     if (!user) return <p className="text-center mt-8">No hay usuario logueado.</p>;
 
     const handleChange = (e) => {

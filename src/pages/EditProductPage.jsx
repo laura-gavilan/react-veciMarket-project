@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, useOutletContext } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../core/http/axios";
 
 export const EditProductPage = () => {
-    const { productId } = useParams();
-    const { selectedCommerce, refreshCommerce } = useOutletContext();
+    const { commerceId, productId } = useParams();
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
         name: "",
+        category: "all",
         description: "",
         price: "",
     });
@@ -16,18 +16,38 @@ export const EditProductPage = () => {
     const [currentImage, setCurrentImage] = useState("");
     const [newImage, setNewImage] = useState(null);
     const [preview, setPreview] = useState("");
+    const [commerceProducts, setCommerceProducts] = useState([]);
 
+    // Cargar el comercio y producto desde API
     useEffect(() => {
-        const product = selectedCommerce?.products.find((p) => p._id === productId);
-        if (product) {
-            setForm({
-                name: product.name,
-                description: product.description,
-                price: product.price.toString(),
-            });
-            setCurrentImage(product.images?.[0] || "");
-        }
-    }, [selectedCommerce, productId]);
+        const fetchData = async () => {
+            try {
+                // Obtener productos del comercio
+                const { data: commerce } = await api.get(`/commerces/${commerceId}`);
+                setCommerceProducts(commerce.products || []);
+
+                // Buscar el producto
+                const product = commerce.products.find(p => p._id === productId);
+                if (product) {
+                    setForm({
+                        name: product.name,
+                        category: product.category || "all",
+                        description: product.description,
+                        price: product.price.toString(),
+                    });
+                    setCurrentImage(product.images?.[0] || "");
+                } else {
+                    alert("Producto no encontrado");
+                    navigate(-1);
+                }
+            } catch (error) {
+                console.error("Error al cargar producto:", error);
+                alert("No se pudo cargar el producto");
+                navigate(-1);
+            }
+        };
+        fetchData();
+    }, [commerceId, productId, navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -54,6 +74,7 @@ export const EditProductPage = () => {
         try {
             const payload = new FormData();
             payload.append("name", form.name);
+            payload.append("category", form.category);
             payload.append("description", form.description);
             payload.append("price", priceValue);
 
@@ -63,8 +84,8 @@ export const EditProductPage = () => {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
-            if (refreshCommerce) await refreshCommerce();
-            navigate(-1);
+            alert("Producto actualizado correctamente");
+            navigate(`/admin/commerce/${commerceId}`);
         } catch (error) {
             console.error("Error al actualizar producto:", error);
             alert("No se pudo actualizar el producto.");
@@ -72,14 +93,17 @@ export const EditProductPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-general flex items-center justify-center p-6">
-            <div className="bg-white rounded-3xl p-10 max-w-lg w-full shadow-lg elevation">
+        <div className="flex justify-center mt-12">
+            <div className="card-form max-w-3xl w-full p-8 bg-white rounded-xl shadow-lg border border-gray-200">
+                <button onClick={() => navigate(-1)} className="btn-secondary self-start">
+                    ← Volver
+                </button>
+                
                 <h1 className="text-h3 font-title font-semibold text-[var(--color-burdeos-dark)] mb-8 text-center">
                     Editar Producto
                 </h1>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                    {/* Imagen actual / preview */}
                     {(preview || currentImage) && (
                         <div className="mb-4 text-center">
                             <img
@@ -90,7 +114,6 @@ export const EditProductPage = () => {
                         </div>
                     )}
 
-                    {/* Subir nueva imagen */}
                     <div className="flex flex-col">
                         <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
                             Subir nueva imagen
@@ -103,7 +126,6 @@ export const EditProductPage = () => {
                         />
                     </div>
 
-                    {/* Nombre */}
                     <div className="flex flex-col">
                         <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
                             Nombre del producto
@@ -119,7 +141,28 @@ export const EditProductPage = () => {
                         />
                     </div>
 
-                    {/* Descripción */}
+                    <div className="flex flex-col">
+                        <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
+                            Categoría
+                        </label>
+                        <select
+                            name="category"
+                            value={form.category}
+                            onChange={handleChange}
+                            className="input-field border border-gray-300 rounded-md focus:border-[var(--color-burdeos-dark)] focus:ring focus:ring-[var(--color-burdeos-light)] transition-all"
+                            required
+                        >
+                            <option value="all">Todas</option>
+                            <option value="food">Alimentación</option>
+                            <option value="books-paper">Libros & Papelería</option>
+                            <option value="health-beauty">Salud & Belleza</option>
+                            <option value="sports">Deportes</option>
+                            <option value="pets">Animales</option>
+                            <option value="home">Hogar</option>
+                            <option value="other">Otras</option>
+                        </select>
+                    </div>
+
                     <div className="flex flex-col">
                         <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
                             Descripción
@@ -135,7 +178,6 @@ export const EditProductPage = () => {
                         />
                     </div>
 
-                    {/* Precio */}
                     <div className="flex flex-col">
                         <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
                             Precio (€)
@@ -153,7 +195,6 @@ export const EditProductPage = () => {
                         />
                     </div>
 
-                    {/* Botones */}
                     <div className="flex gap-4 mt-6">
                         <button type="submit" className="btn-primary flex-1">
                             Guardar Cambios

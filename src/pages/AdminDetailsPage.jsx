@@ -1,5 +1,5 @@
-import { useContext, useEffect } from "react";
-import { useParams, useNavigate, Outlet } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import { useProduct } from "../core/products/ProductContext";
 import { useCommerce } from "../core/commerce/CommerceContext";
@@ -11,8 +11,10 @@ export const AdminDetailPage = () => {
     const { products, loadProductsByCommerce, deleteProduct } = useProduct();
     const { commerceId } = useParams();
     const navigate = useNavigate();
+    const [showScrollTop, setShowScrollTop] = useState(false);
 
-    const selectedCommerce = commerces.find((commerce) => commerce._id === commerceId);
+    const selectedCommerce = commerces.find(c => c._id === commerceId);
+    const isOwner = user?._id === selectedCommerce?.ownerUserId?._id;
 
     useEffect(() => {
         if (commerces.length === 0) fetchCommerces();
@@ -22,6 +24,18 @@ export const AdminDetailPage = () => {
         if (selectedCommerce) loadProductsByCommerce(selectedCommerce._id);
     }, [selectedCommerce]);
 
+    useEffect(() => {
+        const handleScroll = () => setShowScrollTop(window.scrollY > 300);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+    const refreshProducts = () => {
+        if (selectedCommerce) loadProductsByCommerce(selectedCommerce._id);
+    };
+
     if (!selectedCommerce)
         return (
             <div className="flex items-center justify-center min-h-screen text-[var(--color-burdeos-darker)]">
@@ -29,21 +43,15 @@ export const AdminDetailPage = () => {
             </div>
         );
 
-    const isOwner = user?._id === selectedCommerce?.ownerUserId?._id;
-    const refreshProducts = () => loadProductsByCommerce(selectedCommerce._id);
-
     return (
         <div className="min-h-screen max-w-7xl mx-auto px-6 py-12 flex flex-col gap-12">
             {/* Botón Volver */}
-            <button
-                onClick={() => navigate(-1)}
-                className="btn-secondary self-start"
-            >
+            <button onClick={() => navigate(-1)} className="btn-secondary self-start">
                 ← Volver
             </button>
 
             {/* Información del Comercio */}
-            <div className="card-form relative overflow-hidden">
+            <div className="card-form relative overflow-hidden p-6 rounded-2xl shadow-lg bg-[var(--color-gray-warm)]">
                 <h1 className="text-h2 font-title font-semibold text-[var(--color-burdeos-dark)] mb-4">
                     {selectedCommerce.name}
                 </h1>
@@ -51,22 +59,12 @@ export const AdminDetailPage = () => {
                     {selectedCommerce.description}
                 </p>
 
-                {/* Efectos decorativos */}
-                <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-[var(--color-mostaza-pastel)]/20 blur-3xl pointer-events-none"></div>
-                <div className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-[var(--color-mostaza-pastel)]/10 blur-3xl pointer-events-none"></div>
-
                 {isOwner && (
                     <div className="flex flex-wrap gap-4 mt-6">
-                        <button
-                            onClick={() => navigate("edit")}
-                            className="btn-primary"
-                        >
+                        <button onClick={() => navigate(`/admin/commerce/${commerceId}/edit`)} className="btn-primary">
                             Editar Comercio
                         </button>
-                        <button
-                            onClick={() => navigate("create")}
-                            className="btn-primary"
-                        >
+                        <button onClick={() => navigate(`/admin/commerce/${commerceId}/create`)} className="btn-primary">
                             Crear Producto
                         </button>
                         <button
@@ -84,16 +82,22 @@ export const AdminDetailPage = () => {
                 )}
             </div>
 
-            {/* Productos */}
+            {/* Productos con categorías */}
             <Category
-                products={products}
-                commerceId={selectedCommerce._id}
-                deleteProduct={deleteProduct}
+                products={products.filter(p => p.commerceId === selectedCommerce._id)}
+                ownerId={selectedCommerce.ownerUserId?._id}
                 refreshProducts={refreshProducts}
+                commerceId={selectedCommerce._id} // <- PASAMOS EL COMMERCE ID
             />
 
-            {/* Rutas hijas */}
-            <Outlet context={{ refreshProducts, selectedCommerce }} />
+            {showScrollTop && (
+                <button
+                    onClick={scrollToTop}
+                    className="fixed bottom-6 right-6 bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] p-3 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 z-50"
+                >
+                    ↑
+                </button>
+            )}
         </div>
     );
 };

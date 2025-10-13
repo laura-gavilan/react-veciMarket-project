@@ -100,7 +100,7 @@ export const CommerceDetailPage = () => {
                             >
                                 {product.images?.[0] && (
                                     <img
-                                        src={product.images[0].startsWith("/") ? product.images[0] : `/products/${product.images[0]}`}
+                                        src={product.images[0].startsWith("http") ? product.images[0] : `/products/${product.images[0]}`}
                                         alt={product.name}
                                         className="w-30 h-30 object-cover rounded-lg border"
                                     />

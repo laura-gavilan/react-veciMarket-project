@@ -1,25 +1,29 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useContext, useMemo } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+import { api } from "../core/http/axios";
 
-export const Category = ({
-    products,
-    commerceId,
-    commerceCategory,
-    deleteProduct,
-    refreshProducts,
-}) => {
-    const [selectedCategory, setSelectedCategory] = useState("all");
+export const Category = ({ products, deleteProduct, refreshProducts, ownerId, commerceId }) => {
+    const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const isOwner = user?._id === ownerId;
 
-    const categories = [
-        "all",
-        "food",
-        "books-paper",
-        "health-beauty",
-        "sports",
-        "pets",
-        "home",
-        "other",
-    ];
+    // Agrupar productos por categoría
+    const categories = useMemo(() => {
+        const catMap = {};
+        products.forEach(product => {
+            const cat = product.category || "other";
+            if (!catMap[cat]) catMap[cat] = [];
+            catMap[cat].push(product);
+        });
+        return catMap;
+    }, [products]);
+
+    const handleDelete = async (productId) => {
+        if (!window.confirm("¿Eliminar producto?")) return;
+        await api.delete(`/products/${productId}`);
+        if (refreshProducts) refreshProducts();
+    };
 
     const categoryNames = {
         all: "Todas",
@@ -28,87 +32,71 @@ export const Category = ({
         "health-beauty": "Salud & Belleza",
         sports: "Deportes",
         pets: "Animales",
-        home: "Casa",
+        home: "Hogar",
         other: "Otras",
     };
 
-    const filteredProducts = products.filter((product) => {
-        if (!product) return false;
-        const matchesCommerce = commerceId ? product.commerceId === commerceId : true;
-        const matchesCategory =
-            selectedCategory === "all" ? true : product.category === selectedCategory;
-        return matchesCommerce && matchesCategory;
-    });
-
     return (
-        <div className="mt-6">
-            <h2 className="text-h4 font-title font-semibold text-[var(--color-burdeos-dark)] mb-6 border-b border-[var(--color-burdeos-light)] pb-2">
-                Productos
-            </h2>
-
-            <div className="mb-6 flex items-center gap-3">
-                <label className="text-[var(--color-burdeos-dark)] font-semibold">Categoría:</label>
-                <select
-                    value={selectedCategory}
-                    onChange={(event) => setSelectedCategory(event.target.value)}
-                    className="border border-gray-300 rounded-3xl px-4 py-2 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] focus:border-[var(--color-mostaza)] transition-all"
-                >
-                    {commerceCategory && !categories.includes(commerceCategory) && (
-                        <option value={commerceCategory}>
-                            {categoryNames[commerceCategory] || commerceCategory}
-                        </option>
-                    )}
-                    {categories.map((category) => (
-                        <option key={category} value={category}>
-                            {categoryNames[category]}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            {filteredProducts.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    {filteredProducts.map((product) => (
-                        <div
-                            key={product._id}
-                            className="bg-white rounded-3xl p-5 shadow-lg hover:shadow-xl transition-shadow flex justify-between items-center"
-                        >
-                            {product.images?.[0] && (
-                                <img
-                                    src={product.images[0].startsWith("/") ? product.images[0] : `/products/${product.images[0]}`}
-                                    alt={product.name}
-                                    className="w-24 h-24 object-cover rounded-2xl border border-[var(--color-burdeos-light)] shadow-sm"
-                                />
-                            )}
-                            <div className="flex-1 mx-4">
-                                <span className="font-semibold text-[var(--color-burdeos-dark)] text-lg">{product.name}</span>
-                                <p className="text-gray-500 mt-1">{product.price}€</p>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <Link
-                                    to={`edit/${product._id}`}
-                                    className="btn-primary text-sm"
-                                >
-                                    Editar
-                                </Link>
-                                {deleteProduct && refreshProducts && (
-                                    <button
-                                        onClick={() => {
-                                            deleteProduct(product._id);
-                                            refreshProducts();
-                                        }}
-                                        className="btn-secondary text-sm"
-                                    >
-                                        Eliminar
-                                    </button>
+        <div className="flex flex-col gap-8">
+            {Object.keys(categories).map(category => (
+                <div key={category}>
+                    <h2 className="text-2xl font-bold mb-4 capitalize">
+                        {categoryNames[category] || category}
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {categories[category].map(product => (
+                            <div
+                                key={product._id}
+                                className="bg-[var(--color-gray-warm)] rounded-2xl shadow-md border border-[var(--color-burdeos-light)] overflow-hidden hover:shadow-2xl hover:scale-105 transition-all flex flex-col cursor-pointer"
+                            >
+                                {product.images?.[0] && (
+                                    <img
+                                        src={
+                                            product.images[0].startsWith("http")
+                                                ? product.images[0]
+                                                : product.images[0].startsWith("/products/")
+                                                    ? product.images[0]
+                                                    : `/products/${product.images[0]}`
+                                        }
+                                        alt={product.name}
+                                        className="w-full h-48 object-cover rounded-t-2xl"
+                                    />
                                 )}
+
+                                <div className="p-5 flex flex-col justify-between flex-1">
+                                    <div>
+                                        <h3 className="text-xl font-semibold text-[var(--color-burdeos-dark)]">
+                                            {product.name}
+                                        </h3>
+                                        <p className="text-[var(--color-burdeos-light)] font-bold mt-2">
+                                            {product.price.toFixed(2)} €
+                                        </p>
+                                    </div>
+
+                                    {isOwner && (
+                                        <div className="flex gap-3 mt-4">
+                                            <button
+                                                onClick={() => navigate(`/admin/commerce/${commerceId}/edit/${product._id}`)}
+                                                className="flex-1 bg-[var(--color-burdeos-dark)] hover:bg-[var(--color-burdeos-light)] text-[var(--color-mostaza-pastel)] py-2 rounded-xl text-center font-medium transition-all shadow-sm hover:shadow-md"
+                                            >
+                                                Editar
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(product._id)}
+                                                className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-xl font-medium transition-all shadow-sm hover:shadow-md"
+                                            >
+                                                Eliminar
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            ) : (
-                <p className="text-gray-500 mt-4">No hay productos en esta categoría</p>
-            )}
+            ))}
         </div>
     );
 };
+
+

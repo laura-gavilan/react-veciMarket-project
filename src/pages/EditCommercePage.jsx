@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, useOutletContext } from "react-router-dom";
-import { useCommerce } from "../core/commerce/CommerceContext";
+import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../core/http/axios";
 
 export const EditCommercePage = () => {
-    const { updateCommerce } = useCommerce();
     const { commerceId } = useParams();
     const navigate = useNavigate();
-    const { selectedCommerce } = useOutletContext();
 
     const [form, setForm] = useState({
         name: "",
@@ -16,21 +13,29 @@ export const EditCommercePage = () => {
         address: { street: "", city: "", phone: "", email: "", schedule: "" },
     });
 
+    // Cargar datos del comercio
     useEffect(() => {
-        if (selectedCommerce)
-            setForm({
-                name: selectedCommerce.name || "",
-                category: selectedCommerce.category || "all",
-                description: selectedCommerce.description || "",
-                address: selectedCommerce.address || {
-                    street: "",
-                    city: "",
-                    phone: "",
-                    email: "",
-                    schedule: "",
-                },
-            });
-    }, [selectedCommerce]);
+        const fetchCommerce = async () => {
+            try {
+                const { data } = await api.get(`/commerces/${commerceId}`);
+                setForm({
+                    name: data.name || "",
+                    category: data.category || "all",
+                    description: data.description || "",
+                    address: data.address || {
+                        street: "",
+                        city: "",
+                        phone: "",
+                        email: "",
+                        schedule: "",
+                    },
+                });
+            } catch (error) {
+                console.error("Error al cargar el comercio:", error);
+            }
+        };
+        fetchCommerce();
+    }, [commerceId]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -45,17 +50,22 @@ export const EditCommercePage = () => {
         event.preventDefault();
         try {
             const { data } = await api.patch(`/commerces/${commerceId}`, form);
-            updateCommerce(data);
-            navigate(-1);
+            alert("Comercio actualizado correctamente");
+            navigate(`/admin/commerce/${commerceId}`);
         } catch (error) {
             console.error("Error actualizando comercio:", error);
+            alert("No se pudo actualizar el comercio");
         }
     };
 
     return (
         <div className="flex justify-center mt-12">
-            <div className="card-form max-w-3xl w-full p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300">
-                <h1 className="text-h2 font-title font-semibold text-[var(--color-burdeos-dark)] mb-6 text-center">
+            <div className="card-form max-w-3xl w-full p-8 bg-white rounded-xl shadow-lg border border-gray-200">
+                <button onClick={() => navigate(-1)} className="btn-secondary self-start">
+                    ← Volver
+                </button>
+                
+                <h1 className="text-h2 font-semibold text-[var(--color-burdeos-dark)] mb-6 text-center">
                     Editar Comercio
                 </h1>
 
@@ -67,7 +77,7 @@ export const EditCommercePage = () => {
                             name="category"
                             value={form.category}
                             onChange={handleChange}
-                            className="input-field border border-gray-300 rounded-md focus:border-[var(--color-burdeos-dark)] focus:ring focus:ring-[var(--color-burdeos-light)] transition-all"
+                            className="input-field border border-gray-300 rounded-md"
                             required
                         >
                             <option value="all">Todas</option>
@@ -90,7 +100,8 @@ export const EditCommercePage = () => {
                             value={form.name}
                             onChange={handleChange}
                             placeholder="Nombre del comercio"
-                            className="input-field border border-gray-300 rounded-md focus:border-[var(--color-burdeos-dark)] focus:ring focus:ring-[var(--color-burdeos-light)] transition-all"
+                            className="input-field border border-gray-300 rounded-md"
+                            required
                         />
                     </div>
 
@@ -102,8 +113,9 @@ export const EditCommercePage = () => {
                             value={form.description}
                             onChange={handleChange}
                             placeholder="Descripción breve del comercio"
-                            className="input-field border border-gray-300 rounded-md focus:border-[var(--color-burdeos-dark)] focus:ring focus:ring-[var(--color-burdeos-light)] transition-all"
+                            className="input-field border border-gray-300 rounded-md"
                             rows={4}
+                            required
                         />
                     </div>
 
@@ -117,7 +129,7 @@ export const EditCommercePage = () => {
                                 value={form.address.street}
                                 onChange={handleChange}
                                 placeholder="Calle"
-                                className="input-field border border-gray-300 rounded-md focus:border-[var(--color-burdeos-dark)] focus:ring focus:ring-[var(--color-burdeos-light)] transition-all"
+                                className="input-field border border-gray-300 rounded-md"
                             />
                         </div>
                         <div className="flex flex-col">
@@ -128,7 +140,7 @@ export const EditCommercePage = () => {
                                 value={form.address.city}
                                 onChange={handleChange}
                                 placeholder="Ciudad"
-                                className="input-field border border-gray-300 rounded-md focus:border-[var(--color-burdeos-dark)] focus:ring focus:ring-[var(--color-burdeos-light)] transition-all"
+                                className="input-field border border-gray-300 rounded-md"
                             />
                         </div>
                     </div>
@@ -141,7 +153,7 @@ export const EditCommercePage = () => {
                             value={form.address.phone}
                             onChange={handleChange}
                             placeholder="Teléfono"
-                            className="input-field border border-gray-300 rounded-md focus:border-[var(--color-burdeos-dark)] focus:ring focus:ring-[var(--color-burdeos-light)] transition-all"
+                            className="input-field border border-gray-300 rounded-md"
                         />
                     </div>
 
@@ -153,7 +165,7 @@ export const EditCommercePage = () => {
                             value={form.address.email}
                             onChange={handleChange}
                             placeholder="Correo electrónico"
-                            className="input-field border border-gray-300 rounded-md focus:border-[var(--color-burdeos-dark)] focus:ring focus:ring-[var(--color-burdeos-light)] transition-all"
+                            className="input-field border border-gray-300 rounded-md"
                         />
                     </div>
 
@@ -165,13 +177,13 @@ export const EditCommercePage = () => {
                             value={form.address.schedule}
                             onChange={handleChange}
                             placeholder="Horario de apertura"
-                            className="input-field border border-gray-300 rounded-md focus:border-[var(--color-burdeos-dark)] focus:ring focus:ring-[var(--color-burdeos-light)] transition-all"
+                            className="input-field border border-gray-300 rounded-md"
                         />
                     </div>
 
                     <button
                         type="submit"
-                        className="btn-save mt-4 bg-[var(--color-burdeos-dark)] hover:bg-[var(--color-burdeos-light)] text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300"
+                        className="btn-save mt-4 bg-[var(--color-burdeos-dark)] text-white py-3 rounded-lg"
                     >
                         Guardar cambios
                     </button>

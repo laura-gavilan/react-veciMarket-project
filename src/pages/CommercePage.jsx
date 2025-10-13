@@ -4,11 +4,15 @@ import { useProduct } from "../core/products/ProductContext";
 import { useNavigate } from "react-router-dom";
 
 export const CommercePage = () => {
-    const { commerces, search, setSearch } = useCommerce();
+    const { commerces } = useCommerce();
     const { products, loadAllProducts } = useProduct();
     const navigate = useNavigate();
-    const [selectedCategory, setSelectedCategory] = useState(null);
+
+    const [search, setSearch] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("all");
+    const [showProducts, setShowProducts] = useState(true); // controla si se muestran productos
     const [filteredProducts, setFilteredProducts] = useState([]);
+    const [filteredCommerces, setFilteredCommerces] = useState([]);
 
     const categories = [
         "all",
@@ -32,42 +36,46 @@ export const CommercePage = () => {
         other: "Otras",
     };
 
+    // Cargar todos los productos
     useEffect(() => {
         loadAllProducts();
     }, []);
 
-    const filteredCommerces = commerces
-        .filter((commerce) =>
-            commerce.name.toLowerCase().includes(search.toLowerCase())
-        )
-        .slice(0, 5); // Mostrar solo 5 comercios
-
+    // Filtrado de productos por búsqueda y categoría
     useEffect(() => {
-        if (selectedCategory && selectedCategory !== "all") {
-            const filtered = products.filter((product) =>
-                product.category.includes(selectedCategory)
-            );
-            setFilteredProducts(filtered);
-        } else if (selectedCategory === "all") {
-            setFilteredProducts(products);
-        } else {
-            setFilteredProducts([]);
+        if (!showProducts) {
+            setFilteredProducts([]); // Ocultar productos si showProducts es false
+            return;
         }
-    }, [selectedCategory, products]);
+
+        const searchLower = search.toLowerCase();
+        const filteredProds = products.filter(product => {
+            const matchesSearch = product.name.toLowerCase().includes(searchLower);
+            const matchesCategory =
+                selectedCategory === "all"
+                    ? true
+                    : product.category.includes(selectedCategory);
+            return matchesSearch && matchesCategory;
+        });
+
+        setFilteredProducts(filteredProds);
+
+        // Mostrar todos los comercios
+        setFilteredCommerces(commerces);
+    }, [search, products, commerces, selectedCategory, showProducts]);
 
     return (
-        <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col items-center bg-general">
-
+        <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col items-center bg-general">
             {/* Título principal */}
-            <h1 className="text-center mb-8 text-4xl md:text-5xl font-title font-semibold text-[var(--color-burdeos-dark)] leading-tight">
-                Explora los <span className="text-[var(--color-mostaza)]">comercios</span> y los <span className="text-[var(--color-mostaza)]">productos</span> de tu barrio
+            <h1 className="text-center mb-8 text-5xl md:text-4xl font-title font-semibold text-[var(--color-burdeos-dark)] leading-tight">
+                Explora los <span className="text-[var(--color-mostaza)]">productos</span> y <span className="text-[var(--color-mostaza)]">comercios</span> de tu barrio
             </h1>
 
-            {/* Buscador */}
+            {/* Buscador solo para productos */}
             <div className="mb-8 w-full md:w-1/2 relative">
                 <input
                     type="text"
-                    placeholder="Buscar comercio..."
+                    placeholder="Buscar producto..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="w-full px-5 py-3 rounded-full border border-[var(--color-burdeos-dark)] bg-white text-[var(--color-burdeos-dark)] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] shadow-sm transition-all duration-300"
@@ -83,77 +91,84 @@ export const CommercePage = () => {
             </div>
 
             {/* Categorías */}
-            <div className="w-full mb-10">
-                <div className="flex flex-wrap gap-3 justify-center">
-                    {categories.map((category) => (
-                        <button
-                            key={category}
-                            onClick={() => setSelectedCategory(category)}
-                            className={`px-5 py-2 rounded-full font-semibold transition-all duration-300 ${selectedCategory === category
+            <div className="w-full mb-10 flex flex-wrap gap-3 justify-center">
+                {categories.map((category) => (
+                    <button
+                        key={category}
+                        onClick={() => {
+                            setSelectedCategory(category);
+                            setShowProducts(true); // al cambiar categoría, mostrar productos
+                        }}
+                        className={`px-5 py-2 rounded-full font-semibold transition-all duration-300 ${
+                            selectedCategory === category
                                 ? "bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] shadow-md scale-105"
                                 : "bg-white text-[var(--color-burdeos-dark)] border border-[var(--color-burdeos-dark)] hover:bg-[var(--color-mostaza-pastel)] hover:scale-105"
-                                }`}
-                        >
-                            {categoryNames[category]}
-                        </button>
-                    ))}
-                    {selectedCategory && (
-                        <button
-                            onClick={() => setSelectedCategory(null)}
-                            className="px-5 py-2 rounded-full border bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all duration-300"
-                        >
-                            Ocultar todas
-                        </button>
-                    )}
-                </div>
+                        }`}
+                    >
+                        {categoryNames[category]}
+                    </button>
+                ))}
 
-                {/* Productos filtrados */}
-                {selectedCategory && (
-                    <div className="w-full mt-8">
-                        {filteredProducts.length > 0 ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                                {filteredProducts.map((product) => {
-                                    const commerce = commerces.find(c => c._id === product.commerceId);
-                                    return (
-                                        <div
-                                            key={product._id}
-                                            className="group bg-white border border-gray-200 rounded-3xl shadow-md overflow-hidden cursor-pointer p-5 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                                            onClick={() => commerce && navigate(`/commerce/${commerce._id}`)}
-                                        >
-                                            {product.images?.[0] && (
-                                                <img
-                                                    src={product.images[0].startsWith("/") ? product.images[0] : `/products/${product.images[0]}`}
-                                                    alt={product.name}
-                                                    className="w-24 h-24 md:w-28 md:h-28 object-cover rounded-lg mb-4 transition-transform duration-300 group-hover:scale-105"
-                                                />
-                                            )}
-                                            <h3 className="text-lg md:text-xl font-title font-semibold text-[var(--color-burdeos-dark)]">
-                                                {product.name}
-                                            </h3>
-                                            <p className="text-[var(--color-burdeos-darker)] mt-1 font-medium">
-                                                {product.price} €
-                                            </p>
-                                            {commerce && (
-                                                <p className="text-gray-500 text-sm mt-1 truncate">{commerce.name}</p>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <p className="text-center text-gray-500 mt-4">
-                                No hay productos en esta categoría.
-                            </p>
-                        )}
-                    </div>
+                {/* Botón Ocultar todos */}
+                {showProducts && (
+                    <button
+                        onClick={() => setShowProducts(false)}
+                        className="px-5 py-2 rounded-full border bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all duration-300"
+                    >
+                        Ocultar todos
+                    </button>
                 )}
             </div>
 
-            {/* Comercios */}
+            {/* Productos filtrados */}
+            {showProducts && selectedCategory && filteredProducts.length > 0 && (
+                <div className="w-full mt-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        {filteredProducts.map(product => {
+                            const commerce = commerces.find(c => c._id === product.commerceId);
+                            return (
+                                <div
+                                    key={product._id}
+                                    className="group bg-white border border-gray-200 rounded-3xl shadow-md overflow-hidden cursor-pointer p-5 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                                    onClick={() => commerce && navigate(`/commerce/${commerce._id}`)}
+                                >
+                                    {product.images?.[0] && (
+                                        <img
+                                            src={product.images[0].startsWith("/") ? product.images[0] : `/products/${product.images[0]}`}
+                                            alt={product.name}
+                                            className="w-24 h-24 md:w-28 md:h-28 object-cover rounded-lg mb-4 transition-transform duration-300 group-hover:scale-105"
+                                        />
+                                    )}
+                                    <h3 className="text-lg md:text-xl font-title font-semibold text-[var(--color-burdeos-dark)]">
+                                        {product.name}
+                                    </h3>
+                                    <p className="text-[var(--color-burdeos-darker)] mt-1 font-medium">
+                                        {product.price} €
+                                    </p>
+                                    {commerce && (
+                                        <p className="text-gray-500 text-sm mt-1 truncate">{commerce.name}</p>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+
+            {showProducts && selectedCategory && filteredProducts.length === 0 && (
+                <p className="text-center text-gray-500 mt-4">
+                    No hay productos en esta categoría.
+                </p>
+            )}
+
+            {/* Comercios filtrados */}
             <div className="w-full mt-12">
+                <h2 className="text-h4 font-title font-semibold text-[var(--color-burdeos-dark)] mb-6">
+                    Comercios
+                </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {filteredCommerces.length > 0 ? (
-                        filteredCommerces.map((commerce) => (
+                        filteredCommerces.map(commerce => (
                             <div
                                 key={commerce._id}
                                 className="group bg-white rounded-3xl shadow-md p-6 border border-gray-200 overflow-hidden cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
@@ -161,12 +176,9 @@ export const CommercePage = () => {
                             >
                                 {(commerce.image || commerce.images?.[0]) && (
                                     <img
-                                        src={(commerce.image || commerce.images[0]).startsWith("http")
+                                        src={(commerce.image || commerce.images[0]).startsWith("/")
                                             ? (commerce.image || commerce.images[0])
-                                            : commerce.image?.startsWith("/images/")
-                                                ? commerce.image
-                                                : `/commerces/${commerce.images?.[0] || commerce.image}`
-                                        }
+                                            : `/commerces/${commerce.images?.[0] || commerce.image}`}
                                         alt={commerce.name}
                                         className="w-full h-44 sm:h-48 md:h-40 lg:h-36 object-cover rounded-2xl mb-4 transition-transform duration-300 group-hover:scale-105"
                                     />
@@ -189,4 +201,3 @@ export const CommercePage = () => {
         </div>
     );
 };
-

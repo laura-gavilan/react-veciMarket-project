@@ -7,6 +7,7 @@ export const NavBar = () => {
     const { user } = useContext(AuthContext);
     const { logout } = useAuth();
     const [open, setOpen] = useState(false);
+    const [userMenu, setUserMenu] = useState(false);
 
     // Definimos los enlaces según el rol del usuario
     const links = useMemo(() => {
@@ -37,6 +38,7 @@ export const NavBar = () => {
 
     const handleLogout = () => {
         logout();
+        setUserMenu(false);
         setOpen(false);
     };
 
@@ -54,17 +56,47 @@ export const NavBar = () => {
                             {label}
                         </Link>
                     ))}
+
+                    {/* Icono login / usuario */}
+                    <div className="relative">
+                        {!user ? (
+                            <Link to="/login" className="flex items-center justify-center w-6 h-6">
+                                <img
+                                    src="/public/icons/login.png"
+                                    alt="Login"
+                                    className="w-full h-full object-contain"
+                                />
+                            </Link>
+                        ) : (
+                            <button
+                                onClick={() => setUserMenu(!userMenu)}
+                                className="flex items-center justify-center w-6 h-6"
+                            >
+                                <img
+                                    src="/public/icons/login.png"
+                                    alt="Usuario"
+                                    className="w-full h-full object-contain"
+                                />
+                            </button>
+                        )}
+
+                        {/* Dropdown cerrar sesión */}
+                        {user && userMenu && (
+                            <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg z-50">
+                                <button
+                                    onClick={handleLogout}
+                                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                                >
+                                    Cerrar sesión
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
-                {/* Login / Logout / Menú móvil */}
-                <div className="flex items-center gap-4">
-                    {!user ? (
-                        <Link to="/login" className="btn-primary">Login</Link>
-                    ) : (
-                        <button onClick={handleLogout} className="btn-secondary">Cerrar sesión</button>
-                    )}
-
-                    <button className="md:hidden focus:outline-none" onClick={() => setOpen(!open)}>
+                {/* Menú móvil */}
+                <div className="flex items-center gap-4 md:hidden">
+                    <button className="focus:outline-none" onClick={() => setOpen(!open)}>
                         <img
                             src={open ? "/public/xmark-solid-full.svg" : "/public/white-burger-menu.png"}
                             alt="Menú"
@@ -74,7 +106,7 @@ export const NavBar = () => {
                 </div>
             </div>
 
-            {/* Menú móvil */}
+            {/* Menú móvil desplegable */}
             {open && (
                 <div className="md:hidden flex flex-col items-center gap-4 py-4 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] shadow-inner border-t border-[var(--color-burdeos-light)] text-lg font-semibold transition-all duration-300">
                     {links.map(({ to, label }) => (
@@ -87,8 +119,20 @@ export const NavBar = () => {
                             {label}
                         </Link>
                     ))}
-                    {user && (
-                        <button onClick={handleLogout} className="btn-secondary w-full">
+
+                    {!user ? (
+                        <Link to="/login" onClick={() => setOpen(false)} className="w-10 h-10">
+                            <img
+                                src="/public/icons/login.png"
+                                alt="Login"
+                                className="w-full h-full object-contain"
+                            />
+                        </Link>
+                    ) : (
+                        <button
+                            onClick={handleLogout}
+                            className="btn-secondary w-full"
+                        >
                             Cerrar sesión
                         </button>
                     )}

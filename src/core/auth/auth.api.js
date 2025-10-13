@@ -3,6 +3,7 @@ import { api } from './../http/axios.js';
 export const loginApi = async ({ email, password }) => {
     try {
         const response = await api.post("/auth/login", { email, password });
+        console.log("Respuesta del login:", response.data);
         return response.data;
     } catch (error) {
         console.error("Se ha producido un error al iniciar sesión", error);
@@ -26,7 +27,7 @@ export const registerApi = async (user) => {
 export const logoutApi = async () => {
     try {
         console.log("logoutApi");
-        const response = await api.post("/auth/logout", null);
+        const response = await api.post("/auth/logout");
 
         console.log("respuesta de la api", response);
         return response.data;

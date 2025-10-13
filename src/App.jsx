@@ -19,8 +19,6 @@ import { UserPage } from './pages/UserPage.jsx';
 import { EditUserPage } from './pages/EditUserPage.jsx';
 import { FavoritesPage } from './pages/FavoritesPage.jsx';
 
-
-
 export const App = () => {
   return (
     <div className="min-h-screen flex flex-col">
@@ -37,23 +35,31 @@ export const App = () => {
           <Route path="/login" element={<Login />} />
 
           <Route element={<PrivateRoute />}>
+            {/* Admin principal */}
             <Route path="/admin" element={<AdminPage />} />
-            <Route path="/admin/commerce/:commerceId" element={<AdminDetailPage />}>
-              <Route path="edit" element={<EditCommercePage />} />
-              <Route path="create" element={<CreateProductPage />} />
-              <Route path="edit/:productId" element={<EditProductPage />} />
-            </Route>
 
-            <Route element={<PrivateRoute />}>
-            <Route path="/user" element={<UserPage/>} />
+            {/* Detalles de un comercio */}
+            <Route path="/admin/commerce/:commerceId" element={<AdminDetailPage />} />
+
+            {/* Editar comercio en página separada */}
+            <Route path="/admin/commerce/:commerceId/edit" element={<EditCommercePage />} />
+
+            {/* Crear producto en página separada */}
+            <Route path="/admin/commerce/:commerceId/create" element={<CreateProductPage />} />
+
+            {/* Editar producto en página separada */}
+            <Route path="/admin/commerce/:commerceId/edit/:productId" element={<EditProductPage />} />
+
+            {/* User y favoritos */}
+            <Route path="/user" element={<UserPage />} />
             <Route path="/user/edit" element={<EditUserPage />} />
-            <Route path="/favorites" element={<FavoritesPage/>} />
+            <Route path="/favorites" element={<FavoritesPage />} />
 
-            </Route>
-
+            {/* Crear nuevo comercio */}
             <Route path="/commerce/new" element={<CreateCommercePage />} />
           </Route>
 
+          {/* Ruta no encontrada */}
           <Route path="*" element={<h2 className="text-center mt-10">Página no encontrada</h2>} />
         </Routes>
       </main>
@@ -62,5 +68,4 @@ export const App = () => {
     </div>
   );
 };
-
 

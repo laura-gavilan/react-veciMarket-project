@@ -18,7 +18,16 @@ export const useAuth = () => {
             console.log(`Intentando login con: ${email}`);
             const authData = await loginApi({ email, password });
 
-            if (authData?.token && authData?.user) {
+            // Si la API devuelve directamente el token
+            if (typeof authData === "string") {
+                saveTokenInLocalStorage(authData);
+                // (opcional) puedes luego obtener el perfil
+                await getProfile();
+                navigate("/");
+            }
+
+            // Si devuelve objeto con token y user
+            else if (authData?.token && authData?.user) {
                 saveTokenInLocalStorage(authData.token);
                 saveUserInLocalStorage(authData.user);
                 setUser(authData.user);
@@ -32,14 +41,14 @@ export const useAuth = () => {
     const logout = async () => {
         console.log("Cerrando sesión");
         try {
-            await logoutApi(); 
+            await logoutApi();
         } catch (err) {
-            console.warn("No se pudo cerrar sesión en el servidor, pero se limpiará localmente.", err);
+            console.error("No se pudo cerrar sesión en el servidor.", err);
         } finally {
             removeUserFromLocalStorage();
             removeTokenFromLocalStorage();
-            setUser(null);
-            navigate("/");
+
+            if (setUser) setUser(null);
         }
     };
 
@@ -67,6 +76,7 @@ export const useAuth = () => {
             if (user) {
                 console.log("Usuario actual:", user);
                 setUser(user);
+                saveUserInLocalStorage(user);
             } else {
                 console.log("No hay usuario logueado");
             }
