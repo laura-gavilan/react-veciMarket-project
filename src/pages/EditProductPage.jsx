@@ -32,7 +32,6 @@ export const EditProductPage = () => {
                     setForm({
                         name: product.name,
                         category: product.category || "all",
-                        description: product.description,
                         price: product.price.toString(),
                     });
                     setCurrentImage(product.images?.[0] || "");
@@ -75,7 +74,6 @@ export const EditProductPage = () => {
             const payload = new FormData();
             payload.append("name", form.name);
             payload.append("category", form.category);
-            payload.append("description", form.description);
             payload.append("price", priceValue);
 
             if (newImage) payload.append("image", newImage);
@@ -161,21 +159,6 @@ export const EditProductPage = () => {
                             <option value="home">Hogar</option>
                             <option value="other">Otras</option>
                         </select>
-                    </div>
-
-                    <div className="flex flex-col">
-                        <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
-                            Descripción
-                        </label>
-                        <textarea
-                            name="description"
-                            value={form.description}
-                            onChange={handleChange}
-                            placeholder="Describe el producto..."
-                            rows="4"
-                            className="w-full px-5 py-3 rounded-3xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-[var(--color-mostaza)] focus:border-[var(--color-mostaza)] outline-none transition-all resize-none"
-                            required
-                        />
                     </div>
 
                     <div className="flex flex-col">

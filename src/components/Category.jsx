@@ -47,20 +47,22 @@ export const Category = ({ products, deleteProduct, refreshProducts, ownerId, co
                         {categories[category].map(product => (
                             <div
                                 key={product._id}
-                                className="bg-[var(--color-gray-warm)] rounded-2xl shadow-md border border-[var(--color-burdeos-light)] overflow-hidden hover:shadow-2xl hover:scale-105 transition-all flex flex-col cursor-pointer"
+                                className="bg-[var(--color-gray-warm)] rounded-xl shadow-md border border-[var(--color-burdeos-light)] overflow-hidden hover:shadow-xl hover:scale-105 transition-all flex flex-col cursor-pointer"
                             >
                                 {product.images?.[0] && (
-                                    <img
-                                        src={
-                                            product.images[0].startsWith("http")
-                                                ? product.images[0]
-                                                : product.images[0].startsWith("/products/")
+                                    <div className="w-full flex justify-center p-6">
+                                        <img
+                                            src={
+                                                product.images[0].startsWith("http")
                                                     ? product.images[0]
-                                                    : `/products/${product.images[0]}`
-                                        }
-                                        alt={product.name}
-                                        className="w-full h-48 object-cover rounded-t-2xl"
-                                    />
+                                                    : product.images[0].startsWith("/products/")
+                                                        ? product.images[0]
+                                                        : `/products/${product.images[0]}`
+                                            }
+                                            alt={product.name}
+                                            className="w-50 h-60 object-cover rounded-t-2xl"
+                                        />
+                                    </div>
                                 )}
 
                                 <div className="p-5 flex flex-col justify-between flex-1">

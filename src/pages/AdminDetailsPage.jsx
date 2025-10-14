@@ -82,12 +82,11 @@ export const AdminDetailPage = () => {
                 )}
             </div>
 
-            {/* Productos con categorías */}
             <Category
                 products={products.filter(p => p.commerceId === selectedCommerce._id)}
                 ownerId={selectedCommerce.ownerUserId?._id}
                 refreshProducts={refreshProducts}
-                commerceId={selectedCommerce._id} // <- PASAMOS EL COMMERCE ID
+                commerceId={selectedCommerce._id} 
             />
 
             {showScrollTop && (
