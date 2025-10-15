@@ -35,31 +35,19 @@ export const App = () => {
           <Route path="/login" element={<Login />} />
 
           <Route element={<PrivateRoute />}>
-            {/* Admin principal */}
             <Route path="/admin" element={<AdminPage />} />
-
-            {/* Detalles de un comercio */}
             <Route path="/admin/commerce/:commerceId" element={<AdminDetailPage />} />
-
-            {/* Editar comercio en página separada */}
             <Route path="/admin/commerce/:commerceId/edit" element={<EditCommercePage />} />
-
-            {/* Crear producto en página separada */}
             <Route path="/admin/commerce/:commerceId/create" element={<CreateProductPage />} />
-
-            {/* Editar producto en página separada */}
             <Route path="/admin/commerce/:commerceId/edit/:productId" element={<EditProductPage />} />
 
-            {/* User y favoritos */}
             <Route path="/user" element={<UserPage />} />
             <Route path="/user/edit" element={<EditUserPage />} />
             <Route path="/favorites" element={<FavoritesPage />} />
 
-            {/* Crear nuevo comercio */}
             <Route path="/commerce/new" element={<CreateCommercePage />} />
           </Route>
 
-          {/* Ruta no encontrada */}
           <Route path="*" element={<h2 className="text-center mt-10">Página no encontrada</h2>} />
         </Routes>
       </main>

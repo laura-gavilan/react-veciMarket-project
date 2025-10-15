@@ -18,7 +18,6 @@ export const EditProductPage = () => {
     const [preview, setPreview] = useState("");
     const [commerceProducts, setCommerceProducts] = useState([]);
 
-    // Cargar el comercio y producto desde API
     useEffect(() => {
         const fetchData = async () => {
             try {

@@ -45,12 +45,10 @@ export const AdminDetailPage = () => {
 
     return (
         <div className="min-h-screen max-w-7xl mx-auto px-6 py-12 flex flex-col gap-12">
-            {/* Botón Volver */}
             <button onClick={() => navigate(-1)} className="btn-secondary self-start">
                 ← Volver
             </button>
 
-            {/* Información del Comercio */}
             <div className="card-form relative overflow-hidden p-6 rounded-2xl shadow-lg bg-[var(--color-gray-warm)]">
                 <h1 className="text-h2 font-title font-semibold text-[var(--color-burdeos-dark)] mb-4">
                     {selectedCommerce.name}

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
 import { useNavigate } from "react-router-dom";
+import { FavoriteButton } from "../components/FavoriteButton";
 
 export const CommercePage = () => {
     const { commerces } = useCommerce();
@@ -10,7 +11,7 @@ export const CommercePage = () => {
 
     const [search, setSearch] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("all");
-    const [showProducts, setShowProducts] = useState(true); // controla si se muestran productos
+    const [showProducts, setShowProducts] = useState(true); 
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [filteredCommerces, setFilteredCommerces] = useState([]);
 
@@ -36,15 +37,14 @@ export const CommercePage = () => {
         other: "Otras",
     };
 
-    // Cargar todos los productos
     useEffect(() => {
         loadAllProducts();
     }, []);
 
-    // Filtrado de productos por búsqueda y categoría
+
     useEffect(() => {
         if (!showProducts) {
-            setFilteredProducts([]); // Ocultar productos si showProducts es false
+            setFilteredProducts([]); 
             return;
         }
 
@@ -60,18 +60,17 @@ export const CommercePage = () => {
 
         setFilteredProducts(filteredProds);
 
-        // Mostrar todos los comercios
+
         setFilteredCommerces(commerces);
     }, [search, products, commerces, selectedCategory, showProducts]);
 
     return (
         <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col items-center bg-general">
-            {/* Título principal */}
             <h1 className="text-center mb-8 text-5xl md:text-4xl font-title font-semibold text-[var(--color-burdeos-dark)] leading-tight">
                 Explora los <span className="text-[var(--color-mostaza)]">productos</span> y <span className="text-[var(--color-mostaza)]">comercios</span> de tu barrio
             </h1>
 
-            {/* Buscador solo para productos */}
+
             <div className="mb-8 w-full md:w-1/2 relative">
                 <input
                     type="text"
@@ -90,14 +89,13 @@ export const CommercePage = () => {
                 )}
             </div>
 
-            {/* Categorías */}
             <div className="w-full mb-10 flex flex-wrap gap-3 justify-center">
                 {categories.map((category) => (
                     <button
                         key={category}
                         onClick={() => {
                             setSelectedCategory(category);
-                            setShowProducts(true); // al cambiar categoría, mostrar productos
+                            setShowProducts(true); 
                         }}
                         className={`px-5 py-2 rounded-full font-semibold transition-all duration-300 ${
                             selectedCategory === category
@@ -109,7 +107,6 @@ export const CommercePage = () => {
                     </button>
                 ))}
 
-                {/* Botón Ocultar todos */}
                 {showProducts && (
                     <button
                         onClick={() => setShowProducts(false)}
@@ -120,7 +117,6 @@ export const CommercePage = () => {
                 )}
             </div>
 
-            {/* Productos filtrados */}
             {showProducts && selectedCategory && filteredProducts.length > 0 && (
                 <div className="w-full mt-8">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
@@ -129,7 +125,7 @@ export const CommercePage = () => {
                             return (
                                 <div
                                     key={product._id}
-                                    className="group bg-white border border-gray-200 rounded-3xl shadow-md overflow-hidden cursor-pointer p-5 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                                    className="relative bg-white border border-gray-200 rounded-3xl shadow-md overflow-hidden cursor-pointer p-5 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                                     onClick={() => commerce && navigate(`/commerce/${commerce._id}`)}
                                 >
                                     {product.images?.[0] && (
@@ -148,6 +144,8 @@ export const CommercePage = () => {
                                     {commerce && (
                                         <p className="text-gray-500 text-sm mt-1 truncate">{commerce.name}</p>
                                     )}
+
+                                    <FavoriteButton product={product} />
                                 </div>
                             );
                         })}
@@ -161,7 +159,6 @@ export const CommercePage = () => {
                 </p>
             )}
 
-            {/* Comercios filtrados */}
             <div className="w-full mt-12">
                 <h2 className="text-h4 font-title font-semibold text-[var(--color-burdeos-dark)] mb-6">
                     Comercios

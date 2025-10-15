@@ -51,7 +51,6 @@ export const CreateProductPage = () => {
                     </h1>
 
                     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                        {/* Nombre */}
                         <div className="flex flex-col">
                             <label>Nombre del producto</label>
                             <input
@@ -65,7 +64,6 @@ export const CreateProductPage = () => {
                             />
                         </div>
 
-                        {/* Descripción */}
                         <div className="flex flex-col">
                             <label>Descripción</label>
                             <textarea
@@ -79,7 +77,6 @@ export const CreateProductPage = () => {
                             />
                         </div>
 
-                        {/* Precio */}
                         <div className="flex flex-col">
                             <label>Precio (€)</label>
                             <input
@@ -95,7 +92,6 @@ export const CreateProductPage = () => {
                             />
                         </div>
 
-                        {/* Fecha de lanzamiento */}
                         <div className="flex flex-col">
                             <label>Fecha de lanzamiento</label>
                             <input
@@ -108,7 +104,6 @@ export const CreateProductPage = () => {
                             />
                         </div>
 
-                        {/* Categoría */}
                         <div className="flex flex-col">
                             <label>Categoría</label>
                             <select

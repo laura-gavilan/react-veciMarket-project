@@ -24,7 +24,6 @@ export const Home = () => {
     return (
         <div className="bg-gray-50 text-gray-900 font-roboto">
 
-            {/* HERO */}
             <section className="relative max-w-7xl mx-auto px-10 py-44 rounded-3xl shadow-2xl mt-6 overflow-hidden">
                 <div
                     className="absolute inset-0 rounded-3xl bg-cover bg-[position:90%_right]"
@@ -60,7 +59,7 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* CATEGORÍAS */}
+            
             <section className="py-16 px-6 bg-gradient-to-b from-orange-50 to-yellow-50 text-center">
                 <h2 className="text-3xl md:text-4xl font-poppins font-semibold mb-10 text-gray-800">
                     Categorías destacadas
@@ -85,7 +84,7 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* COMERCIOS DESTACADOS */}
+            
             <section className="py-16 px-6 max-w-7xl mx-auto text-center">
                 <h2 className="text-3xl md:text-4xl font-poppins font-semibold mb-10 text-gray-800">
                     Comercios destacados
@@ -122,7 +121,7 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* PRODUCTOS DESTACADOS */}
+
             <section className="py-16 px-6 bg-gradient-to-b from-orange-50 to-yellow-50 text-center">
                 <h2 className="text-3xl md:text-4xl font-poppins font-semibold mb-10 text-gray-800">
                     Productos destacados
@@ -159,7 +158,7 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* MAPA */}
+
             <section className="py-16 px-6 max-w-7xl mx-auto text-center">
                 <h2 className="text-3xl md:text-4xl font-poppins font-semibold mb-10 text-gray-800">
                     Ubicación de los comercios
@@ -177,7 +176,6 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* CONTACTO */}
             <section className="py-20 px-6 text-center max-w-4xl mx-auto">
                 <h2 className="text-3xl md:text-4xl font-poppins font-semibold mb-6 text-gray-800">
                     Contáctanos
@@ -195,7 +193,7 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* BOTÓN SCROLL TOP */}
+
             {showScrollTop && (
                 <button
                     onClick={scrollToTop}

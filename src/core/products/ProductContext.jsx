@@ -30,68 +30,122 @@ export const ProductProvider = ({ children }) => {
     const [products, setProducts] = useState(getProductsFromLocalStorage());
     const [categories, setCategories] = useState(getCategoriesFromLocalStorage());
 
-    // --- Productos ---
+
     const loadAllProducts = async () => {
-        const data = await getAllProductsApi();
-        setProducts(data);
-        saveProductsInLocalStorage(data);
+        try {
+            const data = await getAllProductsApi();
+            setProducts(data);
+            saveProductsInLocalStorage(data);
+        } catch (error) {
+            console.error("Error cargando todos los produtos", error);
+        }
     };
 
+
     const loadProductsByCommerce = async (commerceId) => {
-        const data = await getProductsByCommerceApi(commerceId);
-        setProducts(data);
-        saveProductsInLocalStorage(data);
+        try {
+            const data = await getProductsByCommerceApi(commerceId);
+            setProducts(data);
+            saveProductsInLocalStorage(data);
+        } catch (error) {
+            console.error("Error cargando products por comercio", error);
+        }
+
     };
 
     const addProduct = async (product) => {
-        const data = await addProductApi(product);
-        setProducts((prev) => [...prev, data]);
-        addProductToLocalStorage(data);
+        try {
+            const data = await addProductApi(product);
+            setProducts((prev) => [...prev, data]);
+            addProductToLocalStorage(data);
+        } catch (error) {
+            console.error("Error agregando producto", error);
+        }
+
     };
 
     const updateProduct = async (productId, updatedProduct) => {
-        const data = await updateProductApi(productId, updatedProduct);
-        setProducts((prev) => prev.map((p) => (p._id === data._id ? data : p)));
-        updateProductInLocalStorage(data);
+        try {
+            const data = await updateProductApi(productId, updatedProduct);
+            setProducts((prev) => prev.map((p) => (p._id === data._id ? data : p)));
+            updateProductInLocalStorage(data);
+        } catch (error) {
+            console.error("Error actualizando producto", error);
+        }
+
     };
 
     const updateProductImages = async (productId, images) => {
-        const data = await patchProductImagesApi(productId, images);
-        setProducts((prev) => prev.map((p) => (p._id === data._id ? data : p)));
-        patchProductImagesInLocalStorage(productId, images);
+        try {
+            const data = await patchProductImagesApi(productId, images);
+            setProducts((prev) => prev.map((p) => (p._id === data._id ? data : p)));
+            patchProductImagesInLocalStorage(productId, images);
+        } catch (error) {
+            console.error("Error actualizando imágenes del producto", error);
+        }
+
     };
 
     const deleteProduct = async (productId) => {
-        await deleteProductApi(productId);
-        setProducts((prev) => prev.filter((p) => p._id !== productId));
-        deleteProductFromLocalStorage(productId);
+        try {
+            await deleteProductApi(productId);
+            let newProducts;
+            setProducts((prev) => {
+                newProducts = prev.filter((p) => p._id !== productId)
+                return newProducts;
+            });
+            saveProductsInLocalStorage(newProducts);
+        }
+        catch (error) {
+            console.log("Error borrando producto en deleteProduct")
+            console.error(error)
+        }
     };
 
-    // --- Categorías ---
+
     const loadCategories = async () => {
-        const data = await getCategoriesApi();
-        setCategories(data);
-        saveCategoriesInLocalStorage(data);
+        try {
+            const data = await getCategoriesApi();
+            setCategories(data);
+            saveCategoriesInLocalStorage(data);
+        } catch (error) {
+            console.error("Error cargando categorías", error);
+        }
+
     };
 
     const addCategory = async (category) => {
-        const data = await addCategoryApi(category);
-        setCategories((prev) => [...prev, data]);
-        saveCategoriesInLocalStorage([...categories, data]);
+        try {
+            const data = await addCategoryApi(category);
+            setCategories((prev) => [...prev, data]);
+            saveCategoriesInLocalStorage([...categories, data]);
+        } catch (error) {
+            console.error("Error agregando categoría", error);
+        }
+
     };
 
     const updateCategory = async (categoryId, updatedCategory) => {
-        const data = await updateCategoryApi(categoryId, updatedCategory);
-        const newCategories = categories.map((c) => (c._id === data._id ? data : c));
-        setCategories(newCategories);
-        saveCategoriesInLocalStorage(newCategories);
+        try {
+            await updateCategoryApi(categoryId, updatedCategory);
+            const newCategories = categories.map((c) => (c._id === data._id ? data : c));
+            setCategories(newCategories);
+            saveCategoriesInLocalStorage(newCategories);
+        } catch (error) {
+            console.error("Error actualizando categoría", error);
+        }
     };
 
     const deleteCategory = async (categoryId) => {
-        await deleteCategoryApi(categoryId);
-        const newCategories = categories.filter((c) => c._id !== categoryId);
-        setCategories(newCategories);
-        saveCategoriesInLocalStorage(newCategories);
+        try {
+            await deleteCategoryApi(categoryId);
+            const newCategories = categories.filter((c) => c._id !== categoryId);
+            setCategories(newCategories);
+            saveCategoriesInLocalStorage(newCategories);
+        } catch (error) {
+            console.error("Error eliminando categoría");
+        }
+        
     };
 
     return (

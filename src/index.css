@@ -10,7 +10,7 @@ body {
     background-color: var(--color-bg-general);
 }
 
-/* @theme con Tailwind sustituye a :root */
+
 @theme {
     --font-sans: "Roboto", sans-serif;
     --font-title: "Roboto Slab", serif;
@@ -22,7 +22,7 @@ body {
     --text-h5: 20px;
     --text-h6: 16px;
 
-    /* 🎨 Colores principales */
+    /*Colores principales */
     --color-burdeos-dark: #6B0F1A;
     --color-burdeos-light: #A83250;
     --color-mostaza: #F2C94C;
@@ -33,7 +33,7 @@ body {
     --color-burdeos-darker: #3C0D12;
 }
 
-/* Tipografía */
+
 h1 {
     @apply font-title text-h1/[125%] font-semibold text-[var(--color-burdeos-dark)];
 }
@@ -62,7 +62,7 @@ p {
     @apply font-sans text-base/[150%] font-normal text-[var(--color-burdeos-darker)];
 }
 
-/* Botones principales */
+/* Botones */
 .btn-primary {
     @apply bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] font-semibold rounded-full px-6 py-3 shadow-md hover:bg-[var(--color-burdeos-light)] transition-all;
 }
@@ -80,7 +80,7 @@ p {
     @apply bg-[var(--color-mostaza-pastel)];
 }
 
-/* Elevación de tarjetas / hover */
+/* Hover */
 .elevation {
     @apply hover:translate-y-[-4px] transition-all shadow-lg;
 }

@@ -8,7 +8,6 @@ export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Cargar usuario desde API si hay token
     useEffect(() => {
         const loadCurrentUser = async () => {
             const token = getTokenFromLocalStorage();
@@ -17,7 +16,7 @@ export const UserProvider = ({ children }) => {
             return;
             }
             try {
-                const { user } = await getProfileApi(); // /auth/me
+                const { user } = await getProfileApi(); 
                 setUser(user);
                 saveUserInLocalStorage(user);
             } catch (error) {

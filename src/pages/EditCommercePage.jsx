@@ -13,7 +13,6 @@ export const EditCommercePage = () => {
         address: { street: "", city: "", phone: "", email: "", schedule: "" },
     });
 
-    // Cargar datos del comercio
     useEffect(() => {
         const fetchCommerce = async () => {
             try {
@@ -91,7 +90,6 @@ export const EditCommercePage = () => {
                         </select>
                     </div>
 
-                    {/* Nombre */}
                     <div className="flex flex-col">
                         <label className="form-label">Nombre</label>
                         <input
@@ -105,7 +103,6 @@ export const EditCommercePage = () => {
                         />
                     </div>
 
-                    {/* Descripción */}
                     <div className="flex flex-col">
                         <label className="form-label">Descripción</label>
                         <textarea
@@ -119,7 +116,6 @@ export const EditCommercePage = () => {
                         />
                     </div>
 
-                    {/* Dirección */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div className="flex flex-col">
                             <label className="form-label">Calle</label>

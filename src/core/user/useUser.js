@@ -10,12 +10,12 @@ export const useUser = () => {
     const navigate = useNavigate();
 
     if (!context) {
-        throw new Error("useUser debe estar dentro de un UserContext.Provider");
+        throw new Error("Error");
     }
 
     const { user, setUser, clearUser } = context;
 
-    // Actualiza los datos del usuario tanto en el contexto como en la API
+
     const updateUserData = async (newData) => {
         if (!user?._id) throw new Error("No hay usuario logueado");
         try {
@@ -27,20 +27,20 @@ export const useUser = () => {
         }
     };
 
-    // Elimina el usuario en la API y limpia el contexto
+
     const deleteUser = async () => {
         if (!user?._id) throw new Error("No hay usuario logueado");
         try {
             await deleteUserApi(user._id);
             clearUser();
-            navigate("/"); // Redirige al inicio tras eliminar
+            return navigate("/"); 
         } catch (error) {
             console.error("Error al eliminar el usuario:", error);
             throw error;
         }
     };
 
-    // Refresca los datos del usuario desde la API
+
     const refreshUser = async () => {
         if (!user?._id) return;
         try {

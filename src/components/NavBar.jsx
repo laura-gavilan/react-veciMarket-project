@@ -9,7 +9,7 @@ export const NavBar = () => {
     const [open, setOpen] = useState(false);
     const [userMenu, setUserMenu] = useState(false);
 
-    // Definimos los enlaces según el rol del usuario
+
     const links = useMemo(() => {
         if (!user) {
             return [
@@ -57,7 +57,6 @@ export const NavBar = () => {
                         </Link>
                     ))}
 
-                    {/* Icono login / usuario */}
                     <div className="relative">
                         {!user ? (
                             <Link to="/login" className="flex items-center justify-center w-6 h-6">
@@ -80,7 +79,6 @@ export const NavBar = () => {
                             </button>
                         )}
 
-                        {/* Dropdown cerrar sesión */}
                         {user && userMenu && (
                             <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg z-50">
                                 <button
@@ -94,7 +92,7 @@ export const NavBar = () => {
                     </div>
                 </div>
 
-                {/* Menú móvil */}
+
                 <div className="flex items-center gap-4 md:hidden">
                     <button className="focus:outline-none" onClick={() => setOpen(!open)}>
                         <img
@@ -106,7 +104,7 @@ export const NavBar = () => {
                 </div>
             </div>
 
-            {/* Menú móvil desplegable */}
+
             {open && (
                 <div className="md:hidden flex flex-col items-center gap-4 py-4 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] shadow-inner border-t border-[var(--color-burdeos-light)] text-lg font-semibold transition-all duration-300">
                     {links.map(({ to, label }) => (

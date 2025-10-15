@@ -8,7 +8,7 @@ export const Category = ({ products, deleteProduct, refreshProducts, ownerId, co
     const navigate = useNavigate();
     const isOwner = user?._id === ownerId;
 
-    // Agrupar productos por categoría
+
     const categories = useMemo(() => {
         const catMap = {};
         products.forEach(product => {

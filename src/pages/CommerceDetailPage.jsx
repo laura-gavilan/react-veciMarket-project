@@ -3,6 +3,7 @@ import { useParams, Outlet, useNavigate, Link } from "react-router-dom";
 import { CommerceContext } from "../core/commerce/CommerceContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { api } from "../core/http/axios";
+import { FavoriteButton } from "../components/FavoriteButton";
 
 export const CommerceDetailPage = () => {
     const { commerces, updateCommerce } = useContext(CommerceContext);
@@ -96,7 +97,7 @@ export const CommerceDetailPage = () => {
                         {selectedCommerce.products.map((product) => (
                             <div
                                 key={product._id}
-                                className="bg-[var(--color-gray-warm)] rounded-2xl shadow-md border border-[var(--color-burdeos-light)] overflow-hidden hover:shadow-2xl hover:scale-105 transition-all flex flex-col cursor-pointer"
+                                className=" relative bg-[var(--color-gray-warm)] rounded-2xl shadow-md border border-[var(--color-burdeos-light)] overflow-hidden hover:shadow-2xl hover:scale-105 transition-all flex flex-col cursor-pointer"
                             >
                                 {product.images?.[0] && (
                                     <img
@@ -111,26 +112,7 @@ export const CommerceDetailPage = () => {
                                         <p className="text-[var(--color-burdeos-light)] font-bold mt-2">{product.price.toFixed(2)} €</p>
                                     </div>
 
-                                    {isOwner && (
-                                        <div className="flex gap-3 mt-4">
-                                            <Link
-                                                to={`edit/${product._id}`}
-                                                className="flex-1 bg-[var(--color-burdeos-dark)] hover:bg-[var(--color-burdeos-light)] text-[var(--color-mostaza-pastel)] py-2 rounded-xl text-center font-medium transition-all shadow-sm hover:shadow-md"
-                                            >
-                                                Editar
-                                            </Link>
-                                            <button
-                                                onClick={async () => {
-                                                    if (!confirm("¿Eliminar producto?")) return;
-                                                    await api.delete(`/products/${product._id}`);
-                                                    refreshCommerce();
-                                                }}
-                                                className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-xl font-medium transition-all shadow-sm hover:shadow-md"
-                                            >
-                                                Eliminar
-                                            </button>
-                                        </div>
-                                    )}
+                                    <FavoriteButton product={product}/>
                                 </div>
                             </div>
                         ))}

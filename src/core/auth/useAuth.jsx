@@ -10,7 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 export const useAuth = () => {
-    const { setUser } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const login = async ({ email, password }) => {
@@ -18,15 +18,13 @@ export const useAuth = () => {
             console.log(`Intentando login con: ${email}`);
             const authData = await loginApi({ email, password });
 
-            // Si la API devuelve directamente el token
+
             if (typeof authData === "string") {
                 saveTokenInLocalStorage(authData);
-                // (opcional) puedes luego obtener el perfil
                 await getProfile();
                 navigate("/");
             }
 
-            // Si devuelve objeto con token y user
             else if (authData?.token && authData?.user) {
                 saveTokenInLocalStorage(authData.token);
                 saveUserInLocalStorage(authData.user);
@@ -85,5 +83,5 @@ export const useAuth = () => {
         }
     };
 
-    return { login, logout, register, getProfile };
+    return { user, setUser, login, logout, register, getProfile };
 };
