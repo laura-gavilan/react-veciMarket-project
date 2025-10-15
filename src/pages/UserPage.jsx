@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { useUser } from "../core/user/useUser";
 
-
 export const UserPage = () => {
     const { user, deleteUser, loading } = useUser();
 
-    if (loading) return <p className="text-center mt-8">Cargando usuario...</p>;
-    if (!user) return <p className="text-center mt-8">No hay usuario logueado.</p>;
+    if (loading)
+        return <p className="text-center mt-8 text-[var(--color-burdeos-dark)] font-sans">Cargando usuario...</p>;
+    if (!user)
+        return <p className="text-center mt-8 text-[var(--color-burdeos-dark)] font-sans">No hay usuario logueado.</p>;
 
     const handleDelete = async () => {
         const confirmDelete = window.confirm(
@@ -19,10 +20,12 @@ export const UserPage = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto mt-10 p-6 bg-general rounded-xl shadow-md elevation">
-            <h1 className="mb-6">Perfil de {user.name}</h1>
+        <div className="max-w-2xl mx-auto mt-10 p-8 bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)]">
+            <h1 className="text-2xl md:text-3xl font-title font-semibold mb-6 text-[var(--color-burdeos-dark)] text-center">
+                Perfil de {user.name}
+            </h1>
 
-            <div className="space-y-2">
+            <div className="space-y-3 text-[var(--color-burdeos-darker)] font-sans">
                 <p><strong>Nombre de usuario:</strong> {user.username}</p>
                 <p><strong>Nombre:</strong> {user.name}</p>
                 <p><strong>Primer Apellido:</strong> {user.firstName}</p>
@@ -32,14 +35,14 @@ export const UserPage = () => {
                 <p><strong>Dirección:</strong> {user.address}</p>
             </div>
 
-            <div className="mt-6 flex gap-4">
-                <Link to="/user/edit">
-                    <button className="btn-primary">Editar perfil</button>
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+                <Link to="/user/edit" className="flex-1">
+                    <button className="btn-primary w-full">Editar perfil</button>
                 </Link>
 
                 <button
                     onClick={handleDelete}
-                    className="btn-secondary text-red-600 hover:text-red-700"
+                    className="btn-secondary flex-1 text-red-600 hover:text-red-700 w-full"
                 >
                     Eliminar perfil
                 </button>
@@ -47,6 +50,7 @@ export const UserPage = () => {
         </div>
     );
 };
+
 
 
 

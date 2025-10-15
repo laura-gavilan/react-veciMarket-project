@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../core/http/axios";
 
@@ -39,100 +39,103 @@ export const CreateProductPage = () => {
     };
 
     return (
-        <div className="flex justify-center mt-12">
-            <div className="card-form max-w-3xl w-full p-8 bg-white rounded-xl shadow-lg border border-gray-200">
-                <button onClick={() => navigate(-1)} className="btn-secondary self-start">
+        <div className="min-h-screen flex items-center justify-center bg-[var(--color-gray-warm)] p-6">
+            <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)] p-10 flex flex-col gap-5">
+                <button
+                    onClick={() => navigate(-1)}
+                    className="self-start px-6 py-2 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] rounded-full shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all font-semibold"
+                >
                     ← Volver
+
                 </button>
+                <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] text-center mb-5">
+                    Crear Nuevo Producto
+                </h1>
 
-                
-                    <h1 className="text-h3 font-semibold text-[var(--color-burdeos-dark)] mb-8 text-center">
-                        Crear Nuevo Producto
-                    </h1>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                    <div className="flex flex-col">
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Nombre del producto</label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={form.name}
+                            onChange={handleChange}
+                            placeholder="Ej. Pan integral"
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                            required
+                        />
+                    </div>
 
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                        <div className="flex flex-col">
-                            <label>Nombre del producto</label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={form.name}
-                                onChange={handleChange}
-                                placeholder="Ej. Pan integral"
-                                className="input-field border border-gray-300 rounded-md"
-                                required
-                            />
-                        </div>
+                    <div className="flex flex-col">
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Descripción</label>
+                        <textarea
+                            name="description"
+                            value={form.description}
+                            onChange={handleChange}
+                            placeholder="Describe el producto..."
+                            rows={4}
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition resize-none"
+                            required
+                        />
+                    </div>
 
-                        <div className="flex flex-col">
-                            <label>Descripción</label>
-                            <textarea
-                                name="description"
-                                value={form.description}
-                                onChange={handleChange}
-                                placeholder="Describe el producto..."
-                                className="input-field border border-gray-300 rounded-md"
-                                rows={4}
-                                required
-                            />
-                        </div>
+                    <div className="flex flex-col">
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Precio (€)</label>
+                        <input
+                            type="number"
+                            name="price"
+                            value={form.price}
+                            onChange={handleChange}
+                            placeholder="Ej. 2.50"
+                            step={0.01}
+                            min={0}
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                            required
+                        />
+                    </div>
 
-                        <div className="flex flex-col">
-                            <label>Precio (€)</label>
-                            <input
-                                type="number"
-                                name="price"
-                                value={form.price}
-                                onChange={handleChange}
-                                placeholder="Ej. 2.50"
-                                className="input-field border border-gray-300 rounded-md"
-                                step={0.01}
-                                min={0}
-                                required
-                            />
-                        </div>
+                    <div className="flex flex-col">
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Fecha de lanzamiento</label>
+                        <input
+                            type="date"
+                            name="releaseDate"
+                            value={form.releaseDate}
+                            onChange={handleChange}
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                            required
+                        />
+                    </div>
 
-                        <div className="flex flex-col">
-                            <label>Fecha de lanzamiento</label>
-                            <input
-                                type="date"
-                                name="releaseDate"
-                                value={form.releaseDate}
-                                onChange={handleChange}
-                                className="input-field border border-gray-300 rounded-md"
-                                required
-                            />
-                        </div>
-
-                        <div className="flex flex-col">
-                            <label>Categoría</label>
-                            <select
-                                name="category"
-                                value={form.category}
-                                onChange={handleChange}
-                                className="input-field border border-gray-300 rounded-md"
-                                required
-                            >
-                                <option value="all">Todas</option>
-                                <option value="food">Alimentación</option>
-                                <option value="books-paper">Libros & Papelería</option>
-                                <option value="health-beauty">Salud & Belleza</option>
-                                <option value="sports">Deportes</option>
-                                <option value="pets">Animales</option>
-                                <option value="home">Hogar</option>
-                                <option value="other">Otras</option>
-                            </select>
-                        </div>
-
-                        <button
-                            type="submit"
-                            className="btn-primary mt-4 bg-[var(--color-burdeos-dark)] text-white py-3 rounded-lg"
+                    <div className="flex flex-col">
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Categoría</label>
+                        <select
+                            name="category"
+                            value={form.category}
+                            onChange={handleChange}
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                            required
                         >
-                            Crear Producto
-                        </button>
-                    </form>
-                </div>
+                            <option value="all">Todas</option>
+                            <option value="food">Alimentación</option>
+                            <option value="books-paper">Libros & Papelería</option>
+                            <option value="health-beauty">Salud & Belleza</option>
+                            <option value="sports">Deportes</option>
+                            <option value="pets">Animales</option>
+                            <option value="home">Hogar</option>
+                            <option value="other">Otras</option>
+                        </select>
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="mt-4 w-full bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] py-3 rounded-2xl font-semibold shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all"
+                    >
+                        Crear Producto
+                    </button>
+                </form>
             </div>
+        </div>
     );
 };
+
 

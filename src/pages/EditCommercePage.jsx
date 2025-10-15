@@ -21,13 +21,7 @@ export const EditCommercePage = () => {
                     name: data.name || "",
                     category: data.category || "all",
                     description: data.description || "",
-                    address: data.address || {
-                        street: "",
-                        city: "",
-                        phone: "",
-                        email: "",
-                        schedule: "",
-                    },
+                    address: data.address || { street: "", city: "", phone: "", email: "", schedule: "" },
                 });
             } catch (error) {
                 console.error("Error al cargar el comercio:", error);
@@ -36,8 +30,8 @@ export const EditCommercePage = () => {
         fetchCommerce();
     }, [commerceId]);
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
+    const handleChange = (e) => {
+        const { name, value } = e.target;
         if (name in form.address) {
             setForm((prev) => ({ ...prev, address: { ...prev.address, [name]: value } }));
         } else {
@@ -45,10 +39,10 @@ export const EditCommercePage = () => {
         }
     };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         try {
-            const { data } = await api.patch(`/commerces/${commerceId}`, form);
+            await api.patch(`/commerces/${commerceId}`, form);
             alert("Comercio actualizado correctamente");
             navigate(`/admin/commerce/${commerceId}`);
         } catch (error) {
@@ -58,25 +52,28 @@ export const EditCommercePage = () => {
     };
 
     return (
-        <div className="flex justify-center mt-12">
-            <div className="card-form max-w-3xl w-full p-8 bg-white rounded-xl shadow-lg border border-gray-200">
-                <button onClick={() => navigate(-1)} className="btn-secondary self-start">
+        <div className="min-h-screen flex justify-center px-6 py-12 bg-[var(--color-gray-warm)]">
+            <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)] p-8 flex flex-col gap-8">
+                <button
+                    onClick={() => navigate(-1)}
+                    className="self-start px-6 py-2 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] rounded-full shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all font-semibold"
+                >
                     ← Volver
                 </button>
-                
-                <h1 className="text-h2 font-semibold text-[var(--color-burdeos-dark)] mb-6 text-center">
+
+                <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] text-center">
                     Editar Comercio
                 </h1>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                     {/* Categoría */}
                     <div className="flex flex-col">
-                        <label className="form-label">Categoría</label>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-1">Categoría</label>
                         <select
                             name="category"
                             value={form.category}
                             onChange={handleChange}
-                            className="input-field border border-gray-300 rounded-md"
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)]"
                             required
                         >
                             <option value="all">Todas</option>
@@ -90,96 +87,99 @@ export const EditCommercePage = () => {
                         </select>
                     </div>
 
+                    {/* Nombre */}
                     <div className="flex flex-col">
-                        <label className="form-label">Nombre</label>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-1">Nombre</label>
                         <input
                             type="text"
                             name="name"
                             value={form.name}
                             onChange={handleChange}
                             placeholder="Nombre del comercio"
-                            className="input-field border border-gray-300 rounded-md"
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)]"
                             required
                         />
                     </div>
 
+                    {/* Descripción */}
                     <div className="flex flex-col">
-                        <label className="form-label">Descripción</label>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-1">Descripción</label>
                         <textarea
                             name="description"
                             value={form.description}
                             onChange={handleChange}
                             placeholder="Descripción breve del comercio"
-                            className="input-field border border-gray-300 rounded-md"
                             rows={4}
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)]"
                             required
                         />
                     </div>
 
+                    {/* Dirección */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div className="flex flex-col">
-                            <label className="form-label">Calle</label>
+                            <label className="font-semibold text-[var(--color-burdeos-dark)] mb-1">Calle</label>
                             <input
                                 type="text"
                                 name="street"
                                 value={form.address.street}
                                 onChange={handleChange}
                                 placeholder="Calle"
-                                className="input-field border border-gray-300 rounded-md"
+                                className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)]"
                             />
                         </div>
                         <div className="flex flex-col">
-                            <label className="form-label">Ciudad</label>
+                            <label className="font-semibold text-[var(--color-burdeos-dark)] mb-1">Ciudad</label>
                             <input
                                 type="text"
                                 name="city"
                                 value={form.address.city}
                                 onChange={handleChange}
                                 placeholder="Ciudad"
-                                className="input-field border border-gray-300 rounded-md"
+                                className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)]"
                             />
                         </div>
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="form-label">Teléfono</label>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-1">Teléfono</label>
                         <input
                             type="text"
                             name="phone"
                             value={form.address.phone}
                             onChange={handleChange}
                             placeholder="Teléfono"
-                            className="input-field border border-gray-300 rounded-md"
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)]"
                         />
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="form-label">Email</label>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-1">Email</label>
                         <input
                             type="email"
                             name="email"
                             value={form.address.email}
                             onChange={handleChange}
                             placeholder="Correo electrónico"
-                            className="input-field border border-gray-300 rounded-md"
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)]"
                         />
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="form-label">Horario</label>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-1">Horario</label>
                         <input
                             type="text"
                             name="schedule"
                             value={form.address.schedule}
                             onChange={handleChange}
                             placeholder="Horario de apertura"
-                            className="input-field border border-gray-300 rounded-md"
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)]"
                         />
                     </div>
 
                     <button
                         type="submit"
-                        className="btn-save mt-4 bg-[var(--color-burdeos-dark)] text-white py-3 rounded-lg"
+                        className="mt-4 w-full bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] py-3 rounded-2xl font-semibold shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all"
                     >
                         Guardar cambios
                     </button>

@@ -11,7 +11,11 @@ export const FavoriteButton = ({ product }) => {
 
     const toggleFavorite = (event) => {
         event.stopPropagation();
-        if (!user?._id) return alert("Debes iniciar sesión");
+        if (!user?._id) {
+            navigate("/login");
+            return alert("Debes iniciar sesión")
+        }
+            
 
         if (isFavorite) {
             deleteFavorite(user._id, product._id);

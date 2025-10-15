@@ -16,21 +16,17 @@ export const EditProductPage = () => {
     const [currentImage, setCurrentImage] = useState("");
     const [newImage, setNewImage] = useState(null);
     const [preview, setPreview] = useState("");
-    const [commerceProducts, setCommerceProducts] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Obtener productos del comercio
                 const { data: commerce } = await api.get(`/commerces/${commerceId}`);
-                setCommerceProducts(commerce.products || []);
-
-                // Buscar el producto
                 const product = commerce.products.find(p => p._id === productId);
                 if (product) {
                     setForm({
                         name: product.name,
                         category: product.category || "all",
+                        description: product.description || "",
                         price: product.price.toString(),
                     });
                     setCurrentImage(product.images?.[0] || "");
@@ -49,7 +45,7 @@ export const EditProductPage = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
+        setForm(prev => ({ ...prev, [name]: value }));
     };
 
     const handleFileChange = (e) => {
@@ -62,7 +58,6 @@ export const EditProductPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const priceValue = parseFloat(form.price);
         if (isNaN(priceValue) || priceValue < 0) {
             alert("Introduce un precio válido");
@@ -74,7 +69,7 @@ export const EditProductPage = () => {
             payload.append("name", form.name);
             payload.append("category", form.category);
             payload.append("price", priceValue);
-
+            payload.append("description", form.description);
             if (newImage) payload.append("image", newImage);
 
             await api.patch(`/products/${productId}`, payload, {
@@ -90,19 +85,15 @@ export const EditProductPage = () => {
     };
 
     return (
-        <div className="flex justify-center mt-12">
-            <div className="card-form max-w-3xl w-full p-8 bg-white rounded-xl shadow-lg border border-gray-200">
-                <button onClick={() => navigate(-1)} className="btn-secondary self-start">
-                    ← Volver
-                </button>
-                
-                <h1 className="text-h3 font-title font-semibold text-[var(--color-burdeos-dark)] mb-8 text-center">
+        <div className="min-h-screen flex items-center justify-center bg-[var(--color-gray-warm)] p-6">
+            <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)] p-10 flex flex-col gap-8">
+                <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] text-center mb-6">
                     Editar Producto
                 </h1>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                     {(preview || currentImage) && (
-                        <div className="mb-4 text-center">
+                        <div className="text-center">
                             <img
                                 src={preview || currentImage}
                                 alt={form.name}
@@ -112,41 +103,35 @@ export const EditProductPage = () => {
                     )}
 
                     <div className="flex flex-col">
-                        <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
-                            Subir nueva imagen
-                        </label>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Subir nueva imagen</label>
                         <input
                             type="file"
                             accept="image/*"
                             onChange={handleFileChange}
-                            className="w-full px-5 py-3 rounded-3xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-[var(--color-mostaza)] focus:border-[var(--color-mostaza)] outline-none transition-all"
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
                         />
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
-                            Nombre del producto
-                        </label>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Nombre del producto</label>
                         <input
                             type="text"
                             name="name"
                             value={form.name}
                             onChange={handleChange}
                             placeholder="Ej. Pan integral"
-                            className="w-full px-5 py-3 rounded-3xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-[var(--color-mostaza)] focus:border-[var(--color-mostaza)] outline-none transition-all"
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
                             required
                         />
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
-                            Categoría
-                        </label>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Categoría</label>
                         <select
                             name="category"
                             value={form.category}
                             onChange={handleChange}
-                            className="input-field border border-gray-300 rounded-md focus:border-[var(--color-burdeos-dark)] focus:ring focus:ring-[var(--color-burdeos-light)] transition-all"
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
                             required
                         >
                             <option value="all">Todas</option>
@@ -156,35 +141,35 @@ export const EditProductPage = () => {
                             <option value="sports">Deportes</option>
                             <option value="pets">Animales</option>
                             <option value="home">Hogar</option>
+                            <option value="clothing">Ropa</option>
+                            <option value="footwear">Calzado</option>
                             <option value="other">Otras</option>
                         </select>
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="text-sm font-semibold text-[var(--color-burdeos-dark)] mb-2">
-                            Precio (€)
-                        </label>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Precio (€)</label>
                         <input
                             type="number"
                             name="price"
                             value={form.price}
                             onChange={handleChange}
                             placeholder="Ej. 2.50"
-                            className="w-full px-5 py-3 rounded-3xl border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-[var(--color-mostaza)] focus:border-[var(--color-mostaza)] outline-none transition-all"
                             min={0}
                             step={0.01}
+                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
                             required
                         />
                     </div>
 
                     <div className="flex gap-4 mt-6">
-                        <button type="submit" className="btn-primary flex-1">
+                        <button type="submit" className="flex-1 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] py-3 rounded-2xl font-semibold shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all">
                             Guardar Cambios
                         </button>
                         <button
                             type="button"
                             onClick={() => navigate(-1)}
-                            className="btn-secondary flex-1"
+                            className="flex-1 bg-[var(--color-burdeos-light)] text-[var(--color-burdeos-dark)] py-3 rounded-2xl font-semibold shadow-md hover:bg-[var(--color-burdeos-dark)] hover:text-[var(--color-mostaza-pastel)] transition-all"
                         >
                             Cancelar
                         </button>
@@ -194,3 +179,4 @@ export const EditProductPage = () => {
         </div>
     );
 };
+

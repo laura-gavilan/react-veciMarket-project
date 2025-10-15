@@ -1,6 +1,6 @@
 export const AboutUs = () => {
     return (
-        <div className="min-h-[calc(100vh-80px)] bg-general text-[var(--color-burdeos-darker)] flex flex-col items-center px-6 py-20">
+        <div className="min-h-[calc(100vh-80px)] text-[var(--color-burdeos-darker)] flex flex-col items-center px-6 py-20">
 
             {/* Título principal */}
             <h1 className="text-3xl md:text-5xl font-title font-semibold mb-6 text-center">

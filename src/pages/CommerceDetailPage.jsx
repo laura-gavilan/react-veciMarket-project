@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams, Outlet, useNavigate, Link } from "react-router-dom";
+import { useParams, Outlet, useNavigate } from "react-router-dom";
 import { CommerceContext } from "../core/commerce/CommerceContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { api } from "../core/http/axios";
@@ -38,89 +38,134 @@ export const CommerceDetailPage = () => {
         );
     }
 
-    const isOwner = user && selectedCommerce.owner?._id === user._id;
+    const { name, description, address, products } = selectedCommerce;
 
     return (
-        <div className="min-h-screen bg-[var(--color-gray-warm)] py-12 px-6 flex flex-col gap-12">
+        <div className="min-h-screen bg-[var(--color-gray-warm)] py-12 px-6 flex flex-col gap-14">
+            {/* Botón volver */}
             <button
                 onClick={() => navigate(-1)}
-                className="self-start px-6 py-2 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] rounded-full shadow-lg hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all font-semibold"
+                className="self-start px-6 py-2 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] rounded-full shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all font-semibold"
             >
                 ← Volver
             </button>
 
-            <div className="bg-[var(--color-gray-warm)] rounded-3xl shadow-xl p-8 flex flex-col md:flex-row gap-10 border border-[var(--color-burdeos-light)] hover:shadow-2xl transition-shadow duration-300">
-                <div className="flex-1 flex flex-col gap-6">
-                    {(selectedCommerce.image || selectedCommerce.images?.[0]) && (
-                        <img
-                            src={
-                                (selectedCommerce.image || selectedCommerce.images?.[0]).startsWith("http")
-                                    ? (selectedCommerce.image || selectedCommerce.images?.[0])
-                                    : selectedCommerce.image?.startsWith("/images/")
-                                        ? selectedCommerce.image
-                                        : `/commerces/${selectedCommerce.images?.[0] || selectedCommerce.image}`
-                            }
-                            alt={selectedCommerce.name}
-                            className="w-full h-64 object-cover rounded-2xl mb-4 shadow-md hover:shadow-lg transition-transform duration-300"
-                        />
-                    )}
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-[var(--color-burdeos-dark)]">
-                        {selectedCommerce.name}
-                    </h1>
-                    <p className="text-[var(--color-burdeos-darker)] text-lg">{selectedCommerce.description}</p>
+            {/* Información del comercio */}
+            <div className="bg-white rounded-3xl shadow-lg p-10 flex flex-col md:flex-row gap-6 border border-[var(--color-burdeos-light)] hover:shadow-2xl transition-all duration-300">
+                {/* Imagen */}
+                {(selectedCommerce.image || selectedCommerce.images?.[0]) && (
+                    <img
+                        src={
+                            (selectedCommerce.image || selectedCommerce.images?.[0]).startsWith("http")
+                                ? (selectedCommerce.image || selectedCommerce.images?.[0])
+                                : selectedCommerce.image?.startsWith("/images/")
+                                    ? selectedCommerce.image
+                                    : `/commerces/${selectedCommerce.images?.[0] || selectedCommerce.image}`
+                        }
+                        alt={name}
+                        className="w-full md:w-1/2 h-70 object-cover rounded-2xl shadow-md hover:shadow-lg transition-transform duration-300"
+                    />
+                )}
 
-                    <div className="grid sm:grid-cols-2 gap-3 text-[var(--color-burdeos-darker)] mt-6 text-sm md:text-base">
-                        <p><span className="font-semibold text-[var(--color-burdeos-dark)]">Calle:</span> {selectedCommerce.address.street}</p>
-                        <p><span className="font-semibold text-[var(--color-burdeos-dark)]">Ciudad:</span> {selectedCommerce.address.city}</p>
-                        <p><span className="font-semibold text-[var(--color-burdeos-dark)]">Teléfono:</span> {selectedCommerce.address.phone}</p>
-                        <p><span className="font-semibold text-[var(--color-burdeos-dark)]">Email:</span> {selectedCommerce.address.email}</p>
-                        <p className="sm:col-span-2"><span className="font-semibold text-[var(--color-burdeos-dark)]">Horario:</span> {selectedCommerce.address.schedule}</p>
+                {/* Texto */}
+                <div className="flex-1 flex flex-col justify-between">
+                    <div className="space-y-4">
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-[var(--color-burdeos-dark)]">
+                            {name}
+                        </h1>
+                        <p className="text-[var(--color-burdeos-darker)] text-lg leading-relaxed">
+                            {description}
+                        </p>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4 text-[var(--color-burdeos-darker)] mt-8 text-sm md:text-base">
+                        <p><span className="font-semibold text-[var(--color-burdeos-dark)]">📍 Calle:</span> {address.street}</p>
+                        <p><span className="font-semibold text-[var(--color-burdeos-dark)]">🏙️ Ciudad:</span> {address.city}</p>
+                        <p><span className="font-semibold text-[var(--color-burdeos-dark)]">📞 Teléfono:</span> {address.phone}</p>
+                        <p><span className="font-semibold text-[var(--color-burdeos-dark)]">📧 Email:</span> {address.email}</p>
+                        <p className="sm:col-span-2"><span className="font-semibold text-[var(--color-burdeos-dark)]">🕒 Horario:</span> {address.schedule}</p>
                     </div>
                 </div>
             </div>
 
-            <div className="bg-[var(--color-gray-warm)] rounded-3xl shadow-xl p-8 border border-[var(--color-burdeos-light)]">
+            {/* Productos */}
+            <div className="bg-white rounded-3xl shadow-lg p-10 border border-[var(--color-burdeos-light)]">
                 <div className="flex justify-between items-center mb-8">
-                    <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)]">Productos</h2>
-                    {isOwner && (
-                        <Link
-                            to="create"
-                            className="px-6 py-2 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] rounded-xl shadow-lg hover:bg-[var(--color-burdeos-light)] transition-all font-semibold"
-                        >
-                            + Nuevo producto
-                        </Link>
-                    )}
+                    <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] border-b-2 border-[var(--color-burdeos-light)] pb-2">
+                        Productos
+                    </h2>
                 </div>
 
-                {selectedCommerce.products?.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {selectedCommerce.products.map((product) => (
+                {products?.length > 0 ? (
+                    <div className="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
+                        {products.map((product) => (
                             <div
                                 key={product._id}
-                                className=" relative bg-[var(--color-gray-warm)] rounded-2xl shadow-md border border-[var(--color-burdeos-light)] overflow-hidden hover:shadow-2xl hover:scale-105 transition-all flex flex-col cursor-pointer"
+                                className="group bg-white rounded-2xl shadow-md border border-[var(--color-burdeos-light)] overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
                             >
                                 {product.images?.[0] && (
-                                    <img
-                                        src={product.images[0].startsWith("http") ? product.images[0] : `/products/${product.images[0]}`}
-                                        alt={product.name}
-                                        className="w-30 h-30 object-cover rounded-lg border"
-                                    />
+                                    <div className="w-full h-44 overflow-hidden">
+                                        <img
+                                            src={
+                                                product.images[0].startsWith("http")
+                                                    ? product.images[0]
+                                                    : product.images[0].startsWith("/products/")
+                                                        ? product.images[0]
+                                                        : `/products/${product.images[0]}`
+                                            }
+                                            alt={product.name}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                        />
+                                    </div>
                                 )}
-                                <div className="p-5 flex flex-col justify-between flex-1">
+
+                                <div className="p-4 flex flex-col justify-between flex-1">
                                     <div>
-                                        <h3 className="text-xl font-semibold text-[var(--color-burdeos-dark)]">{product.name}</h3>
-                                        <p className="text-[var(--color-burdeos-light)] font-bold mt-2">{product.price.toFixed(2)} €</p>
+                                        <h3 className="text-base font-semibold text-[var(--color-burdeos-dark)] truncate">
+                                            {product.name}
+                                        </h3>
+                                        <p className="text-[var(--color-burdeos-light)] font-bold mt-1 text-sm">
+                                            {product.price.toFixed(2)} €
+                                        </p>
                                     </div>
 
-                                    <FavoriteButton product={product}/>
+                                    <div className="mt-3 flex justify-end">
+                                        <FavoriteButton product={product} />
+                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <p className="text-[var(--color-burdeos-darker)] text-center mt-6">No hay productos disponibles por el momento.</p>
+                    <p className="text-[var(--color-burdeos-darker)] text-center mt-6">
+                        No hay productos disponibles por el momento.
+                    </p>
                 )}
             </div>
+
+            {/* Mapa */}
+            {(address?.mapUrl || (address?.street && address?.city)) && (
+                <section className="py-10 px-6 w-full max-w-5xl mx-auto text-center">
+                    <h2 className="text-3xl md:text-4xl font-semibold mb-8 text-[var(--color-burdeos-dark)] border-b-2 border-[var(--color-burdeos-light)] inline-block pb-1">
+                        Ubicación del comercio
+                    </h2>
+
+                    <div className="w-full h-80 md:h-[450px] rounded-3xl overflow-hidden shadow-2xl">
+                        <iframe
+                            src={
+                                address.mapUrl
+                                    ? address.mapUrl
+                                    : `https://www.google.com/maps?q=${encodeURIComponent(`${address.street}, ${address.city}`)}&output=embed`
+                            }
+                            className="w-full h-full border-0"
+                            allowFullScreen={true}
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            title={`Ubicación de ${name}`}
+                        ></iframe>
+                    </div>
+                </section>
+            )}
 
             <Outlet context={{ selectedCommerce, refreshCommerce, commerceId }} />
         </div>
