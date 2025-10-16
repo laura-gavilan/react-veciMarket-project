@@ -1,17 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
 import { useNavigate } from "react-router-dom";
 import { FavoriteButton } from "../components/FavoriteButton";
+import { CartContext } from "../contexts/CartContext";
 
 export const CommercePage = () => {
     const { commerces } = useCommerce();
     const { products, loadAllProducts } = useProduct();
+    const { cart, addToCart, loading } = useContext(CartContext);
     const navigate = useNavigate();
 
     const [search, setSearch] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("all");
-    const [showProducts, setShowProducts] = useState(true); 
+    const [showProducts, setShowProducts] = useState(true);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [filteredCommerces, setFilteredCommerces] = useState([]);
 
@@ -37,7 +39,7 @@ export const CommercePage = () => {
         pets: "Animales",
         home: "Hogar",
         clothing: "Ropa",
-        footwear:"Calzado",
+        footwear: "Calzado",
         other: "Otras",
     };
 
@@ -47,7 +49,7 @@ export const CommercePage = () => {
 
     useEffect(() => {
         if (!showProducts) {
-            setFilteredProducts([]); 
+            setFilteredProducts([]);
             return;
         }
         const searchLower = search.toLowerCase();
@@ -92,11 +94,10 @@ export const CommercePage = () => {
                     <button
                         key={category}
                         onClick={() => { setSelectedCategory(category); setShowProducts(true); }}
-                        className={`px-5 py-2 rounded-full font-semibold transition-all duration-300 ${
-                            selectedCategory === category
-                                ? "bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] shadow-md scale-105"
-                                : "bg-white text-[var(--color-burdeos-dark)] border border-[var(--color-burdeos-dark)] hover:bg-[var(--color-mostaza-pastel)] hover:scale-105"
-                        }`}
+                        className={`px-5 py-2 rounded-full font-semibold transition-all duration-300 ${selectedCategory === category
+                            ? "bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] shadow-md scale-105"
+                            : "bg-white text-[var(--color-burdeos-dark)] border border-[var(--color-burdeos-dark)] hover:bg-[var(--color-mostaza-pastel)] hover:scale-105"
+                            }`}
                     >
                         {categoryNames[category]}
                     </button>
@@ -135,10 +136,24 @@ export const CommercePage = () => {
                                 <p className="text-[var(--color-burdeos-darker)] mt-1 font-medium">
                                     {product.price} €
                                 </p>
+
+                                <button
+                                    disabled={loading}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (!cart._id) return;
+                                        addToCart(product);
+                                    }}
+                                    className={`flex-1 py-2 rounded-xl font-medium shadow-md transition-all ${cart?.loading || !cart?._id ? 'bg-gray-300 cursor-not-allowed' : 'bg-[var(--color-mostaza-pastel)] text-[var(--color-burdeos-dark)] hover:bg-[var(--color-mostaza)] hover:scale-105'}`}
+                                >
+                                    🛒 Añadir al carrito
+                                </button>
+
                                 {commerce && (
-                                    <p className="text-gray-500 text-sm mt-1 truncate">{commerce.name}</p>
+                                    <p className="text-gray-500 text-sm mt-1 truncate">Comercio:{commerce.name}</p>
                                 )}
                                 <FavoriteButton product={product} />
+
                             </div>
                         );
                     })}

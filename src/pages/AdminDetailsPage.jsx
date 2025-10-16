@@ -45,7 +45,6 @@ export const AdminDetailPage = () => {
 
     return (
         <div className="min-h-screen bg-[var(--color-gray-warm)] py-12 px-6 flex flex-col gap-14">
-            {/* Botón volver */}
             <button
                 onClick={() => navigate(-1)}
                 className="self-start px-6 py-2 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] rounded-full shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all font-semibold"

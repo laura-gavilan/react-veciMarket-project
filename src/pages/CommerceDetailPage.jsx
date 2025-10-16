@@ -4,10 +4,12 @@ import { CommerceContext } from "../core/commerce/CommerceContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { api } from "../core/http/axios";
 import { FavoriteButton } from "../components/FavoriteButton";
+import { CartContext } from './../contexts/CartContext';
 
 export const CommerceDetailPage = () => {
     const { commerces, updateCommerce } = useContext(CommerceContext);
     const { user } = useContext(AuthContext);
+    const { addToCart } = useContext(CartContext);
     const { commerceId } = useParams();
     const [selectedCommerce, setSelectedCommerce] = useState(null);
     const navigate = useNavigate();
@@ -16,7 +18,6 @@ export const CommerceDetailPage = () => {
         try {
             const { data } = await api.get(`/commerces/${commerceId}`);
             setSelectedCommerce(data);
-            updateCommerce(data);
         } catch (error) {
             console.error("Error cargando el comercio:", error);
         }
@@ -50,7 +51,6 @@ export const CommerceDetailPage = () => {
             </button>
 
             <div className="bg-white rounded-3xl shadow-lg p-10 flex flex-col md:flex-row gap-6 border border-[var(--color-burdeos-light)] hover:shadow-2xl transition-all duration-300">
-                {/* Imagen */}
                 {(selectedCommerce.image || selectedCommerce.images?.[0]) && (
                     <img
                         src={
@@ -128,6 +128,16 @@ export const CommerceDetailPage = () => {
                                     <div className="mt-3 flex justify-end">
                                         <FavoriteButton product={product} />
                                     </div>
+
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation(); 
+                                            addToCart(product);
+                                        }}
+                                        className="flex-1 bg-[var(--color-mostaza-pastel)] text-[var(--color-burdeos-dark)] py-2 rounded-xl font-medium shadow-md hover:bg-[var(--color-mostaza)] hover:scale-105 transition-all"
+                                    >
+                                        🛒 Añadir al carrito
+                                    </button>
                                 </div>
                             </div>
                         ))}

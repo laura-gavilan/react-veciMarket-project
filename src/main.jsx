@@ -8,6 +8,7 @@ import { CommerceProvider } from './core/commerce/CommerceContext.jsx';
 import { ProductProvider } from './core/products/ProductContext.jsx';
 import { UserProvider } from './contexts/UserContext.jsx';
 import { FavoritesProvider } from './contexts/FavoritesContext.jsx';
+import { CartProvider } from './contexts/CartContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -17,7 +18,9 @@ createRoot(document.getElementById('root')).render(
           <CommerceProvider>
             <ProductProvider>
               <FavoritesProvider>
-              <App />
+                <CartProvider>
+                  <App />
+                </CartProvider>
               </FavoritesProvider>
             </ProductProvider>
           </CommerceProvider>

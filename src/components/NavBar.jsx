@@ -24,6 +24,8 @@ export const NavBar = () => {
                 { to: "/", label: "Inicio" },
                 { to: "/commerce", label: "Comercios" },
                 { to: "/admin", label: "Mis comercios" },
+                { to: "/favorites", label: "Favoritos" },
+                { to: "/cart", label: "Cesta" },
                 { to: "/commerce/new", label: "Crear comercio" },
             ];
         } else {
@@ -32,6 +34,8 @@ export const NavBar = () => {
                 { to: "/commerce", label: "Comercios" },
                 { to: "/user", label: "Perfil" },
                 { to: "/favorites", label: "Favoritos" },
+                { to: "/cart", label: "Cesta" },
+
             ];
         }
     }, [user]);
@@ -60,7 +64,7 @@ export const NavBar = () => {
                         {!user ? (
                             <Link to="/login" className="flex items-center justify-center w-6 h-6">
                                 <img
-                                    src="/public/icons/login.png"
+                                    src="/icons/login.png"
                                     alt="Login"
                                     className="w-full h-full object-contain"
                                 />
