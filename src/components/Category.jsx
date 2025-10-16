@@ -8,7 +8,6 @@ export const Category = ({ products, deleteProduct, refreshProducts, ownerId, co
     const navigate = useNavigate();
     const isOwner = user?._id === ownerId;
 
-    // Agrupar productos por categoría
     const categories = useMemo(() => {
         const catMap = {};
         products.forEach(product => {
@@ -34,7 +33,7 @@ export const Category = ({ products, deleteProduct, refreshProducts, ownerId, co
         pets: "Animales",
         home: "Hogar",
         clothing: "Ropa",
-        footwear:"Calzado",
+        footwear: "Calzado",
         other: "Otras",
     };
 
@@ -42,19 +41,16 @@ export const Category = ({ products, deleteProduct, refreshProducts, ownerId, co
         <div className="flex flex-col gap-14">
             {Object.keys(categories).map(category => (
                 <div key={category} className="space-y-6">
-                    {/* Título de categoría */}
                     <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] border-b-2 border-[var(--color-burdeos-light)] inline-block pb-1">
                         {categoryNames[category] || category}
                     </h2>
 
-                    {/* Grid de productos */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
                         {categories[category].map(product => (
                             <div
                                 key={product._id}
                                 className="group bg-white rounded-3xl shadow-md border border-[var(--color-burdeos-light)] overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
                             >
-                                {/* Imagen del producto */}
                                 {product.images?.[0] && (
                                     <div className="w-full h-48 overflow-hidden rounded-t-3xl">
                                         <img
@@ -71,7 +67,6 @@ export const Category = ({ products, deleteProduct, refreshProducts, ownerId, co
                                     </div>
                                 )}
 
-                                {/* Información */}
                                 <div className="p-4 flex flex-col justify-between flex-1">
                                     <div>
                                         <h3 className="text-lg font-semibold text-[var(--color-burdeos-dark)] truncate">
@@ -82,7 +77,6 @@ export const Category = ({ products, deleteProduct, refreshProducts, ownerId, co
                                         </p>
                                     </div>
 
-                                    {/* Botones de acción */}
                                     {isOwner && (
                                         <div className="flex gap-3 mt-3">
                                             <button
