@@ -42,7 +42,6 @@ export const CommerceDetailPage = () => {
 
     return (
         <div className="min-h-screen bg-[var(--color-gray-warm)] py-12 px-6 flex flex-col gap-14">
-            {/* Botón volver */}
             <button
                 onClick={() => navigate(-1)}
                 className="self-start px-6 py-2 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] rounded-full shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all font-semibold"
@@ -50,7 +49,6 @@ export const CommerceDetailPage = () => {
                 ← Volver
             </button>
 
-            {/* Información del comercio */}
             <div className="bg-white rounded-3xl shadow-lg p-10 flex flex-col md:flex-row gap-6 border border-[var(--color-burdeos-light)] hover:shadow-2xl transition-all duration-300">
                 {/* Imagen */}
                 {(selectedCommerce.image || selectedCommerce.images?.[0]) && (
@@ -67,7 +65,6 @@ export const CommerceDetailPage = () => {
                     />
                 )}
 
-                {/* Texto */}
                 <div className="flex-1 flex flex-col justify-between">
                     <div className="space-y-4">
                         <h1 className="text-4xl md:text-5xl font-extrabold text-[var(--color-burdeos-dark)]">
@@ -88,7 +85,6 @@ export const CommerceDetailPage = () => {
                 </div>
             </div>
 
-            {/* Productos */}
             <div className="bg-white rounded-3xl shadow-lg p-10 border border-[var(--color-burdeos-light)]">
                 <div className="flex justify-between items-center mb-8">
                     <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] border-b-2 border-[var(--color-burdeos-light)] pb-2">
@@ -143,7 +139,6 @@ export const CommerceDetailPage = () => {
                 )}
             </div>
 
-            {/* Mapa */}
             {(address?.mapUrl || (address?.street && address?.city)) && (
                 <section className="py-10 px-6 w-full max-w-5xl mx-auto text-center">
                     <h2 className="text-3xl md:text-4xl font-semibold mb-8 text-[var(--color-burdeos-dark)] border-b-2 border-[var(--color-burdeos-light)] inline-block pb-1">
