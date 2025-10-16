@@ -69,7 +69,6 @@ export const CommercePage = () => {
                 Explora los <span className="text-[var(--color-mostaza)]">productos</span> y <span className="text-[var(--color-mostaza)]">comercios</span> de tu barrio
             </h1>
 
-            {/* Buscador */}
             <div className="mb-8 w-full md:w-1/2 relative">
                 <input
                     type="text"
@@ -88,7 +87,6 @@ export const CommercePage = () => {
                 )}
             </div>
 
-            {/* Filtros de categoría */}
             <div className="w-full mb-10 flex flex-wrap gap-3 justify-center">
                 {categories.map(category => (
                     <button
@@ -114,7 +112,6 @@ export const CommercePage = () => {
                 )}
             </div>
 
-            {/* Productos */}
             {showProducts && selectedCategory && filteredProducts.length > 0 && (
                 <div className="w-full mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                     {filteredProducts.map(product => {
@@ -154,7 +151,6 @@ export const CommercePage = () => {
                 </p>
             )}
 
-            {/* Comercios */}
             <div className="w-full mt-12">
                 <h2 className="text-2xl font-title font-bold text-[var(--color-burdeos-dark)] mb-6">
                     Comercios
