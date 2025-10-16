@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../core/http/axios";
+import { useProduct } from "../core/products/ProductContext";
 
 export const EditProductPage = () => {
     const { commerceId, productId } = useParams();
     const navigate = useNavigate();
+    const { updateProduct } = useProduct();
 
     const [form, setForm] = useState({
         name: "",
@@ -72,9 +74,20 @@ export const EditProductPage = () => {
             payload.append("description", form.description);
             if (newImage) payload.append("image", newImage);
 
-            await api.patch(`/products/${productId}`, payload, {
+            const { data: updatedProductFromApi } = await api.patch(`/products/${productId}`, payload, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
+
+            const updatedProduct = {
+                _id: productId,
+                name: form.name,
+                category: form.category,
+                price: priceValue,
+                description: form.description,
+                images: newImage ? [URL.createObjectURL(newImage)] : [currentImage], 
+                commerceId,
+            };
+            updateProduct(productId, updatedProduct);
 
             alert("Producto actualizado correctamente");
             navigate(`/admin/commerce/${commerceId}`);
