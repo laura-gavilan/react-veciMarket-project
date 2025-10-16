@@ -2,17 +2,14 @@ export const Contact = () => {
     return (
         <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-6 py-16 text-[var(--color-burdeos-darker)]">
 
-            {/* Título */}
             <h1 className="text-4xl md:text-5xl font-title font-semibold mb-6 text-center text-[var(--color-burdeos-dark)]">
                 Contáctanos
             </h1>
 
-            {/* Descripción */}
             <p className="text-center mb-12 max-w-2xl text-lg md:text-xl text-[var(--color-burdeos-darker)]">
                 ¿Tienes alguna duda o sugerencia? Escríbenos y nos pondremos en contacto contigo lo antes posible.
             </p>
 
-            {/* Formulario */}
             <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)] p-8 transition-all">
                 <form className="flex flex-col gap-6">
 
@@ -60,7 +57,6 @@ export const Contact = () => {
                     </button>
                 </form>
 
-                {/* Información de contacto */}
                 <div className="mt-10 text-center space-y-3 text-[var(--color-burdeos-darker)]">
                     <p><span className="font-semibold">Teléfono:</span> +34 123 456 789</p>
                     <p><span className="font-semibold">Email:</span> contacto@vecimarket.com</p>

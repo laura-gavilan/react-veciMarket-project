@@ -49,7 +49,6 @@ export const NavBar = () => {
                     <span className="font-title text-h4 text-[var(--color-burdeos-dark)] font-semibold">VeciMarket</span>
                 </Link>
 
-                {/* Menú escritorio */}
                 <div className="hidden md:flex items-center gap-8 text-[1rem] font-semibold text-[var(--color-burdeos-dark)]">
                     {links.map(({ to, label }) => (
                         <Link key={to} to={to} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">
