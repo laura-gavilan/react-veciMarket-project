@@ -24,14 +24,12 @@ export const Home = () => {
     return (
         <div className="font-sans">
 
-            <section className="relative max-w-7xl mx-auto px-6 py-30 shadow-2xl overflow-hidden">
-                {/* Imagen de fondo alineada a la derecha */}
+            <section className="relative max-w-auto mx-auto px-6 py-30 shadow-2xl overflow-hidden">
                 <div
                     className="absolute inset-0 bg-cover bg-right bg-no-repeat"
                     style={{ backgroundImage: "url('/images/food.jpg')" }}
                 />
 
-                {/* Contenido a la derecha */}
                 <div className="relative z-10 max-w-lg ml-auto text-white space-y-4">
                     <h1 className="text-5xl md:text-6xl font-title font-semibold drop-shadow-lg">
                         VeciMarket
@@ -40,7 +38,6 @@ export const Home = () => {
                         Descubre los mejores productos y locales de tu barrio.
                     </p>
 
-                    {/* Texto adicional */}
                     <p className="text-md md:text-lg text-white/90 drop-shadow">
                         Apoya el comercio local y encuentra ofertas exclusivas en tu zona. ¡Todo lo que necesitas, cerca de ti!
                     </p>
@@ -63,8 +60,6 @@ export const Home = () => {
             </section>
 
 
-
-            {/* Categorías */}
             <section className="py-16 px-6 text-center">
                 <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-[var(--color-burdeos-dark)]">
                     Categorías destacadas
@@ -87,7 +82,8 @@ export const Home = () => {
                 </div>
             </section>
 
-            <section className="py-16 px-6 max-w-7xl mx-auto bg-[var(--color-gray-warm)]">
+
+            <section className="py-16 px-6 max-auto mx-auto bg-[var(--color-gray-warm)]">
                 <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-[var(--color-burdeos-dark)] text-center">
                     Comercios destacados
                 </h2>
@@ -121,7 +117,7 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* Productos destacados */}
+
             <section className="py-16 px-6 max-w-7xl mx-auto">
                 <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-[var(--color-burdeos-dark)] text-center">
                     Productos destacados
@@ -158,7 +154,7 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* Ubicación */}
+
             <section className="py-16 px-6 max-w-7xl mx-auto text-center">
                 <h2 className="text-3xl md:text-4xl font-title font-semibold mb-6 text-[var(--color-burdeos-dark)]">
                     Ubicación de los comercios
@@ -175,7 +171,7 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* Contacto */}
+
             <section className="py-20 px-6 text-center max-w-4xl mx-auto">
                 <h2 className="text-3xl md:text-4xl font-title font-semibold mb-6 text-[var(--color-burdeos-dark)]">
                     Contáctanos
@@ -193,7 +189,7 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* Scroll top */}
+
             {showScrollTop && (
                 <button
                     onClick={scrollToTop}
