@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useFavorites } from "../core/favorites/useFavorites";
 import { useAuth } from './../core/auth/useAuth';
 
@@ -5,6 +6,7 @@ export const FavoriteButton = ({ product }) => {
     const { user } = useAuth();
     const { favorites, addFavorite, deleteFavorite } = useFavorites();
     const isFavorite = Array.isArray(favorites) && favorites.some(f => f._id === product._id);
+    const navigate = useNavigate();
 
     const toggleFavorite = (event) => {
         event.stopPropagation();
@@ -15,9 +17,9 @@ export const FavoriteButton = ({ product }) => {
             
 
         if (isFavorite) {
-            deleteFavorite(user._id, product._id);
+            deleteFavorite(product._id);
         } else {
-            addFavorite(user._id, product);
+            addFavorite(product);
         }
     };
 

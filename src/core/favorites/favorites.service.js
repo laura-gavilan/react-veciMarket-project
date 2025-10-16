@@ -1,25 +1,30 @@
 const FAVORITES_KEY = "favorites";
 
-export const getFavoritesFromLocalStorage = () => {
-    const data = localStorage.getItem(FAVORITES_KEY);
-    return data ? JSON.parse(data) : [];
+export const getFavoritesFromLocalStorage = (userId) => {
+    const data = JSON.parse(localStorage.getItem(FAVORITES_KEY) || {})
+    return userId ? data[userId] || [] : [];
 };
 
-export const saveFavoritesInLocalStorage = (favorites) => {
-    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+export const saveFavoritesInLocalStorage = (userId, favorites) => {
+    const data = JSON.parse(localStorage.getItem(FAVORITES_KEY) || {})
+    if (!userId) return;
+    data[userId] = favorites;
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(data));
 };
 
-export const addFavoriteToLocalStorage = (favorite) => {
-    const favorites = getFavoritesFromLocalStorage();
-    const exists = favorites.map((favorite) => favorite.id === favorite._id);
+export const addFavoriteToLocalStorage = (userId, favorite) => {
+    if (!userId) return;
+    const favorites = getFavoritesFromLocalStorage(userId);
+    const exists = favorites.some((favorite) => favorite._id === favorite._id);
     if (!exists) {
         favorites.push(favorite);
-        saveFavoritesInLocalStorage(favorites);
-    }
+        saveFavoritesInLocalStorage(userId, favorites);
+    };
 };
 
-export const deleteFavoriteFromLocalStorage = (productId) => {
-    const favorites = getFavoritesFromLocalStorage();
+export const deleteFavoriteFromLocalStorage = (userId, productId) => {
+    if (!userId) return;
+    const favorites = getFavoritesFromLocalStorage(userId);
     const newFavorites = favorites.filter((favorite) => favorite._id !== productId);
-    saveFavoritesInLocalStorage(newFavorites);
+    saveFavoritesInLocalStorage(userId, newFavorites);
 };
