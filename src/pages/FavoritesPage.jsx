@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useFavorites } from "../core/favorites/useFavorites";
 import { useAuth } from "../core/auth/useAuth";
-import { FavoriteButton } from "../components/FavoriteButton.jsx"; // reutilizamos el botón de corazón
+import { FavoriteButton } from "../components/FavoriteButton.jsx"; 
 
 export const FavoritesPage = () => {
     const { user } = useAuth();
@@ -48,7 +48,6 @@ export const FavoritesPage = () => {
                             </h2>
                             <p className="text-[var(--color-burdeos-darker)] mt-1 font-medium">{product.price} €</p>
 
-                            {/* Botón de favorito para eliminar */}
                             <div className="mt-2">
                                 <FavoriteButton product={product} />
                             </div>
