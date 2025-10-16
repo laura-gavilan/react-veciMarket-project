@@ -4,7 +4,6 @@ export const Footer = () => {
     return (
         <footer className="bg-[var(--color-mostaza-pastel)] text-[var(--color-burdeos-light)] py-12">
             <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-                {/* Logo / Nombre */}
                 <div>
                     <h2 className="text-2xl font-title font-semibold text-[var(--color-burdeos-dark)] mb-4">
                         VeciMarket
@@ -14,7 +13,6 @@ export const Footer = () => {
                     </p>
                 </div>
 
-                {/* Enlaces rápidos */}
                 <div>
                     <h3 className="text-xl font-semibold mb-4 text-[var(--color-burdeos-dark)]">Enlaces</h3>
                     <ul className="space-y-2">
@@ -33,15 +31,9 @@ export const Footer = () => {
                     </ul>
                 </div>
 
-                {/* Redes sociales / Contacto */}
                 <div>
                     <h3 className="text-xl font-semibold mb-4 text-[var(--color-burdeos-dark)]">Contacto & Redes</h3>
                     <p className="mb-4">Correo: <a href="mailto:contacto@vecimarket.com" className="hover:text-[var(--color-burdeos-dark)] transition-colors">contacto@vecimarket.com</a></p>
-                    {/* <div className="flex justify-center md:justify-start gap-4 text-[var(--color-burdeos-dark)]">
-                        <a href="#" className="hover:text-[var(--color-burdeos-light)] transition-colors"><FaFacebookF /></a>
-                        <a href="#" className="hover:text-[var(--color-burdeos-light)] transition-colors"><FaInstagram /></a>
-                        <a href="#" className="hover:text-[var(--color-burdeos-light)] transition-colors"><FaTwitter /></a>
-                    </div> */}
                 </div>
             </div>
 
