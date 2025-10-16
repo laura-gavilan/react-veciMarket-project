@@ -5,13 +5,7 @@ import { FavoriteButton } from "../components/FavoriteButton.jsx";
 
 export const FavoritesPage = () => {
     const { user } = useAuth();
-    const { favorites, loadFavorites } = useFavorites();
-
-    useEffect(() => {
-        if (user?._id) {
-            loadFavorites(user._id);
-        }
-    }, [user]);
+    const { favorites } = useFavorites();
 
     if (!user)
         return <p className="text-center mt-10 text-[var(--color-burdeos-dark)] font-sans text-lg">
