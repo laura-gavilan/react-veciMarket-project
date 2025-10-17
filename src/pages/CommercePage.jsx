@@ -120,17 +120,20 @@ export const CommercePage = () => {
                         return (
                             <div
                                 key={product._id}
-                                className="group relative bg-white rounded-3xl shadow-xl overflow-hidden cursor-pointer p-5 flex flex-col items-center text-center hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                                className="group relative bg-white rounded-3xl shadow-xl overflow-hidden cursor-pointer p-5 flex flex-col items-center text-center hover:shadow-3xl hover:-translate-y-1 transition-all duration-300"
                                 onClick={() => commerce && navigate(`/commerce/${commerce._id}`)}
                             >
-                                {product.images?.[0] && (
-                                    <img
-                                        src={product.images[0].startsWith("/") ? product.images[0] : `/products/${product.images[0]}`}
-                                        alt={product.name}
-                                        className="w-28 h-28 md:w-32 md:h-32 object-cover rounded-xl mb-4 transition-transform duration-300 group-hover:scale-105"
-                                    />
-                                )}
-                                <h3 className="text-lg md:text-xl font-title font-semibold text-[var(--color-burdeos-dark)]">
+                                <div className="w-full h-44 overflow-hidden">
+                                    {product.images?.[0] && (
+                                        <img
+                                            src={product.images[0].startsWith("/") ? product.images[0] : `/products/${product.images[0]}`}
+                                            alt={product.name}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                        />
+                                    )}
+                                </div>
+
+                                <h3 className="text-lg md:text-xl font-title font-semibold text-[var(--color-burdeos-dark)] mt-2">
                                     {product.name}
                                 </h3>
                                 <p className="text-[var(--color-burdeos-darker)] mt-1 font-medium">

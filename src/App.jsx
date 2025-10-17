@@ -19,11 +19,14 @@ import { UserPage } from './pages/UserPage.jsx';
 import { EditUserPage } from './pages/EditUserPage.jsx';
 import { FavoritesPage } from './pages/FavoritesPage.jsx';
 import { CartPage } from './pages/CartPage.jsx';
+import { ScrollToTop } from './components/ScrollToTop.jsx';
 
 export const App = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
+
+      <ScrollToTop />
 
       <main className="flex-1">
         <Routes>

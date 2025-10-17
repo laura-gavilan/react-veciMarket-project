@@ -7,7 +7,7 @@ import { FavoriteButton } from "../components/FavoriteButton";
 import { CartContext } from './../contexts/CartContext';
 
 export const CommerceDetailPage = () => {
-    const { commerces, updateCommerce } = useContext(CommerceContext);
+    const { commerces, loading } = useContext(CommerceContext);
     const { user } = useContext(AuthContext);
     const { addToCart } = useContext(CartContext);
     const { commerceId } = useParams();
@@ -24,12 +24,34 @@ export const CommerceDetailPage = () => {
     };
 
     useEffect(() => {
-        const commerce = commerces?.find((commerce) => commerce._id === commerceId);
-        if (commerce) setSelectedCommerce(commerce);
-        else refreshCommerce();
-    }, [commerces, commerceId]);
+        if (!commerceId || loading) return;
 
-    if (!selectedCommerce) {
+        const commerceFromContext = commerces?.find(c => c._id === commerceId || c.slug === commerceId);
+
+        if (commerceFromContext) {
+            console.log("✅ Comercio encontrado:", commerceFromContext);
+            setSelectedCommerce(commerceFromContext);
+
+            if (!commerceFromContext.products || commerceFromContext.products.length === 0) {
+                refreshCommerce();
+            }
+        } else {
+            console.log("🔄 Comercio no encontrado en contexto, buscando en API...");
+            refreshCommerce();
+        }
+    }, [commerceId, commerces, loading]);
+
+    // ✅ Mantiene sincronizado el comercio si cambia en el contexto
+    useEffect(() => {
+        if (!selectedCommerce) return;
+        const updated = commerces?.find(c => c._id === selectedCommerce._id);
+        if (updated && updated !== selectedCommerce) {
+            setSelectedCommerce(updated);
+        }
+    }, [commerces]);
+
+    // ✅ Estado de carga
+    if (loading || !selectedCommerce) {
         return (
             <div className="flex items-center justify-center min-h-screen text-[var(--color-burdeos-light)]">
                 <h1 className="text-2xl font-semibold animate-pulse">
@@ -131,7 +153,7 @@ export const CommerceDetailPage = () => {
 
                                     <button
                                         onClick={(e) => {
-                                            e.stopPropagation(); 
+                                            e.stopPropagation();
                                             addToCart(product);
                                         }}
                                         className="flex-1 bg-[var(--color-mostaza-pastel)] text-[var(--color-burdeos-dark)] py-2 rounded-xl font-medium shadow-md hover:bg-[var(--color-mostaza)] hover:scale-105 transition-all"

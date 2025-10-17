@@ -25,11 +25,11 @@ export const createCartApi = async (cartData) => {
 
 export const updateCartApi = async (cartId, data) => {
     try {
-        const response = await api.patch(`/carts/${cartId}`, data);
+        const response = await api.patch(`/carts/${cartId || data.id}`, data);
         console.log("Carrito actualizado", response.data);
         return response.data;
     } catch (error) {
-        console.error("Error al actualizar el carrito", error);
+        console.error("Error al actualizar el carrito", error.response?.data || error);
         throw error;
     }
 };

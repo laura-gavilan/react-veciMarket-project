@@ -127,11 +127,11 @@ export const Home = () => {
                         <Link key={product._id} to={`/commerce/${product.commerceId}`} className="block group">
                             <div className="bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)] overflow-hidden transition-transform duration-300 hover:shadow-2xl hover:-translate-y-1">
                                 {product.images?.[0] && (
-                                    <div className="w-full flex justify-center bg-white/10">
+                                    <div className="w-full h-34 overflow-hidden">
                                         <img
                                             src={product.images[0]}
                                             alt={product.name}
-                                            className="w-36 h-36 md:w-40 md:h-40 object-cover rounded-t-2xl transition-transform duration-300 group-hover:scale-105"
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                         />
                                     </div>
                                 )}

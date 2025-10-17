@@ -23,6 +23,7 @@ export const NavBar = () => {
             return [
                 { to: "/", label: "Inicio" },
                 { to: "/commerce", label: "Comercios" },
+                { to: "/user", label: "Perfil" },
                 { to: "/admin", label: "Mis comercios" },
                 { to: "/favorites", label: "Favoritos" },
                 { to: "/cart", label: "Cesta" },
@@ -75,7 +76,7 @@ export const NavBar = () => {
                                 className="flex items-center justify-center w-6 h-6"
                             >
                                 <img
-                                    src="/public/icons/login.png"
+                                    src="/icons/login.png"
                                     alt="Usuario"
                                     className="w-full h-full object-contain"
                                 />
@@ -99,7 +100,7 @@ export const NavBar = () => {
                 <div className="flex items-center gap-4 md:hidden">
                     <button className="focus:outline-none" onClick={() => setOpen(!open)}>
                         <img
-                            src={open ? "/public/xmark-solid-full.svg" : "/public/white-burger-menu.png"}
+                            src={open ? "/xmark-solid-full.svg" : "/public/white-burger-menu.png"}
                             alt="Menú"
                             className="w-10 h-10 transition-transform duration-300"
                         />
@@ -124,7 +125,7 @@ export const NavBar = () => {
                     {!user ? (
                         <Link to="/login" onClick={() => setOpen(false)} className="w-10 h-10">
                             <img
-                                src="/public/icons/login.png"
+                                src="/icons/login.png"
                                 alt="Login"
                                 className="w-full h-full object-contain"
                             />

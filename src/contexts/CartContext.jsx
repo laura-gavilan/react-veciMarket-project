@@ -7,11 +7,20 @@ export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
     const { user } = useAuth();
-    const [cart, setCart] = useState({ _id: null, userId: null, items: [], total: 0 });
+    const [cart, setCart] = useState({
+        _id: null,
+        id: null,
+        userId: null,
+        items: [],
+        total: 0,
+        status: "active"
+    });
+
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (user?._id) loadCart(user._id);
+        if (user?._id)
+            loadCart(user._id);
         else {
             setCart({ _id: null, userId: null, items: [], total: 0 });
             setLoading(false);
@@ -25,6 +34,8 @@ export const CartProvider = ({ children }) => {
             if (!existingCart) {
                 existingCart = await createCartApi({ userId, items: [], total: 0, status: "active" });
             }
+            existingCart._id = existingCart._id || existingCart.id;
+            existingCart.id = existingCart.id || existingCart._id;
             setCart(existingCart);
         } catch (error) {
             console.error("Error al cargar el carrito:", error);
@@ -44,6 +55,7 @@ export const CartProvider = ({ children }) => {
             )
             : [...cart.items, { productId: product._id, name: product.name, price: product.price, quantity: 1 }];
 
+
         const updatedCart = {
             ...cart,
             items: updatedItems,
@@ -51,7 +63,7 @@ export const CartProvider = ({ children }) => {
         };
 
         try {
-            const savedCart = await updateCartApi(cart._id, updatedCart); // <- usar _id
+            const savedCart = await updateCartApi(cart._id || cart.id, updatedCart);
             setCart(savedCart);
         } catch (error) {
             console.error("Error al agregar producto al carrito:", error);
@@ -64,7 +76,7 @@ export const CartProvider = ({ children }) => {
         const updatedItems = cart.items.filter(i => i.productId !== productId);
         const updatedCart = { ...cart, items: updatedItems, total: updatedItems.reduce((acc, i) => acc + i.price * i.quantity, 0) };
         try {
-            const savedCart = await updateCartApi(cart.id, updatedCart);
+            const savedCart = await updateCartApi(cart._id || cart.id, updatedCart);
             setCart(savedCart);
         } catch (error) {
             console.error("Error al eliminar producto del carrito:", error);
@@ -76,7 +88,7 @@ export const CartProvider = ({ children }) => {
 
         const clearedCart = { ...cart, items: [], total: 0 };
         try {
-            const savedCart = await updateCartApi(cart.id, clearedCart);
+            const savedCart = await updateCartApi(cart._id || cart.id, clearedCart);
             setCart(savedCart);
         } catch (error) {
             console.error("Error al vaciar el carrito:", error);
