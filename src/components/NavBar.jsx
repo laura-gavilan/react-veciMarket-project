@@ -100,7 +100,7 @@ export const NavBar = () => {
                 <div className="flex items-center gap-4 md:hidden">
                     <button className="focus:outline-none" onClick={() => setOpen(!open)}>
                         <img
-                            src={open ? "/xmark-solid-full.svg" : "/white-burger-menu.png"}
+                            src={open ? "/xmark-solid-full.svg" : "/burger-menu.png"}
                             alt="Menú"
                             className="w-10 h-10 transition-transform duration-300"
                         />

@@ -16,6 +16,7 @@ export const CommercePage = () => {
     const [showProducts, setShowProducts] = useState(true);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [filteredCommerces, setFilteredCommerces] = useState([]);
+    const [showScrollTop, setShowScrollTop] = useState(false);
 
     const categories = [
         "all",
@@ -41,6 +42,16 @@ export const CommercePage = () => {
         clothing: "Ropa",
         footwear: "Calzado",
         other: "Otras",
+    };
+
+    useEffect(() => {
+        const handleScroll = () => setShowScrollTop(window.scrollY > 300);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     useEffect(() => {
@@ -202,6 +213,15 @@ export const CommercePage = () => {
                         <p className="col-span-full text-center text-gray-500">
                             No se encontraron comercios.
                         </p>
+                    )}
+
+                    {showScrollTop && (
+                        <button
+                            onClick={scrollToTop}
+                            className="fixed bottom-6 right-6 bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] p-3 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 z-50"
+                        >
+                            ↑
+                        </button>
                     )}
                 </div>
             </div>
