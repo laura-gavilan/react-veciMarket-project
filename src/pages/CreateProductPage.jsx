@@ -10,17 +10,27 @@ export const CreateProductPage = () => {
         name: "",
         description: "",
         price: "",
-        category: "all",
+        category: ["all"], 
         releaseDate: "",
+        images: [], 
     });
+
+    const [errors, setErrors] = useState(null);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
+
+        if (name === "category") {
+            setForm((prev) => ({ ...prev, category: [value] }));
+        } else {
+            setForm((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setErrors(null);
+
         try {
             const payload = {
                 ...form,
@@ -34,7 +44,12 @@ export const CreateProductPage = () => {
             navigate(`/admin/commerce/${commerceId}`);
         } catch (error) {
             console.error("Error creando producto:", error);
-            alert("No se pudo crear el producto");
+
+            if (error.response?.data?.invalidFields) {
+                setErrors(error.response.data.invalidFields);
+            } else {
+                setErrors([{ message: "No se pudo crear el producto" }]);
+            }
         }
     };
 
@@ -46,11 +61,19 @@ export const CreateProductPage = () => {
                     className="self-start px-6 py-2 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] rounded-full shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all font-semibold"
                 >
                     ← Volver
-
                 </button>
+
                 <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] text-center mb-5">
                     Crear Nuevo Producto
                 </h1>
+
+                {errors && (
+                    <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">
+                        {errors.map((err, idx) => (
+                            <p key={idx}>{err.message}</p>
+                        ))}
+                    </div>
+                )}
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                     <div className="flex flex-col">
@@ -110,7 +133,7 @@ export const CreateProductPage = () => {
                         <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Categoría</label>
                         <select
                             name="category"
-                            value={form.category}
+                            value={form.category[0]}
                             onChange={handleChange}
                             className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
                             required
@@ -122,6 +145,8 @@ export const CreateProductPage = () => {
                             <option value="sports">Deportes</option>
                             <option value="pets">Animales</option>
                             <option value="home">Hogar</option>
+                            <option value="clothing">Ropa</option>
+                            <option value="footwear">Calzado</option>
                             <option value="other">Otras</option>
                         </select>
                     </div>
@@ -137,5 +162,3 @@ export const CreateProductPage = () => {
         </div>
     );
 };
-
-

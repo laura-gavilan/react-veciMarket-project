@@ -4,11 +4,8 @@ import {
     getFavoritesFromLocalStorage,
     saveFavoritesInLocalStorage,
 } from "../core/favorites/favorites.service";
-
 import { useAuth } from "../core/auth/useAuth";
-import { addFavoriteApi, deleteFavoritesApi, getFavoritesApi } from './../core/favorites/favorites.api';
-
-
+import { addFavoriteApi, deleteFavoritesApi, getFavoritesApi } from "../core/favorites/favorites.api";
 
 export const FavoritesContext = createContext(null);
 
@@ -22,15 +19,14 @@ export const FavoritesProvider = ({ children }) => {
                 setFavorites([]);
                 return;
             }
+
             try {
                 const data = await getFavoritesApi(user._id);
                 const favs = Array.isArray(data.favoritos) ? data.favoritos : [];
-
                 setFavorites(favs);
                 saveFavoritesInLocalStorage(user._id, favs);
             } catch (error) {
-                console.error("Error en loadFavorites", error);
-
+                console.error("Error cargando favoritos desde API", error);
                 const localFavs = getFavoritesFromLocalStorage(user._id);
                 setFavorites(localFavs);
             }
@@ -38,32 +34,34 @@ export const FavoritesProvider = ({ children }) => {
         loadFavorites();
     }, [user]);
 
-
     const addFavorite = async (product) => {
         if (!user?._id) {
             alert("Debes iniciar sesión para marcar favoritos");
             return;
         }
-        if (!product?._id) return console.error("Producto inválido", product);
+        if (!product?._id) {
+            console.error("Producto inválido", product);
+            return;
+        }
 
         try {
             await addFavoriteApi(user._id, product._id);
             setFavorites((prev) => [...prev, product]);
             addFavoriteToLocalStorage(user._id, product);
         } catch (error) {
-            console.erros("Error en addFavorite", error);
+            console.error("Error en addFavorite", error);
         }
     };
 
     const deleteFavorite = async (productId) => {
-        if (!user._id) {
-            alert("Debes iniciar sesión para elimiar favoritos");
+        if (!user?._id) {
+            alert("Debes iniciar sesión para eliminar favoritos");
             return;
         }
 
         try {
             await deleteFavoritesApi(user._id, productId);
-            const newFavorites = favorites.filter((favorite) => favorite._id !== productId);
+            const newFavorites = favorites.filter((f) => f._id !== productId);
             setFavorites(newFavorites);
             saveFavoritesInLocalStorage(user._id, newFavorites);
         } catch (error) {
@@ -72,9 +70,9 @@ export const FavoritesProvider = ({ children }) => {
     };
 
     return (
-        <FavoritesContext.Provider value ={{favorites, addFavorite, deleteFavorite }} >
+        <FavoritesContext.Provider value={{ favorites, addFavorite, deleteFavorite }}>
             {children}
         </FavoritesContext.Provider>
     );
 };
-        
+

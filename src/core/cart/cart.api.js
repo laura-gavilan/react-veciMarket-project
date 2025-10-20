@@ -1,46 +1,35 @@
-import { api } from "../http/axios";
+import { api } from "../http/axios.js";
 
-export const getCartApi = async (userId) => {
-    try {
-        const response = await api.get(`/carts?userId=${userId}`);
-        console.log("Carrito obtenido", response.data);
-        return response.data.length > 0 ? response.data[0] : null;
-    } catch (error) {
-        console.error("Error al obtener el carrito", error);
-        return null;
-    }
+// Crear carrito vacío
+export const createCartApi = async () => {
+	const response = await api.post("/carts", {
+		items: [],
+		status: "active",
+	});
+	return response.data;
 };
 
-export const createCartApi = async (cartData) => {
-    try {
-        const response = await api.post("/carts", cartData);
-        console.log("Carrito creado", response.data);
-        return response.data;
-    } catch (error) {
-        console.error("Error al crear el carrito", error);
-        throw error;
-    }
+// Obtener todos los carritos (opcional)
+export const getCartsApi = async () => {
+	const response = await api.get("/carts");
+	return response.data;
 };
 
+// Actualizar carrito existente
+export const updateCartApi = async (cartId, items) => {
+	console.log(`PATCH /carts/${cartId}`, { items });
 
-export const updateCartApi = async (cartId, data) => {
-    try {
-        const response = await api.patch(`/carts/${cartId || data.id}`, data);
-        console.log("Carrito actualizado", response.data);
-        return response.data;
-    } catch (error) {
-        console.error("Error al actualizar el carrito", error.response?.data || error);
-        throw error;
-    }
+	const response = await api.patch(`/carts/${cartId}`, {
+		items,
+		status: "active",
+	});
+
+	console.log("Carrito actualizado:", response.data);
+	return response.data;
 };
 
+// Eliminar carrito
 export const deleteCartApi = async (cartId) => {
-    try {
-        const response = await api.delete(`/carts/${cartId}`);
-        console.log("Carrito eliminado", response.data);
-        return response.data;
-    } catch (error) {
-        console.error("Error al eliminar el carrito", error);
-        throw error;
-    }
+	const response = await api.delete(`/carts/${cartId}`);
+	return response.data;
 };

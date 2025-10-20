@@ -1,25 +1,35 @@
-import { useNavigate } from "react-router-dom";
+import { useContext, useCallback } from "react";
+import { CartContext } from "../contexts/CartContext";
 import { useAuth } from "../core/auth/useAuth";
-import { useCart } from "../core/cart/useCart";
-
 
 export const CartButton = ({ product }) => {
+    const { addToCart, cart } = useContext(CartContext);
     const { user } = useAuth();
-    const { addToCart, loading } = useCart();
-    const navigate = useNavigate();
 
-    const handleAddToCart = (event) => {
-        event.stopPropagation();
-        if (!user?._id) {
-            alert("Debes iniciar sesión para añadir productos al carrito");
-            return navigate("/login");
-        }
-        addToCart(product);
-    };
+    if (!user) return null; // solo usuarios logueados pueden añadir
+
+    const isInCart = cart.items?.some((item) => item._id === product._id);
+
+    // Memoizamos la función para que no se recree en cada render
+    const handleClick = useCallback(
+        (e) => {
+            e.stopPropagation();
+            addToCart(product);
+        },
+        [addToCart, product]
+    );
+
+    const buttonClasses = `
+        px-4 py-2 rounded-xl shadow-md transition-all
+        ${isInCart
+            ? "bg-burdeos-400 hover:bg-burdeos-500"
+            : "bg-[var(--color-mostaza-pastel)] hover:bg-[var(--color-mostaza)]"}
+        text-[var(--color-burdeos-dark)]
+    `;
 
     return (
-        <button onClick={handleAddToCart} disabled={loading} className="btn-secondary">
-            {loading ? "Añadiendo..." : "🛒 Añadir al carrito"}
+        <button onClick={handleClick} className={buttonClasses}>
+            {isInCart ? "➕ Añadir más" : "🛒 Añadir al carrito"}
         </button>
     );
 };

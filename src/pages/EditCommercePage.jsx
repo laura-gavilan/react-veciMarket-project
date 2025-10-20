@@ -83,6 +83,8 @@ export const EditCommercePage = () => {
                             <option value="sports">Deportes</option>
                             <option value="pets">Animales</option>
                             <option value="home">Hogar</option>
+                            <option value="clothing">Ropa</option>
+                            <option value="footwear">Calzado</option>
                             <option value="other">Otras</option>
                         </select>
                     </div>

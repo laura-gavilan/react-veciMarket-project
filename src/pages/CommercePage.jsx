@@ -3,12 +3,12 @@ import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
 import { useNavigate } from "react-router-dom";
 import { FavoriteButton } from "../components/FavoriteButton";
-import { CartContext } from "../contexts/CartContext";
+import { CartButton } from "../components/CartButton";
+
 
 export const CommercePage = () => {
     const { commerces } = useCommerce();
     const { products, loadAllProducts } = useProduct();
-    const { cart, addToCart, loading } = useContext(CartContext);
     const navigate = useNavigate();
 
     const [search, setSearch] = useState("");
@@ -151,22 +151,11 @@ export const CommercePage = () => {
                                     {product.price} €
                                 </p>
 
-                                <button
-                                    disabled={loading}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        if (!cart._id) return;
-                                        addToCart(product);
-                                    }}
-                                    className={`flex-1 py-2 rounded-xl font-medium shadow-md transition-all ${cart?.loading || !cart?._id ? 'bg-gray-300 cursor-not-allowed' : 'bg-[var(--color-mostaza-pastel)] text-[var(--color-burdeos-dark)] hover:bg-[var(--color-mostaza)] hover:scale-105'}`}
-                                >
-                                    🛒 Añadir al carrito
-                                </button>
-
                                 {commerce && (
                                     <p className="text-gray-500 text-sm mt-1 truncate">Comercio:{commerce.name}</p>
                                 )}
                                 <FavoriteButton product={product} />
+                                <CartButton product={product}/>
 
                             </div>
                         );

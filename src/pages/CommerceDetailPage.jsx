@@ -4,12 +4,12 @@ import { CommerceContext } from "../core/commerce/CommerceContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { api } from "../core/http/axios";
 import { FavoriteButton } from "../components/FavoriteButton";
-import { CartContext } from './../contexts/CartContext';
+import { CartButton } from "../components/CartButton";
+
 
 export const CommerceDetailPage = () => {
     const { commerces, loading } = useContext(CommerceContext);
     const { user } = useContext(AuthContext);
-    const { addToCart } = useContext(CartContext);
     const { commerceId } = useParams();
     const [selectedCommerce, setSelectedCommerce] = useState(null);
     const navigate = useNavigate();
@@ -41,7 +41,7 @@ export const CommerceDetailPage = () => {
         }
     }, [commerceId, commerces, loading]);
 
-    // ✅ Mantiene sincronizado el comercio si cambia en el contexto
+
     useEffect(() => {
         if (!selectedCommerce) return;
         const updated = commerces?.find(c => c._id === selectedCommerce._id);
@@ -147,19 +147,12 @@ export const CommerceDetailPage = () => {
                                         </p>
                                     </div>
 
-                                    <div className="mt-3 flex justify-end">
+                                    <div className="mt-3 flex justify-end gap-2">
                                         <FavoriteButton product={product} />
+                                        <CartButton product={product}/>
                                     </div>
 
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            addToCart(product);
-                                        }}
-                                        className="flex-1 bg-[var(--color-mostaza-pastel)] text-[var(--color-burdeos-dark)] py-2 rounded-xl font-medium shadow-md hover:bg-[var(--color-mostaza)] hover:scale-105 transition-all"
-                                    >
-                                        🛒 Añadir al carrito
-                                    </button>
+                                    
                                 </div>
                             </div>
                         ))}

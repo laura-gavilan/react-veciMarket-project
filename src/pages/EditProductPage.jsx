@@ -47,7 +47,11 @@ export const EditProductPage = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm(prev => ({ ...prev, [name]: value }));
+        if (name === "category") {
+            setForm(prev => ({ ...prev, category: [value] }));
+        } else {
+            setForm(prev => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleFileChange = (e) => {
@@ -84,7 +88,7 @@ export const EditProductPage = () => {
                 category: form.category,
                 price: priceValue,
                 description: form.description,
-                images: newImage ? [URL.createObjectURL(newImage)] : [currentImage], 
+                images: newImage ? [URL.createObjectURL(newImage)] : [currentImage],
                 commerceId,
             };
             updateProduct(productId, updatedProduct);

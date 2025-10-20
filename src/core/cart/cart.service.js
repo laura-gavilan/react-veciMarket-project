@@ -1,59 +1,93 @@
-const CART_KEY = "cart";
+// cart.service.js
 
-// 🧭 Obtener carrito desde localStorage
-export const getCartFromLocalStorage = () => {
-    const data = localStorage.getItem(CART_KEY);
-    return data ? JSON.parse(data) : { products: [], total: 0 };
-};
-
-// 💾 Guardar carrito en localStorage
+// Guardar carrito en localStorage
 export const saveCartInLocalStorage = (cart) => {
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
-};
-
-// 🛒 Añadir producto al carrito local
-export const addProductToLocalCart = (product) => {
-    const cart = getCartFromLocalStorage();
-    const existingProduct = cart.products.find((p) => p._id === product._id);
-
-    if (existingProduct) {
-        existingProduct.quantity += 1;
-    } else {
-        cart.products.push({
-            _id: product._id,
-            name: product.name,
-            price: product.price,
-            quantity: 1,
-            images: product.images,
-        });
+    try {
+        localStorage.setItem("cart", JSON.stringify(cart));
+        console.log("Carrito guardado en localStorage:", cart);
+    } catch (error) {
+        console.error("Error guardando carrito en localStorage:", error);
     }
-
-    cart.total = cart.products.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
-    );
-
-    saveCartInLocalStorage(cart);
-    return cart;
 };
 
-// ➖ Eliminar un producto del carrito local
-export const removeProductFromLocalCart = (productId) => {
-    const cart = getCartFromLocalStorage();
-    const updatedProducts = cart.products.filter((p) => p._id !== productId);
-    const total = updatedProducts.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
-    );
-
-    const updatedCart = { ...cart, products: updatedProducts, total };
-    saveCartInLocalStorage(updatedCart);
-    return updatedCart;
+// Recuperar carrito de localStorage
+export const getCartFromLocalStorage = () => {
+    try {
+        const cart = localStorage.getItem("cart");
+        if (!cart) return null;
+        return JSON.parse(cart);
+    } catch (error) {
+        console.error("Error leyendo carrito de localStorage:", error);
+        return null;
+    }
 };
 
-// 🧹 Vaciar carrito local
-export const clearLocalCart = () => {
-    const emptyCart = { products: [], total: 0 };
-    saveCartInLocalStorage(emptyCart);
-    return emptyCart;
+// Eliminar carrito de localStorage
+export const removeCartFromLocalStorage = () => {
+    try {
+        localStorage.removeItem("cart");
+        console.log("Carrito eliminado de localStorage");
+    } catch (error) {
+        console.error("Error eliminando carrito de localStorage:", error);
+    }
+};
+
+// Actualizar un producto en el carrito de localStorage
+export const updateCartItemInLocalStorage = (productId, quantity) => {
+    try {
+        const cart = getCartFromLocalStorage();
+        if (!cart) return null;
+
+        const updatedItems = cart.items.map((item) =>
+            item._id === productId ? { ...item, quantity } : item
+        );
+
+        const updatedCart = { ...cart, items: updatedItems };
+        saveCartInLocalStorage(updatedCart);
+        return updatedCart;
+    } catch (error) {
+        console.error("Error actualizando producto en localStorage:", error);
+        return null;
+    }
+};
+
+// Agregar un producto al carrito de localStorage
+export const addItemToLocalStorageCart = (product) => {
+    try {
+        const cart = getCartFromLocalStorage() || { id: null, items: [] };
+
+        const existingItem = cart.items.find((item) => item._id === product._id);
+        let updatedItems;
+
+        if (existingItem) {
+            updatedItems = cart.items.map((item) =>
+                item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
+            );
+        } else {
+            updatedItems = [...cart.items, { ...product, quantity: 1 }];
+        }
+
+        const updatedCart = { ...cart, items: updatedItems };
+        saveCartInLocalStorage(updatedCart);
+        return updatedCart;
+    } catch (error) {
+        console.error("Error agregando producto al carrito en localStorage:", error);
+        return null;
+    }
+};
+
+// Eliminar un producto del carrito de localStorage
+export const removeItemFromLocalStorageCart = (productId) => {
+    try {
+        const cart = getCartFromLocalStorage();
+        if (!cart) return null;
+
+        const updatedItems = cart.items.filter((item) => item._id !== productId);
+        const updatedCart = { ...cart, items: updatedItems };
+        saveCartInLocalStorage(updatedCart);
+        return updatedCart;
+    } catch (error) {
+        console.error("Error eliminando producto del carrito en localStorage:", error);
+        return null;
+    }
 };

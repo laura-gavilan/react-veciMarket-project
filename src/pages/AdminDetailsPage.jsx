@@ -96,7 +96,7 @@ export const AdminDetailPage = () => {
             {/* Lista de productos */}
             <div className="bg-white rounded-3xl shadow-lg p-10 border border-[var(--color-burdeos-light)]">
                 <div className="flex justify-between items-center mb-8">
-                    <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] border-b-2 border-[var(--color-burdeos-light)] pb-2">
+                    <h2 className="text-3xl md:text-4xl font-bold  text-[var(--color-burdeos-dark)] border-b-2 border-[var(--color-burdeos-light)] pb-2">
                         Productos del Comercio
                     </h2>
                 </div>

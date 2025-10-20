@@ -19,11 +19,18 @@ export const CreateCommercePage = () => {
     const [imageFile, setImageFile] = useState(null);
     const [preview, setPreview] = useState(null);
 
+    // ✅ Función para eliminar acentos y caracteres raros
+    const normalizeText = (text) =>
+        text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
     const handleChange = (event) => {
         const { name, value } = event.target;
-        if (name.includes("address.")) {
+        if (name.startsWith("address.")) {
             const key = name.split(".")[1];
-            setForm((prev) => ({ ...prev, address: { ...prev.address, [key]: value } }));
+            setForm((prev) => ({
+                ...prev,
+                address: { ...prev.address, [key]: value },
+            }));
         } else {
             setForm((prev) => ({ ...prev, [name]: value }));
         }
@@ -41,16 +48,27 @@ export const CreateCommercePage = () => {
         event.preventDefault();
         if (!user) return alert("Debes iniciar sesión para crear un comercio");
 
+        const slugRegex = /^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/;
+        const nameRegex = /^[a-zA-Z0-9 ]{3,}$/;
+
+        // Normalizamos antes de validar
+        const normalizedName = normalizeText(form.name);
+
+        if (!nameRegex.test(normalizedName)) {
+            return alert("Nombre inválido. Solo letras, números y espacios, mínimo 3 caracteres.");
+        }
+
+        if (!slugRegex.test(form.slug)) {
+            return alert("Slug inválido. Solo letras, números y guiones simples (sin guiones dobles).");
+        }
+
         try {
             const formData = new FormData();
-            formData.append("name", form.name);
-            formData.append("slug", form.slug);
+            formData.append("name", normalizedName); // 👈 Enviamos el nombre limpio
+            formData.append("slug", form.slug.toLowerCase());
             formData.append("description", form.description);
             formData.append("ownerUserId", user.id);
-
-            Object.entries(form.address).forEach(([key, value]) => {
-                formData.append(`address[${key}]`, value);
-            });
+            formData.append("address", JSON.stringify(form.address));
 
             if (imageFile) formData.append("image", imageFile);
 
@@ -61,8 +79,13 @@ export const CreateCommercePage = () => {
             addCommerce({ ...data, ownerUserId: { id: user.id, name: user.name } });
             navigate("/admin");
         } catch (error) {
-            console.error("Error creando comercio:", error);
-            alert("Error al crear el comercio. Intenta nuevamente.");
+            console.error("Error creando comercio:", error.response?.data || error);
+            const backendErrors = error.response?.data?.error || error.response?.data;
+            alert(
+                backendErrors?._errors?.join("\n") ||
+                Object.values(backendErrors || {}).flat().join("\n") ||
+                "Error al crear el comercio. Intenta nuevamente."
+            );
         }
     };
 
@@ -151,7 +174,9 @@ export const CreateCommercePage = () => {
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Imagen del Comercio</label>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">
+                            Imagen del Comercio
+                        </label>
                         <input
                             type="file"
                             accept="image/*"

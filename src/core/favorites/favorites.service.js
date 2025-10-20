@@ -1,7 +1,7 @@
 const FAVORITES_KEY = "favorites";
 
 export const getFavoritesFromLocalStorage = (userId) => {
-    const data = JSON.parse(localStorage.getItem(FAVORITES_KEY) || {})
+    const data = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "{}")
     return userId ? data[userId] || [] : [];
 };
 
@@ -15,7 +15,7 @@ export const saveFavoritesInLocalStorage = (userId, favorites) => {
 export const addFavoriteToLocalStorage = (userId, favorite) => {
     if (!userId) return;
     const favorites = getFavoritesFromLocalStorage(userId);
-    const exists = favorites.some((favorite) => favorite._id === favorite._id);
+    const exists = favorites.some((f) => f._id === favorite._id);
     if (!exists) {
         favorites.push(favorite);
         saveFavoritesInLocalStorage(userId, favorites);
