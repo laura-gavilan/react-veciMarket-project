@@ -1,201 +1,169 @@
-import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { api } from "../core/http/axios";
-import { AuthContext } from "../contexts/AuthContext";
-import { useCommerce } from "../core/commerce/CommerceContext";
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../core/auth/useAuth';
+
+import { useCommerce } from './../core/commerce/CommerceContext';
+import { useState } from 'react';
+
 
 export const CreateCommercePage = () => {
-    const navigate = useNavigate();
-    const { user } = useContext(AuthContext);
     const { addCommerce } = useCommerce();
+    const { user } = useAuth(); // Usuario logueado
+    const navigate = useNavigate();
 
     const [form, setForm] = useState({
         name: "",
         slug: "",
         description: "",
-        address: { street: "", city: "", phone: "", email: "", schedule: "" },
+        image: "",
+        address: {
+            street: "",
+            city: "",
+            phone: "",
+            email: "",
+            schedule: "",
+        },
+        isActive: true,
     });
 
-    const [imageFile, setImageFile] = useState(null);
-    const [preview, setPreview] = useState(null);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
 
-    // ✅ Función para eliminar acentos y caracteres raros
-    const normalizeText = (text) =>
-        text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        if (name.startsWith("address.")) {
-            const key = name.split(".")[1];
-            setForm((prev) => ({
-                ...prev,
-                address: { ...prev.address, [key]: value },
-            }));
+        if (name.includes("address.")) {
+            const addressField = name.split(".")[1];
+            setForm({
+                ...form,
+                address: { ...form.address, [addressField]: value },
+            });
         } else {
-            setForm((prev) => ({ ...prev, [name]: value }));
+            setForm({ ...form, [name]: value });
         }
     };
 
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setImageFile(file);
-            setPreview(URL.createObjectURL(file));
-        }
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        if (!user) return alert("Debes iniciar sesión para crear un comercio");
-
-        const slugRegex = /^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/;
-        const nameRegex = /^[a-zA-Z0-9 ]{3,}$/;
-
-        // Normalizamos antes de validar
-        const normalizedName = normalizeText(form.name);
-
-        if (!nameRegex.test(normalizedName)) {
-            return alert("Nombre inválido. Solo letras, números y espacios, mínimo 3 caracteres.");
-        }
-
-        if (!slugRegex.test(form.slug)) {
-            return alert("Slug inválido. Solo letras, números y guiones simples (sin guiones dobles).");
-        }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
         try {
-            const formData = new FormData();
-            formData.append("name", normalizedName); // 👈 Enviamos el nombre limpio
-            formData.append("slug", form.slug.toLowerCase());
-            formData.append("description", form.description);
-            formData.append("ownerUserId", user.id);
-            formData.append("address", JSON.stringify(form.address));
+            const newCommerce = {
+                ...form,
+                ownerUserId: user?._id, // vincula el comercio al usuario logueado
+            };
 
-            if (imageFile) formData.append("image", imageFile);
-
-            const { data } = await api.post("/commerces", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-
-            addCommerce({ ...data, ownerUserId: { id: user.id, name: user.name } });
-            navigate("/admin");
+            await addCommerce(newCommerce);
+            navigate("/commerce"); // redirige a la lista general
         } catch (error) {
-            console.error("Error creando comercio:", error.response?.data || error);
-            const backendErrors = error.response?.data?.error || error.response?.data;
-            alert(
-                backendErrors?._errors?.join("\n") ||
-                Object.values(backendErrors || {}).flat().join("\n") ||
-                "Error al crear el comercio. Intenta nuevamente."
-            );
+            console.error("Error al crear comercio:", error);
+            alert("No se pudo crear el comercio. Revisa los datos.");
         }
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-[var(--color-gray-warm)] p-6">
             <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)] p-10 flex flex-col gap-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] text-center mb-6">
-                    Crear Nuevo Comercio
-                </h1>
+                <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] text-center mb-6">Crear Comercio</h1>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                    <div className="flex flex-col sm:flex-row gap-4">
+                    {/* Nombre */}
+                    <div className="flex flex-col">
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Nombre</label>
                         <input
                             type="text"
                             name="name"
-                            placeholder="Nombre"
                             value={form.name}
                             onChange={handleChange}
-                            className="flex-1 px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
                             required
+                            className="w-full border rounded p-2"
                         />
+                    </div>
+
+                    {/* Slug */}
+                    <div>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Slug</label>
                         <input
                             type="text"
                             name="slug"
-                            placeholder="Slug"
                             value={form.slug}
                             onChange={handleChange}
-                            className="flex-1 px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
-                            required
+                            placeholder="ej: calzado, moda, comida..."
+                            className="w-full border rounded p-2"
                         />
                     </div>
 
-                    <textarea
-                        name="description"
-                        placeholder="Descripción"
-                        value={form.description}
-                        onChange={handleChange}
-                        rows={4}
-                        className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition resize-none"
-                        required
-                    />
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <input
-                            type="text"
-                            name="address.street"
-                            placeholder="Calle"
-                            value={form.address.street}
+                    {/* Descripción */}
+                    <div>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Descripción</label>
+                        <textarea
+                            name="description"
+                            value={form.description}
                             onChange={handleChange}
-                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
                             required
-                        />
-                        <input
-                            type="text"
-                            name="address.city"
-                            placeholder="Ciudad"
-                            value={form.address.city}
-                            onChange={handleChange}
-                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
-                            required
-                        />
-                        <input
-                            type="text"
-                            name="address.phone"
-                            placeholder="Teléfono"
-                            value={form.address.phone}
-                            onChange={handleChange}
-                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
-                        />
-                        <input
-                            type="email"
-                            name="address.email"
-                            placeholder="Email"
-                            value={form.address.email}
-                            onChange={handleChange}
-                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
-                        />
-                        <input
-                            type="text"
-                            name="address.schedule"
-                            placeholder="Horario"
-                            value={form.address.schedule}
-                            onChange={handleChange}
-                            className="col-span-1 sm:col-span-2 px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                            className="w-full border rounded p-2 h-24"
                         />
                     </div>
 
-                    <div className="flex flex-col">
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">
-                            Imagen del Comercio
-                        </label>
+                    {/* Imagen */}
+                    <div>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">URL de Imagen</label>
                         <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            className="px-3 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                            type="text"
+                            name="image"
+                            value={form.image}
+                            onChange={handleChange}
+                            placeholder="/images/commerces/shoes.jpg"
+                            className="w-full border rounded p-2"
                         />
-                        {preview && (
-                            <img
-                                src={preview}
-                                alt="Preview"
-                                className="mt-2 w-40 h-40 object-cover rounded-xl border border-[var(--color-burdeos-light)]"
+                    </div>
+
+                    {/* Dirección */}
+                    <fieldset className="border p-3 rounded">
+                        <legend className="font-semibold">Dirección</legend>
+                        <div className="grid grid-cols-2 gap-3">
+                            <input
+                                type="text"
+                                name="address.street"
+                                placeholder="Calle"
+                                value={form.address.street}
+                                onChange={handleChange}
+                                className="border rounded p-2"
                             />
-                        )}
-                    </div>
+                            <input
+                                type="text"
+                                name="address.city"
+                                placeholder="Ciudad"
+                                value={form.address.city}
+                                onChange={handleChange}
+                                className="border rounded p-2"
+                            />
+                            <input
+                                type="text"
+                                name="address.phone"
+                                placeholder="Teléfono"
+                                value={form.address.phone}
+                                onChange={handleChange}
+                                className="border rounded p-2"
+                            />
+                            <input
+                                type="email"
+                                name="address.email"
+                                placeholder="Email"
+                                value={form.address.email}
+                                onChange={handleChange}
+                                className="border rounded p-2"
+                            />
+                            <input
+                                type="text"
+                                name="address.schedule"
+                                placeholder="Horario"
+                                value={form.address.schedule}
+                                onChange={handleChange}
+                                className="col-span-2 border rounded p-2"
+                            />
+                        </div>
+                    </fieldset>
 
+                    {/* Botón */}
                     <button
                         type="submit"
-                        className="mt-4 w-full bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] py-3 rounded-2xl font-semibold shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all"
-                    >
+                        className="flex-1 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] py-3 rounded-2xl font-semibold shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all">
                         Crear Comercio
                     </button>
                 </form>
@@ -203,3 +171,7 @@ export const CreateCommercePage = () => {
         </div>
     );
 };
+
+
+
+

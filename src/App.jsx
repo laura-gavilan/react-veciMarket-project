@@ -7,7 +7,6 @@ import { Login } from './pages/Login';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Footer } from './components/Footer';
 import { CommercePage } from './pages/CommercePage';
-import { CreateCommercePage } from './pages/CreateCommercePage.jsx';
 import { AdminPage } from './pages/AdminPage';
 import { ContactPage } from './pages/ContactPage';
 import { CommerceDetailPage } from './pages/CommerceDetailPage';
@@ -21,6 +20,7 @@ import { FavoritesPage } from './pages/FavoritesPage.jsx';
 import { ScrollToTop } from './components/ScrollToTop.jsx';
 import { CartPage } from './pages/CartPage.jsx';
 import { OrdersPage } from './pages/OrdersPage.jsx';
+import { CreateCommercePage } from './pages/CreateCommercePage.jsx';
 
 export const App = () => {
   return (

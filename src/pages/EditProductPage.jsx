@@ -7,6 +7,7 @@ export const EditProductPage = () => {
     const { commerceId, productId } = useParams();
     const navigate = useNavigate();
     const { updateProduct } = useProduct();
+    
 
     const [form, setForm] = useState({
         name: "",
