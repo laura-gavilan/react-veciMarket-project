@@ -18,9 +18,8 @@ import { UserPage } from './pages/UserPage.jsx';
 import { EditUserPage } from './pages/EditUserPage.jsx';
 import { FavoritesPage } from './pages/FavoritesPage.jsx';
 import { ScrollToTop } from './components/ScrollToTop.jsx';
-import { CartPage } from './pages/CartPage.jsx';
-import { OrdersPage } from './pages/OrdersPage.jsx';
 import { CreateCommercePage } from './pages/CreateCommercePage.jsx';
+import { CartPage } from './pages/CartPage';
 
 export const App = () => {
   return (
@@ -49,10 +48,10 @@ export const App = () => {
             <Route path="/user" element={<UserPage />} />
             <Route path="/user/edit" element={<EditUserPage />} />
             <Route path="/favorites" element={<FavoritesPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/orders" element={<OrdersPage />} />
 
             <Route path="/commerce/new" element={<CreateCommercePage />} />
+            <Route path="/cart" element={<CartPage />} />
+
           </Route>
 
           <Route path="*" element={<h2 className="text-center mt-10">Página no encontrada</h2>} />

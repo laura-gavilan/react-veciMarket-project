@@ -5,6 +5,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { api } from "../core/http/axios";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { CartButton } from "../components/CartButton";
+// import { CartButton } from "../components/CartButton";
 
 
 export const CommerceDetailPage = () => {

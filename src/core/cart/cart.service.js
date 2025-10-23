@@ -1,93 +1,48 @@
-// cart.service.js
+const CART_KEY = "carts";
 
-// Guardar carrito en localStorage
-export const saveCartInLocalStorage = (cart) => {
-    try {
-        localStorage.setItem("cart", JSON.stringify(cart));
-        console.log("Carrito guardado en localStorage:", cart);
-    } catch (error) {
-        console.error("Error guardando carrito en localStorage:", error);
-    }
+export const getCartsFromLocalStorage = () => {
+    const data = localStorage.getItem(CART_KEY);
+    return data ? JSON.parse(data) : [];
 };
 
-// Recuperar carrito de localStorage
-export const getCartFromLocalStorage = () => {
-    try {
-        const cart = localStorage.getItem("cart");
-        if (!cart) return null;
-        return JSON.parse(cart);
-    } catch (error) {
-        console.error("Error leyendo carrito de localStorage:", error);
-        return null;
-    }
+export const saveCartsInLocalStorage = (carts) => {
+    localStorage.setItem(CART_KEY, JSON.stringify(carts));
 };
 
-// Eliminar carrito de localStorage
-export const removeCartFromLocalStorage = () => {
-    try {
-        localStorage.removeItem("cart");
-        console.log("Carrito eliminado de localStorage");
-    } catch (error) {
-        console.error("Error eliminando carrito de localStorage:", error);
-    }
+export const addCartToLocalStorage = (cart) => {
+    const current = getCartsFromLocalStorage();
+    saveCartsInLocalStorage([...current, cart]);
 };
 
-// Actualizar un producto en el carrito de localStorage
-export const updateCartItemInLocalStorage = (productId, quantity) => {
-    try {
-        const cart = getCartFromLocalStorage();
-        if (!cart) return null;
-
-        const updatedItems = cart.items.map((item) =>
-            item._id === productId ? { ...item, quantity } : item
-        );
-
-        const updatedCart = { ...cart, items: updatedItems };
-        saveCartInLocalStorage(updatedCart);
-        return updatedCart;
-    } catch (error) {
-        console.error("Error actualizando producto en localStorage:", error);
-        return null;
-    }
+export const updateCartInLocalStorage = (updatedCart) => {
+    const current = getCartsFromLocalStorage();
+    const updated = current.map(c => c._id === updatedCart._id ? updatedCart : c);
+    saveCartsInLocalStorage(updated);
 };
 
-// Agregar un producto al carrito de localStorage
-export const addItemToLocalStorageCart = (product) => {
-    try {
-        const cart = getCartFromLocalStorage() || { id: null, items: [] };
-
-        const existingItem = cart.items.find((item) => item._id === product._id);
-        let updatedItems;
-
-        if (existingItem) {
-            updatedItems = cart.items.map((item) =>
-                item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
-            );
-        } else {
-            updatedItems = [...cart.items, { ...product, quantity: 1 }];
+export const addOrUpdateItemInCartLocal = (cartId, item) => {
+    const current = getCartsFromLocalStorage();
+    const updated = current.map(c => {
+        if (c._id === cartId) {
+            const exists = c.items.find(i => i.productId._id === item.productId._id);
+            if (exists) {
+                c.items = c.items.map(i => i.productId._id === item.productId._id ? { ...i, qty: item.qty } : i);
+            } else {
+                c.items.push(item);
+            }
         }
-
-        const updatedCart = { ...cart, items: updatedItems };
-        saveCartInLocalStorage(updatedCart);
-        return updatedCart;
-    } catch (error) {
-        console.error("Error agregando producto al carrito en localStorage:", error);
-        return null;
-    }
+        return c;
+    });
+    saveCartsInLocalStorage(updated);
 };
 
-// Eliminar un producto del carrito de localStorage
-export const removeItemFromLocalStorageCart = (productId) => {
-    try {
-        const cart = getCartFromLocalStorage();
-        if (!cart) return null;
-
-        const updatedItems = cart.items.filter((item) => item._id !== productId);
-        const updatedCart = { ...cart, items: updatedItems };
-        saveCartInLocalStorage(updatedCart);
-        return updatedCart;
-    } catch (error) {
-        console.error("Error eliminando producto del carrito en localStorage:", error);
-        return null;
-    }
+export const deleteItemFromCartLocal = (cartId, productId) => {
+    const current = getCartsFromLocalStorage();
+    const updated = current.map(c => {
+        if (c._id === cartId) {
+            c.items = c.items.filter(i => i.productId.id !== productId);
+        }
+        return c;
+    });
+    saveCartsInLocalStorage(updated);
 };

@@ -4,6 +4,7 @@ import { useProduct } from "../core/products/ProductContext";
 import { useNavigate } from "react-router-dom";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { CartButton } from "../components/CartButton";
+// import { CartButton } from "../components/CartButton";
 
 
 export const CommercePage = () => {
@@ -75,6 +76,8 @@ export const CommercePage = () => {
         setFilteredProducts(filteredProds);
         setFilteredCommerces(commerces);
     }, [search, products, commerces, selectedCategory, showProducts]);
+
+    
 
     return (
         <div className="min-h-screen  px-6 py-12 flex flex-col items-center max-w-7xl mx-auto">
@@ -155,7 +158,7 @@ export const CommercePage = () => {
                                     <p className="text-gray-500 text-sm mt-1 truncate">Comercio:{commerce.name}</p>
                                 )}
                                 <FavoriteButton product={product} />
-                                <CartButton product={product}/>
+                                <CartButton product={product} />
 
                             </div>
                         );

@@ -14,7 +14,7 @@ export const CreateCommercePage = () => {
         name: "",
         slug: "",
         description: "",
-        image: "",
+        // image: "",
         address: {
             street: "",
             city: "",
@@ -101,7 +101,7 @@ export const CreateCommercePage = () => {
                     </div>
 
                     {/* Imagen */}
-                    <div>
+                    {/* <div>
                         <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">URL de Imagen</label>
                         <input
                             type="text"
@@ -111,7 +111,7 @@ export const CreateCommercePage = () => {
                             placeholder="/images/commerces/shoes.jpg"
                             className="w-full border rounded p-2"
                         />
-                    </div>
+                    </div> */}
 
                     {/* Dirección */}
                     <fieldset className="border p-3 rounded">
