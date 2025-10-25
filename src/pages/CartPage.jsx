@@ -18,8 +18,8 @@ export const CartPage = () => {
     if (!user) {
         return (
             <div className="p-8 text-center">
-                <h2 className="text-2xl font-semibold mb-2">🛒 Carrito</h2>
-                <p>Debes iniciar sesión para ver tu carrito.</p>
+                <h2 className="text-2xl font-semibold mb-2">🛒 Cesta</h2>
+                <p>Debes iniciar sesión para ver tu cesta.</p>
             </div>
         );
     }
@@ -28,7 +28,7 @@ export const CartPage = () => {
     if (!cart || !cart.items || cart.items.length === 0) {
         return (
             <div className="p-8 text-center">
-                <h2 className="text-2xl font-semibold mb-2">🛒 Tu carrito está vacío</h2>
+                <h2 className="text-2xl font-semibold mb-2">🛒 Tu cesta está vacía</h2>
                 <p>Agrega productos para comenzar tu compra.</p>
             </div>
         );
@@ -42,7 +42,7 @@ export const CartPage = () => {
 
     return (
         <div className="max-w-4xl mx-auto p-8">
-            <h2 className="text-3xl font-semibold mb-6 text-center">🛍️ Tu carrito</h2>
+            <h2 className="text-3xl font-semibold mb-6 text-center">Tu cesta de la compra</h2>
 
             {loading && <p className="text-center text-gray-500">Cargando...</p>}
 
@@ -113,7 +113,7 @@ export const CartPage = () => {
                         onClick={clearCart}
                         className="px-6 py-2 bg-gray-300 hover:bg-gray-400 rounded-xl"
                     >
-                        Vaciar carrito
+                        Vaciar cesta
                     </button>
                     <button
                         onClick={checkout}

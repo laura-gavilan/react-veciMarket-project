@@ -6,19 +6,16 @@ export const CartButton = ({ product }) => {
     const { user } = useAuth();
 
     const handleAddToCart = async () => {
-        console.log("Producto que se va a añadir:", product);
-        console.log("ID que se enviará:", product._id);
-
         if (!user) {
             alert("Debes iniciar sesión para añadir productos al carrito");
             return;
         }
 
         if (!product?._id) {
-        console.error("Producto no tiene ID válido");
-        return;
-    }
-    
+            console.error("Producto no tiene ID válido");
+            return;
+        }
+
         try {
             await addItem(product, 1);
             alert(`✅ ${product.name} añadido al carrito.`);
@@ -33,12 +30,12 @@ export const CartButton = ({ product }) => {
             type="button"
             onClick={handleAddToCart}
             disabled={loading}
-            className={`px-4 py-2 rounded transition ${loading
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700 text-white"
+            className={`px-4 py-2 rounded transition-colors duration-300 font-medium mt-1 ${loading
+                    ? "bg-gray-400 cursor-not-allowed text-gray-600"
+                    : "bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza)] hover:bg-[var(--color-burdeos-light)]"
                 }`}
         >
-            {loading ? "Añadiendo..." : "🛒 Añadir al carrito"}
+            {loading ? "Añadiendo..." : "🛒 Añadir"}
         </button>
     );
 };
