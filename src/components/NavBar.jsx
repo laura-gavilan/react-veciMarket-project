@@ -15,13 +15,13 @@ export const NavBar = () => {
             return [
                 { to: "/", label: "Inicio" },
                 { to: "/aboutUs", label: "Sobre nosotros" },
-                { to: "/commerce", label: "Comercios" },
+                { to: "/commerce", label: "Comercios & Productos" },
                 { to: "/contact", label: "Contacto" },
                 { to: "/register", label: "Registro" },
             ];
         } else if (user.role === "admin") {
             return [
-                { to: "/commerce", label: "Comercios" },
+                { to: "/commerce", label: "Comercios & Productos" },
                 { to: "/user", label: "Perfil" },
                 { to: "/admin", label: "Mis comercios" },
                 { to: "/favorites", label: "Favoritos" },
@@ -31,10 +31,10 @@ export const NavBar = () => {
             ];
         } else {
             return [
-                { to: "/commerce", label: "Comercios" },
+                { to: "/commerce", label: "Comercios & Productos" },
                 { to: "/user", label: "Perfil" },
                 { to: "/favorites", label: "Favoritos" },
-                // { to: "/cart", label: "Cesta" },
+                { to: "/cart", label: "Cesta" },
                 // { to: "/orders", label: "Pedidos" }
             ];
         }

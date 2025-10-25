@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useEffect } from "react";
 import {
     createCartApi,
     getCartsApi,
-    getCartByIdApi,
     addItemToCartApi,
     updateCartItemApi,
     deleteCartItemApi,
@@ -11,129 +10,120 @@ import {
 
 import {
     getCartsFromLocalStorage,
-    saveCartsInLocalStorage,
     addCartToLocalStorage,
     updateCartInLocalStorage,
     addOrUpdateItemInCartLocal,
     deleteItemFromCartLocal
 } from "../core/cart/cart.service.js";
 
+import { useAuth } from "../core/auth/useAuth.jsx";
+
 export const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
-export const CartProvider = ({ children, userId }) => {
+export const CartProvider = ({ children }) => {
+    const { user } = useAuth();
+    const userId = user?._id;
+
     const [cart, setCart] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Cargar carrito desde API o localStorage
+    // Cargar carrito del usuario actual
     const fetchCart = async () => {
         setLoading(true);
-        try {
-            let carts = await getCartsApi(userId);
-            let activeCart = carts.find(c => c.status === "active");
+        if (!userId) {
+            setCart(null);
+            setLoading(false);
+            return;
+        }
 
+        try {
+            const carts = await getCartsApi(userId);
+            // 🔹 Buscar carrito activo para este usuario
+            let activeCart = carts.find(c => c.status === "active" && c.userId === userId);
+
+            // 🔹 Si no existe, crear uno nuevo
             if (!activeCart) {
                 activeCart = await createCartApi({ userId, status: "active" });
             }
 
             setCart(activeCart);
-            addCartToLocalStorage(activeCart);
+            addCartToLocalStorage(userId, activeCart);
         } catch (error) {
-            console.error("Error cargando carrito desde API:", error);
+            console.error("Error cargando carrito API:", error);
 
-            const localData = getCartsFromLocalStorage();
-            const localCart =
-                localData.find(c => c.userId === userId && c.status === "active") || null;
+            // fallback a localStorage
+            const localData = getCartsFromLocalStorage(userId);
+            const localCart = localData.find(c => c.status === "active" && c.userId === userId) || null;
             setCart(localCart);
         } finally {
             setLoading(false);
         }
     };
 
-    // Añadir item al carrito
+    // Añadir producto al carrito
     const addItem = async (product, qty = 1) => {
-        if (!cart) return;
-        try {
-            const payload = {
-                productId: product._id,
-                qty,
-                priceSnapshot: product.price
-            };
-            const updatedCart = await addItemToCartApi(cart._id, payload);
-            setCart(updatedCart);
-            addOrUpdateItemInCartLocal(cart._id, { productId: product, qty });
-        } catch (error) {
-            console.error("Error añadiendo producto al carrito:", error);
-            alert(error.response?.data?.error || "Error añadiendo producto al carrito");
-        }
+        if (!userId) throw new Error("Debes iniciar sesión para añadir productos");
+        if (!cart) throw new Error("No hay carrito disponible");
+
+        const payload = { productId: product._id, qty, priceSnapshot: product.price };
+        const updatedCart = await addItemToCartApi(cart._id, payload);
+
+        setCart(updatedCart);
+        addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId: product, qty });
     };
 
-    // Actualizar cantidad de un item
+    // Actualizar producto
     const updateItem = async (productId, qty) => {
+        if (!userId) throw new Error("Debes iniciar sesión para actualizar el carrito");
         if (!cart) return;
-        try {
-            const updatedCart = await updateCartItemApi(cart._id, productId, { qty });
-            setCart(updatedCart);
-            addOrUpdateItemInCartLocal(cart._id, { productId, qty });
-        } catch (error) {
-            console.error("Error actualizando producto en carrito:", error);
-            alert(error.response?.data?.error || "Error actualizando producto en carrito");
-        }
+
+        const updatedCart = await updateCartItemApi(cart._id, productId, { qty });
+        setCart(updatedCart);
+        addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId, qty });
     };
 
-    // Eliminar item del carrito
+    // Eliminar producto
     const removeItem = async (productId) => {
+        if (!userId) throw new Error("Debes iniciar sesión para eliminar productos");
         if (!cart) return;
-        try {
-            const updatedCart = await deleteCartItemApi(cart._id, productId);
-            setCart(updatedCart.cart || updatedCart);
-            deleteItemFromCartLocal(cart._id, productId);
-        } catch (error) {
-            console.error("Error eliminando producto del carrito:", error);
-            alert(error.response?.data?.error || "Error eliminando producto del carrito");
-        }
+
+        const updatedCart = await deleteCartItemApi(cart._id, productId);
+        setCart(updatedCart.cart || updatedCart);
+        deleteItemFromCartLocal(userId, cart._id, productId);
     };
 
     // Vaciar carrito
     const clearCart = async () => {
-        if (!cart) return;
-        try {
-            for (const item of cart.items) {
-                await removeItem(item.productId._id);
-            }
-        } catch (error) {
-            console.error("Error vaciando carrito:", error);
+        if (!userId) throw new Error("Debes iniciar sesión para vaciar el carrito");
+        if (!cart?.items) return;
+
+        for (const item of [...cart.items]) {
+            await removeItem(item.productId._id);
         }
     };
 
-    // Checkout del carrito
+    // Checkout
     const checkout = async () => {
-        if (!cart) return;
+        if (!userId) throw new Error("Debes iniciar sesión para finalizar la compra");
+        if (!cart || cart.status === "ordered") return;
 
-        if (cart.status === "ordered") {
-            alert("Este carrito ya fue finalizado.");
-            return;
-        }
+        const result = await checkoutCartApi(cart._id);
+        setCart(result.cart);
+        updateCartInLocalStorage(userId, result.cart);
 
-        try {
-            const result = await checkoutCartApi(cart._id);
-            setCart(result.cart);
-            updateCartInLocalStorage(result.cart);
+        // Crear nuevo carrito activo
+        const newCart = await createCartApi({ userId, status: "active" });
+        setCart(newCart);
+        addCartToLocalStorage(userId, newCart);
 
-            // Crear un nuevo carrito activo automáticamente
-            const newCart = await createCartApi({ userId: cart.userId, status: "active" });
-            setCart(newCart);
-            addCartToLocalStorage(newCart);
-
-            return result;
-        } catch (error) {
-            console.error("Error realizando checkout:", error);
-            alert(error.response?.data?.error || "Error realizando checkout");
-        }
+        return result;
     };
 
+    // Cargar carrito automáticamente cuando cambia el usuario
     useEffect(() => {
-        fetchCart();
+        if (userId) fetchCart();
+        else setCart(null); // limpiar carrito si no hay usuario
     }, [userId]);
 
     return (
