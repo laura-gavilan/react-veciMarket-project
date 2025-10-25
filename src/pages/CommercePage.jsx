@@ -1,11 +1,10 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
 import { useNavigate } from "react-router-dom";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { CartButton } from "../components/CartButton";
-// import { CartButton } from "../components/CartButton";
-
+import { ProductModal } from "../components/ProductModal";
 
 export const CommercePage = () => {
     const { commerces } = useCommerce();
@@ -19,17 +18,12 @@ export const CommercePage = () => {
     const [filteredCommerces, setFilteredCommerces] = useState([]);
     const [showScrollTop, setShowScrollTop] = useState(false);
 
+    const [modalProduct, setModalProduct] = useState(null);
+    const [modalCommerce, setModalCommerce] = useState(null);
+
     const categories = [
-        "all",
-        "food",
-        "books-paper",
-        "health-beauty",
-        "sports",
-        "pets",
-        "home",
-        "clothing",
-        "footwear",
-        "other"
+        "all", "food", "books-paper", "health-beauty", "sports",
+        "pets", "home", "clothing", "footwear", "other"
     ];
 
     const categoryNames = {
@@ -51,13 +45,9 @@ export const CommercePage = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    };
+    const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
-    useEffect(() => {
-        loadAllProducts();
-    }, []);
+    useEffect(() => { loadAllProducts(); }, []);
 
     useEffect(() => {
         if (!showProducts) {
@@ -68,19 +58,15 @@ export const CommercePage = () => {
         const filteredProds = products.filter(product => {
             const matchesSearch = product.name.toLowerCase().includes(searchLower);
             const matchesCategory =
-                selectedCategory === "all"
-                    ? true
-                    : product.category.includes(selectedCategory);
+                selectedCategory === "all" ? true : product.category.includes(selectedCategory);
             return matchesSearch && matchesCategory;
         });
         setFilteredProducts(filteredProds);
         setFilteredCommerces(commerces);
     }, [search, products, commerces, selectedCategory, showProducts]);
 
-    
-
     return (
-        <div className="min-h-screen  px-6 py-12 flex flex-col items-center max-w-7xl mx-auto">
+        <div className="min-h-screen px-6 py-12 flex flex-col items-center max-w-7xl mx-auto">
             <h1 className="text-center mb-8 text-4xl md:text-5xl font-title font-bold text-[var(--color-burdeos-dark)] leading-tight">
                 Explora los <span className="text-[var(--color-mostaza)]">productos</span> y <span className="text-[var(--color-mostaza)]">comercios</span> de tu barrio
             </h1>
@@ -116,7 +102,6 @@ export const CommercePage = () => {
                         {categoryNames[category]}
                     </button>
                 ))}
-
                 {showProducts && (
                     <button
                         onClick={() => setShowProducts(false)}
@@ -135,7 +120,10 @@ export const CommercePage = () => {
                             <div
                                 key={product._id}
                                 className="group relative bg-white rounded-3xl shadow-xl overflow-hidden cursor-pointer p-5 flex flex-col items-center text-center hover:shadow-3xl hover:-translate-y-1 transition-all duration-300"
-                                onClick={() => commerce && navigate(`/commerce/${commerce._id}`)}
+                                onClick={() => {
+                                    setModalProduct(product);
+                                    setModalCommerce(commerce);
+                                }}
                             >
                                 <div className="w-full h-44 overflow-hidden">
                                     {product.images?.[0] && (
@@ -146,20 +134,17 @@ export const CommercePage = () => {
                                         />
                                     )}
                                 </div>
-
                                 <h3 className="text-lg md:text-xl font-title font-semibold text-[var(--color-burdeos-dark)] mt-2">
                                     {product.name}
                                 </h3>
                                 <p className="text-[var(--color-burdeos-darker)] mt-1 font-medium">
                                     {product.price} €
                                 </p>
-
                                 {commerce && (
                                     <p className="text-gray-500 text-sm mt-1 truncate">Comercio:{commerce.name}</p>
                                 )}
                                 <FavoriteButton product={product} />
                                 <CartButton product={product} />
-
                             </div>
                         );
                     })}
@@ -217,7 +202,15 @@ export const CommercePage = () => {
                     )}
                 </div>
             </div>
+
+            {/* Modal */}
+            {modalProduct && (
+                <ProductModal
+                    product={modalProduct}
+                    commerce={modalCommerce}
+                    onClose={() => setModalProduct(null)}
+                />
+            )}
         </div>
     );
 };
-
