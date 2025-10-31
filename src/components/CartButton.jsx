@@ -18,10 +18,10 @@ export const CartButton = ({ product }) => {
 
         try {
             await addItem(product, 1);
-            alert(`✅ ${product.name} añadido al carrito.`);
+            alert(`✅ ${product.name} añadido al carro.`);
         } catch (error) {
             console.error(error);
-            alert("⚠️ No se pudo añadir el producto al carrito.");
+            alert("⚠️ No se pudo añadir el producto al carro.");
         }
     };
 
@@ -35,7 +35,7 @@ export const CartButton = ({ product }) => {
                     : "bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza)] hover:bg-[var(--color-burdeos-light)]"
                 }`}
         >
-            {loading ? "Añadiendo..." : "🛒 Añadir"}
+            {loading ? "Añadiendo..." : "Añadir"}
         </button>
     );
 };

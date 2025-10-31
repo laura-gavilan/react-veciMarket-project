@@ -1,30 +1,32 @@
-// const STORAGE_KEY = "orders";
+export const saveOrdersInLocalStorage = (orders) => {
+    localStorage.setItem("orders", JSON.stringify(orders));
+};
 
-// export const getOrdersFromLocalStorage = (userId) => {
-//     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-//     return Array.isArray(stored[userId]) ? stored[userId] : [];
-// };
+export const getOrdersFromLocalStorage = () => {
+    const data = localStorage.getItem("orders");
+    return data ? JSON.parse(data) : [];
+};
 
-// export const saveOrdersInLocalStorage = (userId, orders) => {
-//     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-//     stored[userId] = orders;
-//     localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
-// };
+export const addOrderToLocalStorage = (order) => {
+    const orders = getOrdersFromLocalStorage();
+    orders.push(order);
+    saveOrdersInLocalStorage(orders);
+};
 
-// export const addOrderToLocalStorage = (userId, order) => {
-//     const orders = getOrdersFromLocalStorage(userId);
-//     orders.push(order);
-//     saveOrdersInLocalStorage(userId, orders);
-// };
+export const updateOrderInLocalStorage = (updateOrder) => {
+    const orders = getOrdersFromLocalStorage();
+    const newOrders = orders.map((order) => order._id === updateOrder._id ? updateOrder : order);
+    saveOrdersInLocalStorage(newOrders);
+};
 
-// export const updateOrderLocal = (userId, orderId, updates) => {
-//     const orders = getOrdersFromLocalStorage(userId).map(o =>
-//         o._id === orderId ? { ...o, ...updates } : o
-//     );
-//     saveOrdersInLocalStorage(userId, orders);
-// };
+export const patchOrderStatusInLocalStorage = (orderId, status) => {
+    const orders = getOrdersFromLocalStorage();
+    const newOrders = orders.map((order) => order._id === orderId ? { ...order, status } : order);
+    saveOrdersInLocalStorage(newOrders);
+};
 
-// export const deleteOrderFromLocalStorage = (userId, orderId) => {
-//     const orders = getOrdersFromLocalStorage(userId).filter(o => o._id !== orderId);
-//     saveOrdersInLocalStorage(userId, orders);
-// };
+export const deleteOrderFromLocalStorage = (orderId) => {
+    const orders = getOrdersFromLocalStorage();
+    const newOrders = orders.filter((order) => order._id !== orderId);
+    saveOrdersInLocalStorage(newOrders);
+};

@@ -1,39 +1,53 @@
-// import { api } from "../http/axios";
+import { api } from "../http/axios"
+
+export const getOrdersApi = async () => {
+    try {
+        const response = await api.get("/orders");
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener las órdenes", error);
+        throw error;
+    }
+};
+
+export const addOrderApi = async (order) => {
+    try {
+        const response = await api.post("/orders", order);
+        return response.data;
+    } catch (error) {
+        console.error("Error al crear la orden", error);
+        throw error;
+    }
+};
+
+export const getOrderByIdApi = async (orderId) => {
+    try {
+        const response = await api.get(`/orders/${orderId}`);
+        return response.data;
+    } catch (error) {
+        console.error ("Error al obtener la orden", error);
+        throw error;
+    }  
+};
+
+export const updateOrderStatusApi = async (orderId, status) => {
+    try {
+        const response = await api.patch(`/orders/${orderId}/status`, {status});
+        return response.data;
+    } catch ( error) {
+        console.error ("Error al actualizar el estado de la orden", error);
+        throw error;
+    }
+};
+
+export const deleteOrderApi = async (orderId) => {
+    try {
+        const response = await api.delete(`orders/${orderId}`);
+        return response.data;
+    } catch ( error) {
+        console.error ("Error al eliminar la orden", error);
+        throw error;
+    }
+};
 
 
-// // Crear un pedido
-// export const createOrderApi = async (orderData) => {
-//     const response = await api.post("/orders", orderData);
-//     return response.data;
-// };
-
-// // Obtener todos los pedidos o de un usuario específico
-// export const getOrdersApi = async (userId) => {
-//     const url = userId ? `/orders?userId=${userId}` : "/orders";
-//     const response = await api.get(url);
-//     return response.data;
-// };
-
-// // Obtener un pedido por ID
-// export const getOrderByIdApi = async (orderId) => {
-//     const response = await api.get(`/orders/${orderId}`);
-//     return response.data;
-// };
-
-// // Actualizar un pedido existente
-// export const updateOrderApi = async (orderId, updateData) => {
-//     const response = await api.patch(`/orders/${orderId}`, updateData);
-//     return response.data;
-// };
-
-// // Eliminar un pedido
-// export const deleteOrderApi = async (orderId) => {
-//     const response = await api.delete(`/orders/${orderId}`);
-//     return response.data;
-// };
-
-// // Obtener pedidos filtrando por estado
-// export const getOrdersByStatusApi = async (status) => {
-//     const response = await api.get(`/orders?status=${status}`);
-//     return response.data;
-// };

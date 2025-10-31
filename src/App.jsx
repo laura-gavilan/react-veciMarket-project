@@ -20,6 +20,7 @@ import { FavoritesPage } from './pages/FavoritesPage.jsx';
 import { ScrollToTop } from './components/ScrollToTop.jsx';
 import { CreateCommercePage } from './pages/CreateCommercePage.jsx';
 import { CartPage } from './pages/CartPage';
+import { OrdersPage } from './pages/OrdersPage.jsx';
 
 export const App = () => {
   return (
@@ -51,6 +52,7 @@ export const App = () => {
 
             <Route path="/commerce/new" element={<CreateCommercePage />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/orders" element={<OrdersPage />} />
 
           </Route>
 

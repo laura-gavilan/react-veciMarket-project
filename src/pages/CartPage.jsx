@@ -14,7 +14,7 @@ export const CartPage = () => {
         clearCart
     } = useCart();
 
-    // 🧠 Si no hay usuario logueado
+
     if (!user) {
         return (
             <div className="p-8 text-center">
@@ -24,7 +24,6 @@ export const CartPage = () => {
         );
     }
 
-    // 🧠 Si el carrito está vacío
     if (!cart || !cart.items || cart.items.length === 0) {
         return (
             <div className="p-8 text-center">
@@ -34,7 +33,6 @@ export const CartPage = () => {
         );
     }
 
-    // 🧮 Calcular total
     const total = cart.items.reduce(
         (acc, item) => acc + item.priceSnapshot * item.qty,
         0

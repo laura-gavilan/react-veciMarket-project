@@ -1,125 +1,90 @@
-// import { useState, useEffect, useCallback } from "react";
-// import { createOrderApi, deleteOrderApi, getOrderByIdApi, getOrdersApi, getOrdersByStatusApi, updateOrderApi } from "./orders.api";
+import { useEffect, useState } from "react"
+import { addOrderApi, deleteOrderApi, getOrdersApi, updateOrderStatusApi } from "./orders.api";
+import { addOrderToLocalStorage, deleteOrderFromLocalStorage, getOrdersFromLocalStorage, patchOrderStatusInLocalStorage, saveOrdersInLocalStorage, updateOrderInLocalStorage } from "./orders.service";
 
 
-// export const useOrders = (userId = null) => {
-//     const [orders, setOrders] = useState([]);
-//     const [loading, setLoading] = useState(false);
-//     const [error, setError] = useState(null);
+export const useOrders = () => {
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-//     // Cargar pedidos
-//     const fetchOrders = useCallback(async () => {
-//         setLoading(true);
-//         setError(null);
-//         try {
-//             const data = await getOrdersApi(userId);
-//             setOrders(data);
-//         } catch (err) {
-//             console.error("Error cargando pedidos:", err);
-//             setError(err);
-//         } finally {
-//             setLoading(false);
-//         }
-//     }, [userId]);
+    useEffect(() => {
+        const fetchOrders = async () => {
+            setLoading(true);
+            try {
+                const data = await getOrdersApi();
+                setOrders(data);
+                saveOrdersInLocalStorage(data);
+            } catch (error) {
+                console.error("No se pudo obtener desde API", error);
+                const localOrders = getOrdersFromLocalStorage();
+                setOrders(localOrders);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchOrders();
+    }, []);
 
-//     // Crear un nuevo pedido
-//     const createOrder = async (orderData) => {
-//         setLoading(true);
-//         setError(null);
-//         try {
-//             const newOrder = await createOrderApi(orderData);
-//             setOrders((prev) => [...prev, newOrder]);
-//             return newOrder;
-//         } catch (err) {
-//             console.error("Error creando pedido:", err);
-//             setError(err);
-//             throw err;
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
+    const addOrder = async (orderData) => {
+        try {
+            const newOrder = await addOrderApi(orderData);
+            const updateOrders = [...orders, newOrder];
+            setOrders(updateOrders);
+            saveOrdersInLocalStorage(updateOrders);
+        } catch (error) {
+            console.error("Error al crear orden", error);
+            addOrderToLocalStorage(orderData);
+            setOrders(getOrdersFromLocalStorage());
+            setError(error);
+        }
+    };
 
-//     // Actualizar un pedido existente
-//     const updateOrder = async (orderId, updateData) => {
-//         setLoading(true);
-//         setError(null);
-//         try {
-//             const updatedOrder = await updateOrderApi(orderId, updateData);
-//             setOrders((prev) =>
-//                 prev.map((order) => (order._id === orderId ? updatedOrder : order))
-//             );
-//             return updatedOrder;
-//         } catch (err) {
-//             console.error("Error actualizando pedido:", err);
-//             setError(err);
-//             throw err;
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
+    const updateOrderStatus = async (orderId, status) => {
+        try {
+            const updatedOrder = await updateOrderStatusApi(orderId, status);
+            const updatedOrders = orders.map((o) =>
+                o._id === orderId ? updatedOrder : o
+            );
+            setOrders(updatedOrders);
+            saveOrdersInLocalStorage(updatedOrders);
+        } catch (err) {
+            console.error("Error al actualizar estado:", err);
+            patchOrderStatusInLocalStorage(orderId, status);
+            setOrders(getOrdersFromLocalStorage());
+            setError(err);
+        }
+    };
 
-//     // Eliminar un pedido
-//     const deleteOrder = async (orderId) => {
-//         setLoading(true);
-//         setError(null);
-//         try {
-//             await deleteOrderApi(orderId);
-//             setOrders((prev) => prev.filter((order) => order._id !== orderId));
-//         } catch (err) {
-//             console.error("Error eliminando pedido:", err);
-//             setError(err);
-//             throw err;
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
+    // --- Eliminar orden ---
+    const deleteOrder = async (orderId) => {
+        try {
+            await deleteOrderApi(orderId);
+            const updatedOrders = orders.filter((o) => o._id !== orderId);
+            setOrders(updatedOrders);
+            saveOrdersInLocalStorage(updatedOrders);
+        } catch (err) {
+            console.error("Error al eliminar orden:", err);
+            deleteOrderFromLocalStorage(orderId);
+            setOrders(getOrdersFromLocalStorage());
+            setError(err);
+        }
+    };
 
-//     // Obtener un pedido por ID
-//     const getOrderById = async (orderId) => {
-//         setLoading(true);
-//         setError(null);
-//         try {
-//             const order = await getOrderByIdApi(orderId);
-//             return order;
-//         } catch (err) {
-//             console.error("Error obteniendo pedido por ID:", err);
-//             setError(err);
-//             throw err;
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
+    // --- Actualizar orden completa (no solo estado) ---
+    const updateOrder = (updatedOrder) => {
+        updateOrderInLocalStorage(updatedOrder);
+        setOrders(getOrdersFromLocalStorage());
+    };
 
-//     // Obtener pedidos por estado
-//     const getOrdersByStatus = async (status) => {
-//         setLoading(true);
-//         setError(null);
-//         try {
-//             const data = await getOrdersByStatusApi(status);
-//             return data;
-//         } catch (err) {
-//             console.error("Error obteniendo pedidos por estado:", err);
-//             setError(err);
-//             throw err;
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
+    return {
+        orders,
+        loading,
+        error,
+        addOrder,
+        updateOrderStatus,
+        deleteOrder,
+        updateOrder,
+    };
+};
 
-//     // Cargar pedidos automáticamente al montar
-//     useEffect(() => {
-//         fetchOrders();
-//     }, [fetchOrders]);
-
-//     return {
-//         orders,
-//         loading,
-//         error,
-//         fetchOrders,
-//         createOrder,
-//         updateOrder,
-//         deleteOrder,
-//         getOrderById,
-//         getOrdersByStatus
-//     };
-// };

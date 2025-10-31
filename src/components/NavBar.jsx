@@ -26,7 +26,7 @@ export const NavBar = () => {
                 { to: "/admin", label: "Mis comercios" },
                 { to: "/favorites", label: "Favoritos" },
                 { to: "/cart", label: "Cesta" },
-                // { to: "/orders", label: "Pedidos" },
+                { to: "/orders", label: "Pedidos" },
                 { to: "/commerce/new", label: "Crear comercio" },
             ];
         } else {
@@ -35,7 +35,7 @@ export const NavBar = () => {
                 { to: "/user", label: "Perfil" },
                 { to: "/favorites", label: "Favoritos" },
                 { to: "/cart", label: "Cesta" },
-                // { to: "/orders", label: "Pedidos" }
+                { to: "/orders", label: "Pedidos" }
             ];
         }
     }, [user]);

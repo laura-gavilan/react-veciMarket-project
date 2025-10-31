@@ -28,7 +28,6 @@ export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Cargar carrito del usuario actual
     const fetchCart = async () => {
         setLoading(true);
         if (!userId) {
@@ -39,10 +38,8 @@ export const CartProvider = ({ children }) => {
 
         try {
             const carts = await getCartsApi(userId);
-            // 🔹 Buscar carrito activo para este usuario
             let activeCart = carts.find(c => c.status === "active" && c.userId === userId);
 
-            // 🔹 Si no existe, crear uno nuevo
             if (!activeCart) {
                 activeCart = await createCartApi({ userId, status: "active" });
             }
@@ -51,8 +48,6 @@ export const CartProvider = ({ children }) => {
             addCartToLocalStorage(userId, activeCart);
         } catch (error) {
             console.error("Error cargando carrito API:", error);
-
-            // fallback a localStorage
             const localData = getCartsFromLocalStorage(userId);
             const localCart = localData.find(c => c.status === "active" && c.userId === userId) || null;
             setCart(localCart);
@@ -61,7 +56,6 @@ export const CartProvider = ({ children }) => {
         }
     };
 
-    // Añadir producto al carrito
     const addItem = async (product, qty = 1) => {
         if (!userId) throw new Error("Debes iniciar sesión para añadir productos");
         if (!cart) throw new Error("No hay carrito disponible");
@@ -73,7 +67,7 @@ export const CartProvider = ({ children }) => {
         addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId: product, qty });
     };
 
-    // Actualizar producto
+
     const updateItem = async (productId, qty) => {
         if (!userId) throw new Error("Debes iniciar sesión para actualizar el carrito");
         if (!cart) return;
@@ -83,7 +77,6 @@ export const CartProvider = ({ children }) => {
         addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId, qty });
     };
 
-    // Eliminar producto
     const removeItem = async (productId) => {
         if (!userId) throw new Error("Debes iniciar sesión para eliminar productos");
         if (!cart) return;
@@ -93,7 +86,6 @@ export const CartProvider = ({ children }) => {
         deleteItemFromCartLocal(userId, cart._id, productId);
     };
 
-    // Vaciar carrito
     const clearCart = async () => {
         if (!userId) throw new Error("Debes iniciar sesión para vaciar el carrito");
         if (!cart?.items) return;
@@ -103,7 +95,7 @@ export const CartProvider = ({ children }) => {
         }
     };
 
-    // Checkout
+
     const checkout = async () => {
         if (!userId) throw new Error("Debes iniciar sesión para finalizar la compra");
         if (!cart || cart.status === "ordered") return;
@@ -120,10 +112,9 @@ export const CartProvider = ({ children }) => {
         return result;
     };
 
-    // Cargar carrito automáticamente cuando cambia el usuario
     useEffect(() => {
         if (userId) fetchCart();
-        else setCart(null); // limpiar carrito si no hay usuario
+        else setCart(null); 
     }, [userId]);
 
     return (
