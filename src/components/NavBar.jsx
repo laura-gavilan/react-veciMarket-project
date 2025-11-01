@@ -35,7 +35,6 @@ export const NavBar = () => {
                 { to: "/user", label: "Perfil" },
                 { to: "/favorites", label: "Favoritos" },
                 { to: "/cart", label: "Cesta" },
-                { to: "/orders", label: "Pedidos" }
             ];
         }
     }, [user]);

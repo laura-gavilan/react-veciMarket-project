@@ -28,15 +28,22 @@ export const useOrders = () => {
 
     const addOrder = async (orderData) => {
         try {
-            const newOrder = await addOrderApi(orderData);
-            const updateOrders = [...orders, newOrder];
-            setOrders(updateOrders);
-            saveOrdersInLocalStorage(updateOrders);
-        } catch (error) {
-            console.error("Error al crear orden", error);
+            // Solo enviar los campos que la API espera
+            const payload = {
+                userId: orderData.userId,
+                items: orderData.items,
+                notes: orderData.notes
+            };
+            const newOrder = await addOrderApi(payload);
+            const updatedOrders = [...orders, newOrder];
+            setOrders(updatedOrders);
+            saveOrdersInLocalStorage(updatedOrders);
+        } catch (err) {
+            console.error("Error al crear la orden:", err);
+            // Guardar localmente como fallback
             addOrderToLocalStorage(orderData);
             setOrders(getOrdersFromLocalStorage());
-            setError(error);
+            setError(err);
         }
     };
 

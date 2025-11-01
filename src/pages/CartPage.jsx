@@ -1,4 +1,5 @@
 import { useCart } from "../contexts/CartContext.jsx";
+import { useOrdersContext } from "../contexts/OrdersContext.jsx";
 import { useAuth } from "../core/auth/useAuth.jsx";
 
 
@@ -13,7 +14,7 @@ export const CartPage = () => {
         checkout,
         clearCart
     } = useCart();
-
+    const { addOrder } = useOrdersContext();
 
     if (!user) {
         return (
@@ -38,6 +39,34 @@ export const CartPage = () => {
         0
     );
 
+    const handleCheckout = () => {
+        if (!user) {
+            alert("Debes iniciar sesión para finalizar la compra.");
+            return;
+        }
+
+        if (!cart.items || cart.items.length === 0) {
+            alert("Tu carrito está vacío.");
+            return;
+        }
+
+        const newOrder = {
+            _id: Date.now().toString(),
+            userId: user._id || user.id || "guest",
+            items: cart.items.map((item) => ({
+                productId: item.productId._id,
+                qty: item.qty || 1,
+            })),
+            status: "pendiente",
+            createdAt: new Date().toISOString(),
+        };
+
+        addOrder(newOrder);
+        clearCart();
+
+        alert("✅ Compra finalizada. Tu pedido ha sido creado.");
+    };
+
     return (
         <div className="max-w-4xl mx-auto p-8">
             <h2 className="text-3xl font-semibold mb-6 text-center">Tu cesta de la compra</h2>
@@ -47,7 +76,7 @@ export const CartPage = () => {
             <div className="space-y-6">
                 {cart.items.map((item) => (
                     <div
-                        key={item._id}
+                        key={item.productId._id}
                         className="flex flex-col md:flex-row items-center justify-between bg-white dark:bg-gray-800 shadow-md rounded-2xl p-4"
                     >
                         <div className="flex items-center gap-4">
@@ -106,16 +135,10 @@ export const CartPage = () => {
                 <h3 className="text-2xl font-bold">
                     Total: <span className="text-blue-600">{total.toFixed(2)} €</span>
                 </h3>
-                <div className="flex gap-4 mt-4 md:mt-0">
+                <div className="flex justify-center mt-8">
                     <button
-                        onClick={clearCart}
-                        className="px-6 py-2 bg-gray-300 hover:bg-gray-400 rounded-xl"
-                    >
-                        Vaciar cesta
-                    </button>
-                    <button
-                        onClick={checkout}
-                        className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl"
+                        onClick={handleCheckout}
+                        className="btn-primary elevation w-full md:w-auto"
                     >
                         Finalizar compra
                     </button>
