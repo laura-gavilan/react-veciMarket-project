@@ -5,6 +5,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { api } from "../core/http/axios";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { CartButton } from "../components/CartButton";
+import { ProductModal } from "../components/ProductModal";
 // import { CartButton } from "../components/CartButton";
 
 
@@ -14,6 +15,7 @@ export const CommerceDetailPage = () => {
     const { commerceId } = useParams();
     const [selectedCommerce, setSelectedCommerce] = useState(null);
     const navigate = useNavigate();
+    const [modalProduct, setModalProduct] = useState(null);
 
     const refreshCommerce = async () => {
         try {
@@ -121,6 +123,9 @@ export const CommerceDetailPage = () => {
                             <div
                                 key={product._id}
                                 className="group bg-white rounded-2xl shadow-md border border-[var(--color-burdeos-light)] overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
+                                onClick={() => {
+                                    setModalProduct(product);
+                                }}
                             >
                                 {product.images?.[0] && (
                                     <div className="w-full h-44 overflow-hidden">
@@ -150,10 +155,10 @@ export const CommerceDetailPage = () => {
 
                                     <div className="mt-3 flex justify-end gap-2">
                                         <FavoriteButton product={product} />
-                                        <CartButton product={product}/>
+                                        <CartButton product={product} />
                                     </div>
 
-                                    
+
                                 </div>
                             </div>
                         ))}
@@ -164,6 +169,12 @@ export const CommerceDetailPage = () => {
                     </p>
                 )}
             </div>
+
+            {modalProduct && (
+                <ProductModal
+                    product={modalProduct}
+                    onClose={() => setModalProduct(null)} />
+            )}
 
             {(address?.mapUrl || (address?.street && address?.city)) && (
                 <section className="py-10 px-6 w-full max-w-5xl mx-auto text-center">

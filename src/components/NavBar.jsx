@@ -47,7 +47,7 @@ export const NavBar = () => {
 
     return (
         <nav className="sticky top-0 z-50 w-full  shadow-md transition-all duration-300">
-            <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
+            <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 gap-8">
                 <Link to="/" className="flex items-center gap-2">
                     <span className="font-title text-h4 text-[var(--color-burdeos-dark)] font-semibold">VeciMarket</span>
                 </Link>
