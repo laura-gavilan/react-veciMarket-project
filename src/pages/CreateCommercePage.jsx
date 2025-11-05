@@ -12,7 +12,6 @@ export const CreateCommercePage = () => {
 
     const [form, setForm] = useState({
         name: "",
-        slug: "",
         description: "",
         // image: "",
         address: {
@@ -45,11 +44,11 @@ export const CreateCommercePage = () => {
         try {
             const newCommerce = {
                 ...form,
-                ownerUserId: user?._id, // vincula el comercio al usuario logueado
+                ownerUserId: user?._id, 
             };
 
             await addCommerce(newCommerce);
-            navigate("/commerce"); // redirige a la lista general
+            navigate("/commerce"); 
         } catch (error) {
             console.error("Error al crear comercio:", error);
             alert("No se pudo crear el comercio. Revisa los datos.");
@@ -62,7 +61,6 @@ export const CreateCommercePage = () => {
                 <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] text-center mb-6">Crear Comercio</h1>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                    {/* Nombre */}
                     <div className="flex flex-col">
                         <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Nombre</label>
                         <input
@@ -75,20 +73,6 @@ export const CreateCommercePage = () => {
                         />
                     </div>
 
-                    {/* Slug */}
-                    <div>
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Slug</label>
-                        <input
-                            type="text"
-                            name="slug"
-                            value={form.slug}
-                            onChange={handleChange}
-                            placeholder="ej: calzado, moda, comida..."
-                            className="w-full border rounded p-2"
-                        />
-                    </div>
-
-                    {/* Descripción */}
                     <div>
                         <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Descripción</label>
                         <textarea
@@ -113,7 +97,7 @@ export const CreateCommercePage = () => {
                         />
                     </div> */}
 
-                    {/* Dirección */}
+
                     <fieldset className="border p-3 rounded">
                         <legend className="font-semibold">Dirección</legend>
                         <div className="grid grid-cols-2 gap-3">
@@ -160,7 +144,6 @@ export const CreateCommercePage = () => {
                         </div>
                     </fieldset>
 
-                    {/* Botón */}
                     <button
                         type="submit"
                         className="flex-1 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] py-3 rounded-2xl font-semibold shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all">
