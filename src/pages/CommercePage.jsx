@@ -144,7 +144,7 @@ export const CommercePage = () => {
                                     <p className="text-gray-500 text-sm mt-1 truncate">Comercio:{commerce.name}</p>
                                 )}
                                 <FavoriteButton product={product} />
-                                {/* <CartButton product={product} /> */}
+                                <CartButton product={product} />
                             </div>
                         );
                     })}

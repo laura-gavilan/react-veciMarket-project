@@ -32,7 +32,7 @@ export const useUser = () => {
         try {
             await deleteUserApi(user._id);
             clearUser();
-            return navigate("/"); 
+            return navigate("/");
         } catch (error) {
             console.error("Error al eliminar el usuario:", error);
             throw error;
@@ -50,13 +50,6 @@ export const useUser = () => {
         }
     };
 
-    return {
-        user,
-        setUser,
-        updateUserData,
-        deleteUser,
-        clearUser,
-        refreshUser
-    };
+    return { user, setUser, updateUserData, deleteUser, clearUser, refreshUser };
 };
 

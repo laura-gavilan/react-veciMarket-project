@@ -84,3 +84,4 @@ p {
 .elevation {
     @apply hover:translate-y-[-4px] transition-all shadow-lg;
 }
+

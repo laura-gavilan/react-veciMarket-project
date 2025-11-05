@@ -8,28 +8,25 @@ export const OrdersPage = () => {
     const [notesState, setNotesState] = useState({}); // { orderId: "nota actual" }
 
     const statusOptions = [
-        { label: "Todas", value: "all", color: "bg-gray-200 text-gray-700" },
-        { label: "Pendientes", value: "pending", color: "bg-yellow-100 text-yellow-800" },
-        { label: "En preparación", value: "preparing", color: "bg-blue-100 text-blue-800" },
-        { label: "Entregadas", value: "delivered", color: "bg-green-100 text-green-800" },
-        { label: "Canceladas", value: "cancelled", color: "bg-red-100 text-red-800" },
+        { label: "Todos", value: "all", color: "bg-gray-200 text-gray-700" },
+        { label: "Pendientes", value: "pending", color: "bg-yellow-200 text-yellow-800" },
+        { label: "En preparación", value: "preparing", color: "bg-blue-300 text-blue-800" },
+        { label: "Entregados", value: "delivered", color: "bg-green-300 text-green-800" },
+        { label: "Cancelados", value: "cancelled", color: "bg-red-300 text-red-800" },
     ];
 
-    
+    const statusLabels = {
+        pending: "pendiente",
+        preparing: "En preparación",
+        delivered: "Entregado",
+        cancelled: "Cancelado",
+    };
 
-    if (loading)
-        return (
-            <p className="text-center mt-10 text-[var(--color-burdeos-dark)] font-sans text-lg">
-                Cargando órdenes...
-            </p>
-        );
+    const getStatusColor = (status) => {
+        const option = statusOptions.find((s) => s.value === status);
+        return option ? option.color.split(' ')[0] : 'bg-gray-400';
+    };
 
-    if (error)
-        return (
-            <p className="text-center mt-10 text-red-600 font-sans text-lg">
-                Error: {error.message}
-            </p>
-        );
 
     const filteredOrders = orders.filter((o) => {
         const matchesStatus = filter === "all" || o.status === filter;
@@ -67,13 +64,26 @@ export const OrdersPage = () => {
             const updated = { ...prevNotes };
             orders.forEach((o) => {
                 if (updated[o._id] === undefined) {
-                    // Primero busca en localStorage, luego en order.notes
                     updated[o._id] = storedNotes[o._id] ?? o.notes ?? "";
                 }
             });
             return updated;
         });
     }, [orders]);
+
+    if (loading)
+        return (
+            <p className="text-center mt-10 text-[var(--color-burdeos-dark)] font-sans text-lg">
+                Cargando pedidos...
+            </p>
+        );
+
+    if (error)
+        return (
+            <p className="text-center mt-10 text-red-600 font-sans text-lg">
+                Error: {error.message}
+            </p>
+        );
 
     const handleNotesChange = (orderId, value) => {
         setNotesState({ ...notesState, [orderId]: value });
@@ -83,10 +93,8 @@ export const OrdersPage = () => {
         const noteText = notesState[orderId]?.trim();
         if (!noteText) return;
 
-        // Actualizar estado local (para que se vea de inmediato)
         if (updateOrderNotes) updateOrderNotes(orderId, noteText);
 
-        // Guardar en localStorage
         const savedNotes = JSON.parse(localStorage.getItem('orderNotes')) || {};
         savedNotes[orderId] = noteText;
         localStorage.setItem('orderNotes', JSON.stringify(savedNotes));
@@ -97,12 +105,11 @@ export const OrdersPage = () => {
     return (
         <div className="max-w-7xl mx-auto mt-12 p-6 md:p-10 bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)]">
             <h1 className="text-3xl md:text-4xl font-title font-semibold mb-8 text-[var(--color-burdeos-dark)] text-center">
-                Gestión de Órdenes
+                Gestión de pedidos
             </h1>
 
             {/* Búsqueda y filtros */}
             <div className="sticky top-0 z-10 bg-white py-4 mb-6 flex flex-col gap-4 border-b border-[var(--color-burdeos-light)]">
-                {/* FILTROS ARRIBA */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-2">
                     {statusOptions.map((s) => {
                         const count =
@@ -124,7 +131,7 @@ export const OrdersPage = () => {
                     })}
                 </div>
 
-                {/* BARRA DE BÚSQUEDA ABAJO */}
+
                 <div className="flex w-full md:w-1/2 gap-2">
                     <input
                         type="text"
@@ -145,120 +152,34 @@ export const OrdersPage = () => {
                 </p>
             ) : (
                 <div className="flex flex-col gap-4">
-                    {/* Cards para sm */}
-                    {filteredOrders.map((o) => {
-                        const { subtotal, tax, total } = getTotals(o);
-                        const noteValue =
-                            notesState[o._id] !== undefined ? notesState[o._id] : o.notes ?? "";
-                        return (
-                            <div
-                                key={o._id}
-                                className="border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md md:hidden"
-                            >
-                                <p>
-                                    <strong>ID:</strong> {o._id}
-                                </p>
-                                <p>
-                                    <strong>Usuario:</strong> {o.userId}
-                                </p>
-                                <p>
-                                    <strong>Estado:</strong> {o.status}
-                                </p>
-                                <p>
-                                    <strong>Creada:</strong>{" "}
-                                    {o.createdAt ? new Date(o.createdAt).toLocaleString() : "—"}
-                                </p>
-                                <textarea
-                                    placeholder="Agregar nota..."
-                                    value={noteValue}
-                                    onChange={(e) => handleNotesChange(o._id, e.target.value)}
-                                    className="w-full border border-gray-300 rounded px-2 py-1 mt-2 resize-none"
-                                />
-                                <button
-                                    onClick={() => saveNotes(o._id)}
-                                    className="mt-2 w-full bg-[var(--color-burdeos-dark)] text-white rounded px-2 py-1 hover:bg-[var(--color-mostaza)]"
-                                >
-                                    Guardar nota
-                                </button>
-                                {o.notes && (
-                                    <p className="text-xs text-gray-500 italic mt-1">
-                                        Nota actual: {o.notes}
-                                    </p>
-                                )}
-                                {Array.isArray(o.items) && o.items.length > 0 ? (
-                                    <>
-                                        <ul className="list-disc ml-4 space-y-1">
-                                            {o.items.map((item, idx) => (
-                                                <li key={idx}>
-                                                    <span className="font-semibold">
-                                                        {item.name || item.productId}
-                                                    </span>{" "}
-                                                    — €{((item.price ?? 0) * (item.qty ?? 0)).toFixed(2)} (
-                                                    {item.qty ?? 0}×€{(item.price ?? 0).toFixed(2)})
-                                                </li>
-                                            ))}
-                                        </ul>
-                                        <div className="text-sm mt-2 space-y-1">
-                                            <p>
-                                                <strong>Subtotal:</strong> €{subtotal.toFixed(2)}
-                                            </p>
-                                            <p>
-                                                <strong>Impuestos (10%):</strong> €{tax.toFixed(2)}
-                                            </p>
-                                            <p>
-                                                <strong>Total:</strong> €{total.toFixed(2)}
-                                            </p>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <p className="text-gray-500 italic">Sin productos</p>
-                                )}
-                                <div className="mt-2 space-y-2">
-                                    <select
-                                        value={o.status}
-                                        onChange={(e) => updateOrderStatus(o._id, e.target.value)}
-                                        className="w-full border rounded px-2 py-1"
-                                    >
-                                        {statusOptions
-                                            .filter((s) => s.value !== "all")
-                                            .map((s) => (
-                                                <option key={s.value} value={s.value}>
-                                                    {s.label}
-                                                </option>
-                                            ))}
-                                    </select>
-                                    <button
-                                        onClick={() => deleteOrder(o._id)}
-                                        className="w-full bg-red-500 text-white rounded px-2 py-1 hover:bg-red-600"
-                                    >
-                                        Eliminar
-                                    </button>
-                                </div>
-                            </div>
-                        );
-                    })}
-
-                    {/* Tabla para md+ */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2">
                         {filteredOrders.map((o) => {
                             const { subtotal, tax, total } = getTotals(o);
                             const noteValue = notesState[o._id] ?? o.notes ?? "";
+                            const statusColor = getStatusColor(o.status).split(' ')[0];
 
                             return (
                                 <div
                                     key={o._id}
-                                    className="bg-white border border-gray-200 rounded-lg p-4 flex flex-col justify-between font-sans min-h-[400px] shadow-sm hover:shadow-md"
+                                    className="border rounded-md p-4 flex flex-col justify-between font-sans min-h-[220px] shadow-sm hover:shadow-md transition bg-white md:max-w-md"
                                 >
+                                    <div className={`w-4 h-4 rounded-full ${statusColor} self-end mb-2`}></div>
                                     {/* Fecha arriba a la derecha */}
-                                    <div className="flex justify-end text-xs text-gray-500 mb-2">
+                                    <div className="flex justify-start text-xs text-gray-500 mb-2">
                                         {o.createdAt ? new Date(o.createdAt).toLocaleString() : "—"}
                                     </div>
 
                                     {/* Info básica */}
-                                    <div className="text-sm mb-2 space-y-1">
+                                    <div className="text-[11px] mb-3 space-y-1">
                                         <p><strong>ID:</strong> {o._id}</p>
                                         <p><strong>Usuario:</strong> {o.userId}</p>
-                                        <p><strong>Estado:</strong> <span className="capitalize">{o.status}</span></p>
+                                        <p><strong>Estado:</strong>
+                                            <span
+                                                className={`ml-1 px-2 py-1 rounded text-[10px] font-semibold ${getStatusColor(o.status)} ${statusOptions.find(s => s.value === o.status)?.color.split(' ')[1]}`}
+                                            >
+                                                {statusLabels[o.status] || o.status}
+                                            </span>
+                                        </p>
                                     </div>
 
                                     {/* Notas */}
@@ -270,20 +191,24 @@ export const OrdersPage = () => {
                                             placeholder="Notas..."
                                             rows={2}
                                         />
-                                        <button
-                                            onClick={() => saveNotes(o._id)}
-                                            className="mt-1 w-full bg-[var(--color-burdeos-dark)] text-white rounded px-2 py-1 text-sm hover:bg-[var(--color-mostaza)]"
-                                        >
-                                            Guardar
-                                        </button>
+                                        <div className="flex justify-center mt-2">
+                                            <button
+                                                onClick={() => saveNotes(o._id)}
+                                                className="mt-1 flex justify-center bg-[var(--color-burdeos-dark)] text-white rounded px-2 py-1 text-sm hover:bg-[var(--color-mostaza)]"
+                                            >
+                                                Guardar
+                                            </button>
+                                        </div>
                                     </div>
 
                                     {/* Productos con fondo */}
-                                    <div className="bg-[var(--color-gray-warm)] p-2 rounded mb-2 flex-1 overflow-auto text-sm space-y-1">
+                                    <div className=" border border-gray-300 p-2 rounded mb-2 flex-1 overflow-auto text-sm space-y-1">
                                         {Array.isArray(o.items) && o.items.length > 0 ? (
                                             o.items.map((item, idx) => (
-                                                <div key={idx} className="flex justify-between">
-                                                    <span>{item.name ?? `Producto ${item.productId}`} ({item.qty ?? 0}×€{(item.price ?? 0).toFixed(2)})</span>
+                                                <div key={idx} className={`flex justify-between pb-1 mb-1 ${idx !== o.items.length - 1 ? 'border-b border-gray-300' : ''}`}>
+                                                    <span><strong>{item.name ?? `Producto ${item.productId}`}</strong>
+                                                        ({item.qty ?? 0}×€{(item.price ?? 0).toFixed(2)})
+                                                    </span>
                                                     <span>€{((item.price ?? 0) * (item.qty ?? 0)).toFixed(2)}</span>
                                                 </div>
                                             ))
@@ -293,7 +218,7 @@ export const OrdersPage = () => {
                                     </div>
 
                                     {/* Totales con otro fondo */}
-                                    <div className="bg-[var(--color-mostaza-pastel)] p-2 rounded mb-2 text-sm space-y-1">
+                                    <div className="bg-yellow-100 p-2 rounded mb-2 text-sm font-sans space-y-1">
                                         <p><strong>Subtotal:</strong> €{subtotal.toFixed(2)}</p>
                                         <p><strong>Impuestos (10%):</strong> €{tax.toFixed(2)}</p>
                                         <p><strong>Total:</strong> €{total.toFixed(2)}</p>
@@ -310,12 +235,14 @@ export const OrdersPage = () => {
                                                 <option key={s.value} value={s.value}>{s.label}</option>
                                             ))}
                                         </select>
-                                        <button
-                                            onClick={() => deleteOrder(o._id)}
-                                            className="w-full bg-red-600 text-white rounded px-2 py-1 text-sm hover:bg-red-800"
-                                        >
-                                            X
-                                        </button>
+                                        <div className="flex justify-center mt-2">
+                                            <button
+                                                onClick={() => deleteOrder(o._id)}
+                                                className="w-8 bg-[var(--color-burdeos-dark)] text-white rounded px-2 py-1 text-sm hover:bg-red-800"
+                                            >
+                                                X
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             );

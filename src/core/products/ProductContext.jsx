@@ -17,7 +17,6 @@ import {
     getProductsFromLocalStorage,
     addProductToLocalStorage,
     updateProductInLocalStorage,
-    deleteProductFromLocalStorage,
     patchProductImagesInLocalStorage,
     saveCategoriesInLocalStorage,
     getCategoriesFromLocalStorage
@@ -145,26 +144,12 @@ export const ProductProvider = ({ children }) => {
         } catch (error) {
             console.error("Error eliminando categoría");
         }
-        
+
     };
 
     return (
         <ProductContext.Provider
-            value={{
-                products,
-                categories,
-                loadAllProducts,
-                loadProductsByCommerce,
-                addProduct,
-                updateProduct,
-                updateProductImages,
-                deleteProduct,
-                loadCategories,
-                addCategory,
-                updateCategory,
-                deleteCategory
-            }}
-        >
+            value={{ products, categories, loadAllProducts, loadProductsByCommerce, addProduct, updateProduct, updateProductImages, deleteProduct, loadCategories, addCategory, updateCategory, deleteCategory }} >
             {children}
         </ProductContext.Provider>
     );

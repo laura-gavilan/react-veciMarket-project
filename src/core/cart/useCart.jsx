@@ -16,14 +16,5 @@ export const useCart = () => {
         return cart?.items?.reduce((sum, item) => sum + item.qty, 0) || 0;
     };
 
-    return {
-        cart,
-        loading,
-        addItem,
-        updateItem,
-        removeItem,
-        checkout,
-        getItemQty,
-        getTotalItems
-    };
+    return { cart, loading, addItem, updateItem, removeItem, checkout, getItemQty, getTotalItems };
 };

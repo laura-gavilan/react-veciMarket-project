@@ -28,7 +28,6 @@ export const useOrders = () => {
 
     const addOrder = async (orderData) => {
         try {
-            // Solo enviar los campos que la API espera
             const payload = {
                 userId: orderData.userId,
                 items: orderData.items,
@@ -40,7 +39,6 @@ export const useOrders = () => {
             saveOrdersInLocalStorage(updatedOrders);
         } catch (err) {
             console.error("Error al crear la orden:", err);
-            // Guardar localmente como fallback
             addOrderToLocalStorage(orderData);
             setOrders(getOrdersFromLocalStorage());
             setError(err);
@@ -63,7 +61,7 @@ export const useOrders = () => {
         }
     };
 
-    // --- Eliminar orden ---
+
     const deleteOrder = async (orderId) => {
         try {
             await deleteOrderApi(orderId);
@@ -78,20 +76,11 @@ export const useOrders = () => {
         }
     };
 
-    // --- Actualizar orden completa (no solo estado) ---
     const updateOrder = (updatedOrder) => {
         updateOrderInLocalStorage(updatedOrder);
         setOrders(getOrdersFromLocalStorage());
     };
 
-    return {
-        orders,
-        loading,
-        error,
-        addOrder,
-        updateOrderStatus,
-        deleteOrder,
-        updateOrder,
-    };
+    return { orders, loading, error, addOrder, updateOrderStatus, deleteOrder, updateOrder };
 };
 

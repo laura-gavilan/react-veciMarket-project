@@ -104,7 +104,6 @@ export const CartProvider = ({ children }) => {
         setCart(result.cart);
         updateCartInLocalStorage(userId, result.cart);
 
-        // Crear nuevo carrito activo
         const newCart = await createCartApi({ userId, status: "active" });
         setCart(newCart);
         addCartToLocalStorage(userId, newCart);
@@ -114,22 +113,11 @@ export const CartProvider = ({ children }) => {
 
     useEffect(() => {
         if (userId) fetchCart();
-        else setCart(null); 
+        else setCart(null);
     }, [userId]);
 
     return (
-        <CartContext.Provider
-            value={{
-                cart,
-                loading,
-                fetchCart,
-                addItem,
-                updateItem,
-                removeItem,
-                clearCart,
-                checkout
-            }}
-        >
+        <CartContext.Provider value={{ cart, loading, fetchCart, addItem, updateItem, removeItem, clearCart, checkout }}>
             {children}
         </CartContext.Provider>
     );
