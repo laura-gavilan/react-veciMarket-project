@@ -10,6 +10,7 @@ export const EditCommercePage = () => {
         name: "",
         category: "all",
         description: "",
+        image: "",
         address: { street: "", city: "", phone: "", email: "", schedule: "" },
     });
 
@@ -112,6 +113,18 @@ export const EditCommercePage = () => {
                             rows={4}
                             className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)]"
                             required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">URL de Imagen</label>
+                        <input
+                            type="text"
+                            name="image"
+                            value={form.image}
+                            onChange={handleChange}
+                            placeholder="/images/commerces/shoes.jpg"
+                            className="w-full border rounded p-2"
                         />
                     </div>
 

@@ -7,18 +7,16 @@ export const EditProductPage = () => {
     const { commerceId, productId } = useParams();
     const navigate = useNavigate();
     const { updateProduct } = useProduct();
-    
+
 
     const [form, setForm] = useState({
         name: "",
         category: "all",
         description: "",
         price: "",
+        image:"",
     });
 
-    const [currentImage, setCurrentImage] = useState("");
-    const [newImage, setNewImage] = useState(null);
-    const [preview, setPreview] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,8 +29,8 @@ export const EditProductPage = () => {
                         category: product.category || "all",
                         description: product.description || "",
                         price: product.price.toString(),
+                        image: product.image || "",
                     });
-                    setCurrentImage(product.images?.[0] || "");
                 } else {
                     alert("Producto no encontrado");
                     navigate(-1);
@@ -48,19 +46,8 @@ export const EditProductPage = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name === "category") {
-            setForm(prev => ({ ...prev, category: [value] }));
-        } else {
-            setForm(prev => ({ ...prev, [name]: value }));
-        }
-    };
+        setForm(prev => ({ ...prev, [name]: value }));
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setNewImage(file);
-            setPreview(URL.createObjectURL(file));
-        }
     };
 
     const handleSubmit = async (e) => {
@@ -72,24 +59,13 @@ export const EditProductPage = () => {
         }
 
         try {
-            const payload = new FormData();
-            payload.append("name", form.name);
-            payload.append("category", form.category);
-            payload.append("price", priceValue);
-            payload.append("description", form.description);
-            if (newImage) payload.append("image", newImage);
-
-            const { data: updatedProductFromApi } = await api.patch(`/products/${productId}`, payload, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-
             const updatedProduct = {
                 _id: productId,
                 name: form.name,
                 category: form.category,
                 price: priceValue,
                 description: form.description,
-                images: newImage ? [URL.createObjectURL(newImage)] : [currentImage],
+                image: form.image,
                 commerceId,
             };
             updateProduct(productId, updatedProduct);
@@ -98,7 +74,6 @@ export const EditProductPage = () => {
             navigate(`/admin/commerce/${commerceId}`);
         } catch (error) {
             console.error("Error al actualizar producto:", error);
-            alert("No se pudo actualizar el producto.");
         }
     };
 
@@ -110,24 +85,26 @@ export const EditProductPage = () => {
                 </h1>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                    {(preview || currentImage) && (
-                        <div className="text-center">
-                            <img
-                                src={preview || currentImage}
-                                alt={form.name}
-                                className="mx-auto w-40 h-40 object-cover rounded-3xl border border-[var(--color-burdeos-light)] shadow-md"
-                            />
-                        </div>
-                    )}
-
                     <div className="flex flex-col">
                         <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Subir nueva imagen</label>
                         <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
+                            type="text"
+                            name="image"
+                            value={form.image}
+                            onChange={handleChange}
+                            placeholder="/products/shoes.jpg"
                             className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
                         />
+
+                        {form.image && (
+                            <div className="mt-4 flex justify-center">
+                                <img 
+                                src={form.image}
+                                alt="Vista previa del producto"
+                                className="max-h-40 rounded-2xl shadow-md border-[var(--color-burdeos-light] object-contain"
+                                onError={(e) => (e.target.style.display = "none")}/>
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex flex-col">
