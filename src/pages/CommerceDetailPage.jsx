@@ -6,7 +6,7 @@ import { api } from "../core/http/axios";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { CartButton } from "../components/CartButton";
 import { ProductModal } from "../components/ProductModal";
-// import { CartButton } from "../components/CartButton";
+
 
 
 export const CommerceDetailPage = () => {
@@ -29,7 +29,7 @@ export const CommerceDetailPage = () => {
     useEffect(() => {
         if (!commerceId || loading) return;
 
-        const commerceFromContext = commerces?.find(c => c._id === commerceId || c.slug === commerceId);
+        const commerceFromContext = commerces?.find(commerce => commerce._id === commerceId || commerce.slug === commerceId);
 
         if (commerceFromContext) {
             console.log("✅ Comercio encontrado:", commerceFromContext);
@@ -47,13 +47,12 @@ export const CommerceDetailPage = () => {
 
     useEffect(() => {
         if (!selectedCommerce) return;
-        const updated = commerces?.find(c => c._id === selectedCommerce._id);
+        const updated = commerces?.find(commerce => commerce._id === selectedCommerce._id);
         if (updated && updated !== selectedCommerce) {
             setSelectedCommerce(updated);
         }
     }, [commerces]);
 
-    // ✅ Estado de carga
     if (loading || !selectedCommerce) {
         return (
             <div className="flex items-center justify-center min-h-screen text-[var(--color-burdeos-light)]">

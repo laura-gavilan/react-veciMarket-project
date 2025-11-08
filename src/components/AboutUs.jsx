@@ -18,9 +18,9 @@ export const AboutUs = () => {
                     { title: "Misión", text: "Apoyar el comercio local y fortalecer la comunidad vecinal mediante una plataforma intuitiva y confiable." },
                     { title: "Visión", text: "Ser la plataforma de referencia para el comercio local, fomentando relaciones duraderas entre vecinos y comercios." },
                     { title: "Valores", text: "Comunidad, confianza, cercanía y apoyo al comercio local son los pilares que guían nuestra labor diaria." }
-                ].map((item, idx) => (
+                ].map((item, index) => (
                     <div
-                        key={idx}
+                        key={index}
                         className="p-8 bg-[var(--color-gray-warm)] rounded-3xl shadow-lg elevation text-center transition-all"
                     >
                         <h3 className="font-title font-semibold text-2xl mb-4 text-[var(--color-burdeos-dark)]">{item.title}</h3>

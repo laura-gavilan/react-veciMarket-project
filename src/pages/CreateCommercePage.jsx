@@ -24,8 +24,8 @@ export const CreateCommercePage = () => {
         isActive: true,
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const handleChange = (event) => {
+        const { name, value } = event.target;
 
         if (name.includes("address.")) {
             const addressField = name.split(".")[1];
@@ -38,8 +38,8 @@ export const CreateCommercePage = () => {
         }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
         try {
             const newCommerce = {
@@ -84,7 +84,7 @@ export const CreateCommercePage = () => {
                         />
                     </div>
 
-                    {/* Imagen */}
+                    
                     <div>
                         <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">URL de Imagen</label>
                         <input

@@ -13,7 +13,7 @@ export const AdminDetailPage = () => {
     const navigate = useNavigate();
     const [showScrollTop, setShowScrollTop] = useState(false);
 
-    const selectedCommerce = commerces.find(c => c._id === commerceId);
+    const selectedCommerce = commerces.find(commerce => commerce._id === commerceId);
     const isOwner = user?._id === selectedCommerce?.ownerUserId?._id;
 
     useEffect(() => {

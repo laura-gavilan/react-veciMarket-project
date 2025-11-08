@@ -15,7 +15,7 @@ export const saveFavoritesInLocalStorage = (userId, favorites) => {
 export const addFavoriteToLocalStorage = (userId, favorite) => {
     if (!userId) return;
     const favorites = getFavoritesFromLocalStorage(userId);
-    const exists = favorites.some((f) => f._id === favorite._id);
+    const exists = favorites.some((favoriteItem) => favoriteItem._id === favorite._id);
     if (!exists) {
         favorites.push(favorite);
         saveFavoritesInLocalStorage(userId, favorites);

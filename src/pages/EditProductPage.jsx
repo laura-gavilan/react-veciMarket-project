@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../core/http/axios";
 import { useProduct } from "../core/products/ProductContext";
 
+
 export const EditProductPage = () => {
     const { commerceId, productId } = useParams();
     const navigate = useNavigate();
@@ -14,9 +15,11 @@ export const EditProductPage = () => {
         category: "all",
         description: "",
         price: "",
-        image:"",
     });
 
+    const [currentImage, setCurrentImage] = useState("");
+    const [newImage, setNewImage] = useState(null);
+    const [preview, setPreview] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,8 +32,8 @@ export const EditProductPage = () => {
                         category: product.category || "all",
                         description: product.description || "",
                         price: product.price.toString(),
-                        image: product.image || "",
                     });
+                    setCurrentImage(product.images?.[0] || "");
                 } else {
                     alert("Producto no encontrado");
                     navigate(-1);
@@ -46,8 +49,22 @@ export const EditProductPage = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm(prev => ({ ...prev, [name]: value }));
+        if (name === "category") {
+            setForm(prev => ({ ...prev, category: [value] }));
+        } else {
+            setForm(prev => ({ ...prev, [name]: value }));
+        }
+    };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            console.log("Archivo seleccionado:", file);
+            setNewImage(file);
+            const previewUrl = URL.createObjectURL(file);
+            console.log("Preview URL:", previewUrl);
+            setPreview(previewUrl);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -59,13 +76,31 @@ export const EditProductPage = () => {
         }
 
         try {
+            const payload = new FormData();
+            payload.append("name", form.name);
+            payload.append("category", form.category);
+            payload.append("price", priceValue);
+            payload.append("description", form.description);
+            if (newImage) payload.append("image", newImage);
+
+            const { data: updatedProductFromApi } = await api.patch(`/products/${productId}`, payload, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+
+            // Actualizamos la imagen y limpiamos el preview
+            if (updatedProductFromApi.images?.[0]) {
+                setCurrentImage(updatedProductFromApi.images[0]);
+                setPreview("");
+            }
+
+            // Actualizamos el contexto/local state
             const updatedProduct = {
                 _id: productId,
                 name: form.name,
                 category: form.category,
                 price: priceValue,
                 description: form.description,
-                image: form.image,
+                images: updatedProductFromApi.images || [currentImage],
                 commerceId,
             };
             updateProduct(productId, updatedProduct);
@@ -85,26 +120,24 @@ export const EditProductPage = () => {
                 </h1>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                    {(preview || currentImage) && (
+                        <div className="text-center">
+                            <img
+                                src={preview ? preview : currentImage}
+                                alt={form.name}
+                                className="mx-auto w-40 h-40 object-cover rounded-3xl border border-[var(--color-burdeos-light)] shadow-md"
+                            />
+                        </div>
+                    )}
+
                     <div className="flex flex-col">
                         <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Subir nueva imagen</label>
                         <input
-                            type="text"
-                            name="image"
-                            value={form.image}
-                            onChange={handleChange}
-                            placeholder="/products/shoes.jpg"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
                             className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
                         />
-
-                        {form.image && (
-                            <div className="mt-4 flex justify-center">
-                                <img 
-                                src={form.image}
-                                alt="Vista previa del producto"
-                                className="max-h-40 rounded-2xl shadow-md border-[var(--color-burdeos-light] object-contain"
-                                onError={(e) => (e.target.style.display = "none")}/>
-                            </div>
-                        )}
                     </div>
 
                     <div className="flex flex-col">

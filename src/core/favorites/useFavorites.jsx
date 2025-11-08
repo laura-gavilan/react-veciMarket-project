@@ -13,7 +13,7 @@ export const useFavorites = () => {
     const isFavorite = (productId) => {
         if (!productId) return false;
 
-        if (productId) return favorites.some((fav) => fav.id === productId);
+        if (productId) return favorites.some((favorite) => favorite.id === productId);
     };
 
     const toggleFavorite = async (product) => {

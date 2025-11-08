@@ -10,7 +10,6 @@ export const ProductModal = ({ product, commerce, onClose }) => {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
             <div className="bg-white rounded-3xl p-6 w-11/12 max-w-lg relative shadow-xl">
-                {/* Cerrar */}
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-xl font-bold"
@@ -18,7 +17,6 @@ export const ProductModal = ({ product, commerce, onClose }) => {
                     ✕
                 </button>
 
-                {/* Imagen */}
                 <div className="w-full h-64 mb-4 overflow-hidden rounded-xl">
                     {product.images?.[0] && (
                         <img
@@ -29,11 +27,10 @@ export const ProductModal = ({ product, commerce, onClose }) => {
                     )}
                 </div>
 
-                {/* Información */}
                 <h2 className="text-2xl font-semibold text-[var(--color-burdeos-dark)] mb-2">{product.name}</h2>
                 <p className="text-lg font-medium text-[var(--color-burdeos-darker)] mb-4">{product.price} €</p>
 
-                {/* Botones */}
+
                 <div className="flex gap-4 mb-4">
                     <CartButton product={product} />
                     {commerce && (

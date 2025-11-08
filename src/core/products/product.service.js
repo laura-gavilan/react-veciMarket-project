@@ -15,23 +15,23 @@ export const addProductToLocalStorage = (product) => {
 
 export const updateProductInLocalStorage = (updatedProduct) => {
     const products = getProductsFromLocalStorage();
-    const newProducts = products.map((p) =>
-        p._id === updatedProduct._id ? updatedProduct : p
+    const newProducts = products.map((product) =>
+        product._id === updatedProduct._id ? updatedProduct : product
     );
     saveProductsInLocalStorage(newProducts);
 };
 
 export const patchProductImagesInLocalStorage = (productId, images) => {
     const products = getProductsFromLocalStorage();
-    const newProducts = products.map((p) =>
-        p._id === productId ? { ...p, images } : p
+    const newProducts = products.map((product) =>
+        product._id === productId ? { ...product, images } : product
     );
     saveProductsInLocalStorage(newProducts);
 };
 
 export const deleteProductFromLocalStorage = (productId) => {
     const products = getProductsFromLocalStorage();
-    const newProducts = products.filter((p) => p._id !== productId);
+    const newProducts = products.filter((product) => product._id !== productId);
     saveProductsInLocalStorage(newProducts);
 };
 

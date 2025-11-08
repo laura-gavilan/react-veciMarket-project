@@ -48,16 +48,16 @@ export const useOrders = () => {
     const updateOrderStatus = async (orderId, status) => {
         try {
             const updatedOrder = await updateOrderStatusApi(orderId, status);
-            const updatedOrders = orders.map((o) =>
-                o._id === orderId ? updatedOrder : o
+            const updatedOrders = orders.map((order) =>
+                order._id === orderId ? updatedOrder : order
             );
             setOrders(updatedOrders);
             saveOrdersInLocalStorage(updatedOrders);
-        } catch (err) {
-            console.error("Error al actualizar estado:", err);
+        } catch (error) {
+            console.error("Error al actualizar estado:", error);
             patchOrderStatusInLocalStorage(orderId, status);
             setOrders(getOrdersFromLocalStorage());
-            setError(err);
+            setError(error);
         }
     };
 
@@ -65,14 +65,14 @@ export const useOrders = () => {
     const deleteOrder = async (orderId) => {
         try {
             await deleteOrderApi(orderId);
-            const updatedOrders = orders.filter((o) => o._id !== orderId);
+            const updatedOrders = orders.filter((order) => order._id !== orderId);
             setOrders(updatedOrders);
             saveOrdersInLocalStorage(updatedOrders);
-        } catch (err) {
-            console.error("Error al eliminar orden:", err);
+        } catch (error) {
+            console.error("Error al eliminar orden:", error);
             deleteOrderFromLocalStorage(orderId);
             setOrders(getOrdersFromLocalStorage());
-            setError(err);
+            setError(error);
         }
     };
 

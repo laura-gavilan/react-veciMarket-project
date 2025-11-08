@@ -69,8 +69,8 @@ export const CreateProductPage = () => {
 
                 {errors && (
                     <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">
-                        {errors.map((err, idx) => (
-                            <p key={idx}>{err.message}</p>
+                        {errors.map((error, index) => (
+                            <p key={index}>{error.message}</p>
                         ))}
                     </div>
                 )}

@@ -31,8 +31,8 @@ export const EditCommercePage = () => {
         fetchCommerce();
     }, [commerceId]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const handleChange = (event) => {
+        const { name, value } = event.target;
         if (name in form.address) {
             setForm((prev) => ({ ...prev, address: { ...prev.address, [name]: value } }));
         } else {
@@ -40,8 +40,8 @@ export const EditCommercePage = () => {
         }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         try {
             await api.patch(`/commerces/${commerceId}`, form);
             alert("Comercio actualizado correctamente");
@@ -67,7 +67,6 @@ export const EditCommercePage = () => {
                 </h1>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                    {/* Categoría */}
                     <div className="flex flex-col">
                         <label className="font-semibold text-[var(--color-burdeos-dark)] mb-1">Categoría</label>
                         <select

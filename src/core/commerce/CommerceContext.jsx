@@ -44,7 +44,7 @@ export const CommerceProvider = ({ children }) => {
             const editableData = { name, slug, image, description, address, isActive };
 
             const data = await updateCommerceApi(_id, editableData);
-            setCommerces(prev => prev.map(c => (c._id === data._id ? data : c)));
+            setCommerces(prev => prev.map(commerce => (commerce._id === data._id ? data : commerce)));
             updateCommerceInLocalStorage(data);
         } catch (error) {
             console.error("Error actualizando comercio:", error);
@@ -54,7 +54,7 @@ export const CommerceProvider = ({ children }) => {
     const deleteCommerce = async (commerceId) => {
         try {
             await deleteCommerceApi(commerceId);
-            setCommerces(prev => prev.filter(c => c._id !== commerceId));
+            setCommerces(prev => prev.filter(commerce => commerce._id !== commerceId));
             deleteCommerceFromLocalStorage(commerceId);
         } catch (error) {
             console.error("Error eliminando comercio:", error);

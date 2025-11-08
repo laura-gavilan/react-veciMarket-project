@@ -66,7 +66,7 @@ export const ProductProvider = ({ children }) => {
     const updateProduct = async (productId, updatedProduct) => {
         try {
             const data = await updateProductApi(productId, updatedProduct);
-            setProducts((prev) => prev.map((p) => (p._id === data._id ? data : p)));
+            setProducts((prev) => prev.map((product) => (product._id === data._id ? data : product)));
             updateProductInLocalStorage(data);
         } catch (error) {
             console.error("Error actualizando producto", error);
@@ -77,7 +77,7 @@ export const ProductProvider = ({ children }) => {
     const updateProductImages = async (productId, images) => {
         try {
             const data = await patchProductImagesApi(productId, images);
-            setProducts((prev) => prev.map((p) => (p._id === data._id ? data : p)));
+            setProducts((prev) => prev.map((product) => (product._id === data._id ? data : product)));
             patchProductImagesInLocalStorage(productId, images);
         } catch (error) {
             console.error("Error actualizando imágenes del producto", error);
@@ -90,7 +90,7 @@ export const ProductProvider = ({ children }) => {
             await deleteProductApi(productId);
             let newProducts;
             setProducts((prev) => {
-                newProducts = prev.filter((p) => p._id !== productId)
+                newProducts = prev.filter((product) => product._id !== productId)
                 return newProducts;
             });
             saveProductsInLocalStorage(newProducts);
@@ -127,7 +127,7 @@ export const ProductProvider = ({ children }) => {
     const updateCategory = async (categoryId, updatedCategory) => {
         try {
             await updateCategoryApi(categoryId, updatedCategory);
-            const newCategories = categories.map((c) => (c._id === data._id ? data : c));
+            const newCategories = categories.map((category) => (category._id === data._id ? data : category));
             setCategories(newCategories);
             saveCategoriesInLocalStorage(newCategories);
         } catch (error) {
@@ -138,7 +138,7 @@ export const ProductProvider = ({ children }) => {
     const deleteCategory = async (categoryId) => {
         try {
             await deleteCategoryApi(categoryId);
-            const newCategories = categories.filter((c) => c._id !== categoryId);
+            const newCategories = categories.filter((category) => category._id !== categoryId);
             setCategories(newCategories);
             saveCategoriesInLocalStorage(newCategories);
         } catch (error) {

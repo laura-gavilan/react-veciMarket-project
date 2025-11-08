@@ -76,7 +76,7 @@ export const CommercePage = () => {
                     type="text"
                     placeholder="Buscar producto..."
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(event) => setSearch(event.target.value)}
                     className="w-full px-5 py-3 rounded-full border border-[var(--color-burdeos-dark)] bg-white text-[var(--color-burdeos-dark)] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] shadow-sm transition-all duration-300"
                 />
                 {search && (
@@ -115,7 +115,7 @@ export const CommercePage = () => {
             {showProducts && selectedCategory && filteredProducts.length > 0 && (
                 <div className="w-full mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                     {filteredProducts.map(product => {
-                        const commerce = commerces.find(c => c._id === product.commerceId);
+                        const commerce = commerces.find(commerce => commerce._id === product.commerceId);
                         return (
                             <div
                                 key={product._id}
@@ -203,7 +203,6 @@ export const CommercePage = () => {
                 </div>
             </div>
 
-            {/* Modal */}
             {modalProduct && (
                 <ProductModal
                     product={modalProduct}

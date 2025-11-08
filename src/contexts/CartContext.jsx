@@ -38,7 +38,7 @@ export const CartProvider = ({ children }) => {
 
         try {
             const carts = await getCartsApi(userId);
-            let activeCart = carts.find(c => c.status === "active" && c.userId === userId);
+            let activeCart = carts.find(cart => cart.status === "active" && cart.userId === userId);
 
             if (!activeCart) {
                 activeCart = await createCartApi({ userId, status: "active" });
@@ -49,7 +49,7 @@ export const CartProvider = ({ children }) => {
         } catch (error) {
             console.error("Error cargando carrito API:", error);
             const localData = getCartsFromLocalStorage(userId);
-            const localCart = localData.find(c => c.status === "active" && c.userId === userId) || null;
+            const localCart = localData.find(cart => cart.status === "active" && cart.userId === userId) || null;
             setCart(localCart);
         } finally {
             setLoading(false);

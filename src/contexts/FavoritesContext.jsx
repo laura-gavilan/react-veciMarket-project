@@ -61,7 +61,7 @@ export const FavoritesProvider = ({ children }) => {
 
         try {
             await deleteFavoritesApi(user._id, productId);
-            const newFavorites = favorites.filter((f) => f._id !== productId);
+            const newFavorites = favorites.filter((favorite) => favorite._id !== productId);
             setFavorites(newFavorites);
             saveFavoritesInLocalStorage(user._id, newFavorites);
         } catch (error) {

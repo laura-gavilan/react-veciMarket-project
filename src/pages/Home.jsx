@@ -65,13 +65,13 @@ export const Home = () => {
                     Categorías destacadas
                 </h2>
                 <div className="flex flex-wrap justify-center gap-4">
-                    {["Alimentación", "Libros", "Hogar", "Deportes", "Belleza"].map(cat => (
+                    {["Alimentación", "Libros", "Hogar", "Deportes", "Belleza"].map(category => (
                         <Link
-                            key={cat}
-                            to={`/commerce?category=${cat.toLowerCase()}`}
+                            key={category}
+                            to={`/commerce?category=${category.toLowerCase()}`}
                             className="px-6 py-3 bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] font-semibold rounded-full shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300"
                         >
-                            {cat}
+                            {category}
                         </Link>
                     ))}
                 </div>

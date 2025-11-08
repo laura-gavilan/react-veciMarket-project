@@ -21,12 +21,12 @@ export const EditUserPage = () => {
     if (!user)
         return <p className="text-center mt-10 text-[var(--color-burdeos-dark)] font-sans text-lg">No hay usuario logueado.</p>;
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+    const handleChange = (event) => {
+        setForm({ ...form, [event.target.name]: event.target.value });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         await updateUserData(form);
         navigate("/user");
     };

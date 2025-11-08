@@ -10,8 +10,6 @@ export const CartPage = () => {
         loading,
         updateItem,
         removeItem,
-        addItem,
-        checkout,
         clearCart
     } = useCart();
     const { addOrder } = useOrdersContext();
@@ -51,7 +49,6 @@ export const CartPage = () => {
         }
 
         const newOrder = {
-            _id: Date.now().toString(),
             userId: user._id || user.id || "guest",
             items: cart.items.map((item) => ({
                 productId: item.productId._id,

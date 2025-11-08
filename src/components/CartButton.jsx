@@ -28,8 +28,8 @@ export const CartButton = ({ product }) => {
     return (
         <button
             type="button"
-            onClick={(e) => {
-                e.stopPropagation();
+            onClick={(event) => {
+                event.stopPropagation();
                 handleAddToCart();
             }}
             disabled={loading}

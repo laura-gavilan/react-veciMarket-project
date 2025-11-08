@@ -22,38 +22,38 @@ export const addCartToLocalStorage = (userId, cart) => {
 
 export const updateCartInLocalStorage = (userId, updatedCart) => {
     const current = getCartsFromLocalStorage(userId);
-    const updated = current.map(c => (c._id === updatedCart._id ? updatedCart : c));
+    const updated = current.map(cart => (cart._id === updatedCart._id ? updatedCart : cart));
     saveCartsInLocalStorage(userId, updated);
 };
 
 
 export const addOrUpdateItemInCartLocal = (userId, cartId, item) => {
     const current = getCartsFromLocalStorage(userId);
-    const updated = current.map(c => {
-        if (c._id === cartId) {
-            const exists = c.items.find(i => i.productId._id === item.productId._id);
+    const updated = current.map(cart => {
+        if (cart._id === cartId) {
+            const exists = cart.items.find(cartItem => cartItem.productId._id === item.productId._id);
             if (exists) {
-                c.items = c.items.map(i =>
-                    i.productId._id === item.productId._id
-                        ? { ...i, qty: item.qty }
-                        : i
+                cart.items = cart.items.map(cartItem =>
+                    cartItem.productId._id === item.productId._id
+                        ? { ...cartItem, qty: item.qty }
+                        : cartItem
                 );
             } else {
-                c.items.push(item);
+                cart.items.push(item);
             }
         }
-        return c;
+        return cart;
     });
     saveCartsInLocalStorage(userId, updated);
 };
 
 export const deleteItemFromCartLocal = (userId, cartId, productId) => {
     const current = getCartsFromLocalStorage(userId);
-    const updated = current.map(c => {
-        if (c._id === cartId) {
-            c.items = c.items.filter(i => i.productId._id !== productId);
+    const updated = current.map(cart => {
+        if (cart._id === cartId) {
+            cart.items = cart.items.filter(cartItem => cartItem.productId._id !== productId);
         }
-        return c;
+        return cart;
     });
     saveCartsInLocalStorage(userId, updated);
 };
