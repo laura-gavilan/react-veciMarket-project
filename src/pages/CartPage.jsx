@@ -14,14 +14,14 @@ export const CartPage = () => {
     } = useCart();
     const { addOrder } = useOrdersContext();
 
-    if (!user) {
-        return (
-            <div className="p-8 text-center">
-                <h2 className="text-2xl font-semibold mb-2">🛒 Cesta</h2>
-                <p>Debes iniciar sesión para ver tu cesta.</p>
-            </div>
-        );
-    }
+    // if (!user) {
+    //     return (
+    //         <div className="p-8 text-center">
+    //             <h2 className="text-2xl font-semibold mb-2">🛒 Cesta</h2>
+    //             <p>Debes iniciar sesión para ver tu cesta.</p>
+    //         </div>
+    //     );
+    // }
 
     if (!cart || !cart.items || cart.items.length === 0) {
         return (
@@ -38,10 +38,10 @@ export const CartPage = () => {
     );
 
     const handleCheckout = () => {
-        if (!user) {
-            alert("Debes iniciar sesión para finalizar la compra.");
-            return;
-        }
+        // if (!user) {
+        //     alert("Debes iniciar sesión para finalizar la compra.");
+        //     return;
+        // }
 
         if (!cart.items || cart.items.length === 0) {
             alert("Tu carrito está vacío.");

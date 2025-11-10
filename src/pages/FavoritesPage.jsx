@@ -1,16 +1,9 @@
-import { useEffect } from "react";
 import { useFavorites } from "../core/favorites/useFavorites";
-import { useAuth } from "../core/auth/useAuth";
-import { FavoriteButton } from "../components/FavoriteButton.jsx"; 
+import { FavoriteButton } from "../components/FavoriteButton.jsx";
 
 export const FavoritesPage = () => {
-    const { user } = useAuth();
     const { favorites } = useFavorites();
-
-    if (!user)
-        return <p className="text-center mt-10 text-[var(--color-burdeos-dark)] font-sans text-lg">
-            Debes iniciar sesión para ver tus favoritos
-        </p>;
+    const hasFavorites = Array.isArray(favorites) && favorites.length > 0;
 
     return (
         <div className="max-w-6xl mx-auto px-6 py-10">
@@ -18,15 +11,17 @@ export const FavoritesPage = () => {
                 Mis productos favoritos
             </h1>
 
-            {favorites.length === 0 ? (
+            {!hasFavorites && (
                 <p className="text-center text-gray-500 mt-4">
                     No tienes productos favoritos.
                 </p>
-            ) : (
+            )}
+
+            {hasFavorites && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {favorites.map((product) => (
+                    {favorites.map((product, index) => (
                         <div
-                            key={product._id}
+                            key={product._id || `fav-${index}`}
                             className="relative bg-white border border-[var(--color-burdeos-light)] rounded-3xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                         >
                             {product.images?.[0] && (

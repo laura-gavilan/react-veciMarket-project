@@ -13,7 +13,9 @@ import {
     addCartToLocalStorage,
     updateCartInLocalStorage,
     addOrUpdateItemInCartLocal,
-    deleteItemFromCartLocal
+    deleteItemFromCartLocal,
+    mergeGuestCartWithUserCart,
+    saveCartsInLocalStorage
 } from "../core/cart/cart.service.js";
 
 import { useAuth } from "../core/auth/useAuth.jsx";
@@ -30,13 +32,18 @@ export const CartProvider = ({ children }) => {
 
     const fetchCart = async () => {
         setLoading(true);
+
         if (!userId) {
-            setCart(null);
+            const localCarts = getCartsFromLocalStorage(null);
+            let activeCart = localCarts[0] || { _id: "guest", items: [] };
+            setCart(activeCart);
             setLoading(false);
             return;
         }
 
         try {
+            mergeGuestCartWithUserCart(userId);
+
             const carts = await getCartsApi(userId);
             let activeCart = carts.find(cart => cart.status === "active" && cart.userId === userId);
 
@@ -57,37 +64,59 @@ export const CartProvider = ({ children }) => {
     };
 
     const addItem = async (product, qty = 1) => {
-        if (!userId) throw new Error("Debes iniciar sesión para añadir productos");
-        if (!cart) throw new Error("No hay carrito disponible");
+        if (!product?._id) return;
 
-        const payload = { productId: product._id, qty, priceSnapshot: product.price };
-        const updatedCart = await addItemToCartApi(cart._id, payload);
+        // Usuario logueado
+        if (userId) {
+            if (!cart) throw new Error("No hay carrito disponible");
+            const payload = { productId: product._id, qty, priceSnapshot: product.price };
+            const updatedCart = await addItemToCartApi(cart._id, payload);
+            setCart(updatedCart);
+            addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId: product, qty });
+            return;
+        }
 
-        setCart(updatedCart);
-        addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId: product, qty });
+        // Guest
+        let guestCart = getCartsFromLocalStorage("guest");
+        if (!guestCart.length) {
+            guestCart = [{ _id: "guest-cart", items: [] }];
+            saveCartsInLocalStorage("guest", guestCart);
+        }
+        const cartId = guestCart[0]._id;
+
+        addOrUpdateItemInCartLocal("guest", cartId, { productId: product, qty });
+        setCart(guestCart[0]);
     };
+
 
 
     const updateItem = async (productId, qty) => {
-        if (!userId) throw new Error("Debes iniciar sesión para actualizar el carrito");
         if (!cart) return;
 
-        const updatedCart = await updateCartItemApi(cart._id, productId, { qty });
-        setCart(updatedCart);
-        addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId, qty });
+        if (!userId) {
+            addOrUpdateItemInCartLocal(null, cart._id, { productId: product, qty });
+            setCart(prev => ({ ...prev }));
+        } else {
+            const updatedCart = await updateCartItemApi(cart._id, productId, { qty });
+            setCart(updatedCart);
+            addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId, qty });
+        }
     };
 
     const removeItem = async (productId) => {
-        if (!userId) throw new Error("Debes iniciar sesión para eliminar productos");
         if (!cart) return;
 
-        const updatedCart = await deleteCartItemApi(cart._id, productId);
-        setCart(updatedCart.cart || updatedCart);
-        deleteItemFromCartLocal(userId, cart._id, productId);
+        if (!userId) {
+            deleteItemFromCartLocal(null, cart._id, productId);
+            setCart(prev => ({ ...prev }));
+        } else {
+            const updatedCart = await deleteCartItemApi(cart._id, productId);
+            setCart(updatedCart.cart || updatedCart);
+            deleteItemFromCartLocal(userId, cart._id, productId);
+        }
     };
 
     const clearCart = async () => {
-        if (!userId) throw new Error("Debes iniciar sesión para vaciar el carrito");
         if (!cart?.items) return;
 
         for (const item of [...cart.items]) {
@@ -97,8 +126,7 @@ export const CartProvider = ({ children }) => {
 
 
     const checkout = async () => {
-        if (!userId) throw new Error("Debes iniciar sesión para finalizar la compra");
-        if (!cart || cart.status === "ordered") return;
+        if (!userId || !cart || cart.status === "ordered") return null;
 
         const result = await checkoutCartApi(cart._id);
         setCart(result.cart);
@@ -112,8 +140,7 @@ export const CartProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        if (userId) fetchCart();
-        else setCart(null);
+        fetchCart();
     }, [userId]);
 
     return (

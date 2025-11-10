@@ -40,11 +40,13 @@ export const AdminPage = () => {
                 Tus Comercios
             </h1>
 
-            {myCommerces.length === 0 ? (
+            {myCommerces.length === 0 && (
                 <p className="text-gray-500 text-center text-lg mt-6">
                     No tienes comercios aún.
                 </p>
-            ) : (
+            )};
+
+            {myCommerces.length > 0 && (
                 <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {myCommerces.map((commerce) => (
                         <li

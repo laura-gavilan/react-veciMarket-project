@@ -12,58 +12,72 @@ export const FavoritesContext = createContext(null);
 export const FavoritesProvider = ({ children }) => {
     const { user } = useAuth();
     const [favorites, setFavorites] = useState([]);
+    const userId = user?._id;
 
     useEffect(() => {
         const loadFavorites = async () => {
-            if (!user?._id) {
-                setFavorites([]);
-                return;
-            }
-
             try {
-                const data = await getFavoritesApi(user._id);
-                const favs = Array.isArray(data.favoritos) ? data.favoritos : [];
-                setFavorites(favs);
-                saveFavoritesInLocalStorage(user._id, favs);
+                if (!userId) {
+                    const localFavs = getFavoritesFromLocalStorage(null);
+                    setFavorites(localFavs);
+                    return;
+                }
+
+
+                const data = await getFavoritesApi(userId);
+                const serverFavs = Array.isArray(data.favoritos) ? data.favoritos : [];
+                const guestFavs = getFavoritesFromLocalStorage(null);
+
+                const merged = [
+                    ...serverFavs,
+                    ...guestFavs.filter(guest => !serverFavs.some(server => server._id === guest._id)),
+                ];
+
+                setFavorites(merged);
+                saveFavoritesInLocalStorage(userId, merged);
+                saveFavoritesInLocalStorage(null, []);
             } catch (error) {
                 console.error("Error cargando favoritos desde API", error);
-                const localFavs = getFavoritesFromLocalStorage(user._id);
+                const localFavs = getFavoritesFromLocalStorage(userId);
                 setFavorites(localFavs);
             }
         };
         loadFavorites();
-    }, [user]);
+    }, [userId]);
 
     const addFavorite = async (product) => {
-        if (!user?._id) {
-            alert("Debes iniciar sesión para marcar favoritos");
-            return;
-        }
         if (!product?._id) {
             console.error("Producto inválido", product);
             return;
         }
 
+        if (!userId) {
+            addFavoriteToLocalStorage(null, product);
+            setFavorites(prev => [...prev, product]);
+            return;
+        }
+
         try {
-            await addFavoriteApi(user._id, product._id);
+            await addFavoriteApi(userId, product._id);
             setFavorites((prev) => [...prev, product]);
-            addFavoriteToLocalStorage(user._id, product);
+            addFavoriteToLocalStorage(userId, product);
         } catch (error) {
             console.error("Error en addFavorite", error);
         }
     };
 
     const deleteFavorite = async (productId) => {
-        if (!user?._id) {
-            alert("Debes iniciar sesión para eliminar favoritos");
+        if (!userId) {
+            deleteFavoriteFromLocalStorage(null, productId);
+            setFavorites(prev => prev.filter(f => f._id !== productId));
             return;
         }
 
         try {
-            await deleteFavoritesApi(user._id, productId);
+            await deleteFavoritesApi(userId, productId);
             const newFavorites = favorites.filter((favorite) => favorite._id !== productId);
             setFavorites(newFavorites);
-            saveFavoritesInLocalStorage(user._id, newFavorites);
+            saveFavoritesInLocalStorage(userId, newFavorites);
         } catch (error) {
             console.error("Error en deleteFavorite", error);
         }

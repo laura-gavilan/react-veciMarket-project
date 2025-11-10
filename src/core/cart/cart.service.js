@@ -1,15 +1,16 @@
-const CART_KEY_ID = "carts_"; 
+const CART_KEY_ID = "carts_";
+const GUEST_CART_KEY = "guest_cart";
 
-const getCartKey = (userId) => `${CART_KEY_ID}${userId}`;
+const getCartKey = (userId) => {
+    return userId ? `${CART_KEY_ID}${userId}` : GUEST_CART_KEY;
+};
 
 export const getCartsFromLocalStorage = (userId) => {
-    if (!userId) return [];
     const data = localStorage.getItem(getCartKey(userId));
     return data ? JSON.parse(data) : [];
 };
 
 export const saveCartsInLocalStorage = (userId, carts) => {
-    if (!userId) return;
     localStorage.setItem(getCartKey(userId), JSON.stringify(carts));
 };
 
@@ -30,6 +31,7 @@ export const updateCartInLocalStorage = (userId, updatedCart) => {
 export const addOrUpdateItemInCartLocal = (userId, cartId, item) => {
     const current = getCartsFromLocalStorage(userId);
     const updated = current.map(cart => {
+        if (!cart) return cart;
         if (cart._id === cartId) {
             const exists = cart.items.find(cartItem => cartItem.productId._id === item.productId._id);
             if (exists) {
@@ -61,3 +63,18 @@ export const deleteItemFromCartLocal = (userId, cartId, productId) => {
 export const clearUserCartsFromLocalStorage = (userId) => {
     localStorage.removeItem(getCartKey(userId));
 };
+
+// 🔹 (Opcional) Fusionar carrito de invitado con el del usuario logueado
+export const mergeGuestCartWithUserCart = (userId) => {
+    if (!userId) return;
+
+    const guestCart = getCartsFromLocalStorage(null);
+    const userCart = getCartsFromLocalStorage(userId);
+
+    if (guestCart.length > 0) {
+        const merged = [...userCart, ...guestCart];
+        saveCartsInLocalStorage(userId, merged);
+        clearUserCartsFromLocalStorage(null); // Limpiar carrito del invitado
+    }
+};
+

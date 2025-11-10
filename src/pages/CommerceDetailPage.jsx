@@ -116,7 +116,7 @@ export const CommerceDetailPage = () => {
                     </h2>
                 </div>
 
-                {products?.length > 0 ? (
+                {products?.length > 0 && (
                     <div className="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
                         {products.map((product) => (
                             <div
@@ -162,7 +162,9 @@ export const CommerceDetailPage = () => {
                             </div>
                         ))}
                     </div>
-                ) : (
+                )}
+
+                {products?.length > 0 && (
                     <p className="text-[var(--color-burdeos-darker)] text-center mt-6">
                         No hay productos disponibles por el momento.
                     </p>

@@ -1,15 +1,14 @@
-import { useAuth } from "../core/auth/useAuth";
 import { useCart } from "../core/cart/useCart";
 
 export const CartButton = ({ product }) => {
     const { addItem, loading } = useCart();
-    const { user } = useAuth();
+    
 
     const handleAddToCart = async () => {
-        if (!user) {
-            alert("Debes iniciar sesión para añadir productos al carrito");
-            return;
-        }
+        // if (!user) {
+        //     alert("Debes iniciar sesión para añadir productos al carrito");
+        //     return;
+        // }
 
         if (!product?._id) {
             console.error("Producto no tiene ID válido");

@@ -38,6 +38,8 @@ export const App = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+          <Route path="/cart" element={<CartPage />} />
 
           <Route element={<PrivateRoute />}>
             <Route path="/admin" element={<AdminPage />} />
@@ -48,10 +50,9 @@ export const App = () => {
 
             <Route path="/user" element={<UserPage />} />
             <Route path="/user/edit" element={<EditUserPage />} />
-            <Route path="/favorites" element={<FavoritesPage />} />
+            
 
             <Route path="/commerce/new" element={<CreateCommercePage />} />
-            <Route path="/cart" element={<CartPage />} />
             <Route path="/orders" element={<OrdersPage />} />
 
           </Route>

@@ -59,42 +59,84 @@ export const NavBar = () => {
                         </Link>
                     ))}
 
-                    <div className="relative">
-                        {!user ? (
-                            <Link to="/login" className="flex items-center justify-center w-6 h-6">
-                                <img
-                                    src="/icons/login.png"
-                                    alt="Login"
-                                    className="w-full h-full object-contain"
-                                />
-                            </Link>
-                        ) : (
-                            <button
-                                onClick={() => setUserMenu(!userMenu)}
-                                className="flex items-center justify-center w-6 h-6"
-                            >
-                                <img
-                                    src="/icons/login.png"
-                                    alt="Usuario"
-                                    className="w-full h-full object-contain"
-                                />
-                            </button>
+                    {/* Iconos */}
+
+                    <div className="hidden md:flex items-center gap-6 relative">
+                        {!user && (
+                            <>
+                                <Link to="/login" className="flex items-center justify-center w-6 h-6">
+                                    <img
+                                        src="/icons/login.png"
+                                        alt="Login"
+                                        className="w-full h-full object-contain"
+                                    />
+                                </Link>
+                                
+
+                                <Link to="/cart" className="flex items-center justify-center w-6 h-6">
+                                    <img
+                                        src="/icons/cart_shopping.png"
+                                        alt="Cart"
+                                        className="w-full h-full object-contain"
+                                    />
+                                </Link>
+
+                                <Link to="/favorites" className="flex items-center justify-center w-6 h-6">
+                                    <img
+                                        src="/icons/favourite.png"
+                                        alt="Favorites"
+                                        className="w-full h-full object-contain"
+                                    />
+                                </Link>
+                            </>
                         )}
 
-                        {user && userMenu && (
-                            <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg z-50">
+                        {user && (
+                            <>
                                 <button
-                                    onClick={handleLogout}
-                                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                                >
-                                    Cerrar sesión
+                                    onClick={() => setUserMenu(!userMenu)}
+                                    className=" w-6 h-6">
+                                    <img
+                                        src={userMenu ? "/xmark-solid-full.svg" : "/icons/login.png"}
+                                        alt="Usuario"
+                                        className="w-full h-full object-contain"
+                                    />
                                 </button>
-                            </div>
+
+                                <Link to="/cart" className="flex items-center justify-center w-6 h-6">
+                                    <img
+                                        src="/icons/cart_shopping.png"
+                                        alt="Cesta"
+                                        className="w-full h-full object-contain"
+                                    />
+                                </Link>
+
+                                <Link to="/favorites" className="flex items-center justify-center w-6 h-6">
+                                    <img
+                                        src="/icons/favourite.png"
+                                        alt="Favoritos"
+                                        className="w-full h-full object-contain"
+                                    />
+                                </Link>
+
+
+                                {userMenu && (
+                                    <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg z-50">
+                                        <button
+                                            onClick={handleLogout}
+                                            className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                                        >
+                                            Cerrar sesión
+                                        </button>
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
                 </div>
 
 
+                {/* movil */}
                 <div className="flex items-center gap-4 md:hidden">
                     <button className="focus:outline-none" onClick={() => setOpen(!open)}>
                         <img
@@ -136,8 +178,16 @@ export const NavBar = () => {
                             Cerrar sesión
                         </button>
                     )}
+
+                    <Link to="/cart" onClick={() => setOpen(false)}>
+                        Cesta
+                    </Link>
+
+                    <Link to="/favorites" onClick={() => setOpen(false)}>
+                        Favoritos
+                    </Link>
                 </div>
             )}
-        </nav>
+        </nav >
     );
 };
