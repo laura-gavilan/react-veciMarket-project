@@ -68,7 +68,7 @@ export const CommercePage = () => {
     return (
         <div className="min-h-screen px-6 py-12 flex flex-col items-center max-w-7xl mx-auto">
             <h1 className="text-center mb-8 text-4xl md:text-5xl font-title font-bold text-primary-dark leading-tight">
-                Explora los <span className="text-accent">productos</span> y <span className="text-accent">comercios</span> de tu barrio
+                Explora los <span className="text-accent-primary">productos</span> y <span className="text-accent-primary">comercios</span> de tu barrio
             </h1>
 
             <div className="mb-8 w-full md:w-1/2 relative">
@@ -95,7 +95,7 @@ export const CommercePage = () => {
                         key={category}
                         onClick={() => { setSelectedCategory(category); setShowProducts(true); }}
                         className={`px-5 py-2 rounded-full font-semibold transition-all duration-300 ${selectedCategory === category
-                            ? "bg-accent text-primary-dark shadow-md scale-105"
+                            ? "bg-accent-primary text-primary-dark shadow-md scale-105"
                             : "bg-white text-primary-dark border border-primary-dark hover:bg-accent-light hover:scale-105"
                             }`}
                     >
@@ -113,13 +113,13 @@ export const CommercePage = () => {
             </div>
 
             {showProducts && selectedCategory && filteredProducts.length > 0 && (
-                <div className="w-full mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
                     {filteredProducts.map(product => {
                         const commerce = commerces.find(commerce => commerce._id === product.commerceId);
                         return (
                             <div
                                 key={product._id}
-                                className="group relative bg-white rounded-3xl shadow-xl overflow-hidden cursor-pointer p-5 flex flex-col items-center text-center hover:shadow-3xl hover:-translate-y-1 transition-all duration-300"
+                                className="group relative bg-white rounded-3xl shadow-xl overflow-hidden cursor-pointer p-5 flex flex-col justify-between text-center hover:shadow-3xl hover:-translate-y-1 transition-all duration-300 h-full"
                                 onClick={() => {
                                     setModalProduct(product);
                                     setModalCommerce(commerce);
@@ -144,7 +144,9 @@ export const CommercePage = () => {
                                     <p className="text-gray-500 text-sm mt-1 truncate">Comercio:{commerce.name}</p>
                                 )}
                                 <FavoriteButton product={product} />
-                                <CartButton product={product} />
+                                <div className="flex justify-center">
+                                    <CartButton product={product} small />
+                                </div>
                             </div>
                         );
                     })}

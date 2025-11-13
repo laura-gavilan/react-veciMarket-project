@@ -78,7 +78,7 @@ export const Login = () => {
 
                         <button
                             type="submit"
-                            className="mt-4 w-full py-3 rounded-full font-semibold text-white bg-gradient-to-r from-accent-primary to-primary-light)] shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300"
+                            className="mt-4 w-full py-3 rounded-full font-semibold text-white bg-accent-primary shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300"
                         >
                             Entrar
                         </button>

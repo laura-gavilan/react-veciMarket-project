@@ -54,7 +54,7 @@ p {
 }
 
 .btn-secondary {
-    @apply bg-primary-dark text-accent-primary-light font-semibold rounded-full px-6 py-3 shadow-md hover:bg-primary-light transition-all;
+    @apply bg-primary text-accent-primary-light font-semibold rounded-full px-6 py-3 shadow-md hover:bg-primary-light transition-all;
 }
 
 /* Fondos generales */

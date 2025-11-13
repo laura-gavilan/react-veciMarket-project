@@ -67,17 +67,5 @@ export const clearUserCartsFromLocalStorage = (userId) => {
     localStorage.removeItem(getCartKey(userId));
 };
 
-// 🔹 (Opcional) Fusionar carrito de invitado con el del usuario logueado
-export const mergeGuestCartWithUserCart = (userId) => {
-    if (!userId) return;
 
-    const guestCart = getCartsFromLocalStorage(null);
-    const userCart = getCartsFromLocalStorage(userId);
-
-    if (guestCart.length > 0) {
-        const merged = [...userCart, ...guestCart];
-        saveCartsInLocalStorage(userId, merged);
-        clearUserCartsFromLocalStorage(null); // Limpiar carrito del invitado
-    }
-};
 

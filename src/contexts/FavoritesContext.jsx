@@ -3,7 +3,6 @@ import {
     addFavoriteToLocalStorage,
     getFavoritesFromLocalStorage,
     saveFavoritesInLocalStorage,
-    deleteFavoriteFromLocalStorage,
 } from "../core/favorites/favorites.service";
 import { useAuth } from "../core/auth/useAuth";
 import { addFavoriteApi, deleteFavoritesApi, getFavoritesApi } from "../core/favorites/favorites.api";
@@ -16,6 +15,7 @@ export const FavoritesProvider = ({ children }) => {
     const [favorites, setFavorites] = useState([]);
     const userId = user?._id;
     const navigate = useNavigate();
+    const [toast, setToast] = useState(null);
 
     useEffect(() => {
         const loadFavorites = async () => {
@@ -39,10 +39,15 @@ export const FavoritesProvider = ({ children }) => {
         loadFavorites();
     }, [userId]);
 
+    const showToast = (message, duration = 2000) => {
+        setToast(message);
+        setTimeout(() => setToast(null), duration);
+    };
+
 
     const addFavorite = async (product) => {
         if (!userId) {
-            alert("Debes iniciar sesión para ver tu wishlist.");
+            showToast("Debes iniciar sesión para ver tu wishlist.");
             navigate("/login");
             return;
         }
@@ -56,8 +61,10 @@ export const FavoritesProvider = ({ children }) => {
             await addFavoriteApi(userId, product._id);
             setFavorites((prev) => [...prev, product]);
             addFavoriteToLocalStorage(userId, product);
+            showToast(`${product.name} añadido a favoritos`);
         } catch (error) {
             console.error("Error en addFavorite", error);
+            showToast("No se pudo añadir a favoritos");
         }
     };
 
@@ -71,14 +78,21 @@ export const FavoritesProvider = ({ children }) => {
             const newFavorites = favorites.filter((favorite) => favorite._id !== productId);
             setFavorites(newFavorites);
             saveFavoritesInLocalStorage(userId, newFavorites);
+            showToast("Favorito eliminado");
         } catch (error) {
             console.error("Error en deleteFavorite", error);
+            showToast("No se pudo eliminar el favorito");
         }
     };
 
     return (
         <FavoritesContext.Provider value={{ favorites, addFavorite, deleteFavorite }}>
             {children}
+            {toast && (
+                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50">
+                    {toast}
+                </div>
+            )}
         </FavoritesContext.Provider>
     );
 };

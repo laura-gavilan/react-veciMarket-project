@@ -10,6 +10,12 @@ export const CommerceProvider = ({ children }) => {
     const [commerces, setCommerces] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
+    const [toast, setToast] = useState(null);
+
+    const showToast = (message, duration = 3000) => {
+        setToast(message);
+        setTimeout(() => setToast(null), duration);
+    };
 
 
     const fetchCommerces = async () => {
@@ -58,7 +64,7 @@ export const CommerceProvider = ({ children }) => {
             deleteCommerceFromLocalStorage(commerceId);
         } catch (error) {
             console.error("Error eliminando comercio:", error);
-            alert("No se pudo eliminar el comercio.");
+            showToast("No se pudo eliminar el comercio.");
         }
     };
 
@@ -71,6 +77,11 @@ export const CommerceProvider = ({ children }) => {
             value={{ commerces, loading, search, setSearch, fetchCommerces, addCommerce, updateCommerce, deleteCommerce }}
         >
             {children}
+            {toast && (
+                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50 text-sm">
+                    {toast}
+                </div>
+            )}
         </CommerceContext.Provider>
     );
 };

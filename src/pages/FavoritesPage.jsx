@@ -7,7 +7,7 @@ export const FavoritesPage = () => {
 
     return (
         <div className="max-w-6xl mx-auto px-6 py-10">
-            <h1 className="text-3xl md:text-4xl font-title font-semibold mb-8 text-primary-dark text-center">
+            <h1 className="text-3xl md:text-4xl font-title font-semibold mb-8 text-primary text-center">
                 Mis productos favoritos
             </h1>
 

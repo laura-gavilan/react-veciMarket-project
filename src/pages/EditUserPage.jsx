@@ -17,9 +17,9 @@ export const EditUserPage = () => {
     });
 
     if (loading)
-        return <p className="text-center mt-10 text-[var(--color-burdeos-dark)] font-sans text-lg">Cargando usuario...</p>;
+        return <p className="text-center mt-10 text-primary-dark font-sans text-lg">Cargando usuario...</p>;
     if (!user)
-        return <p className="text-center mt-10 text-[var(--color-burdeos-dark)] font-sans text-lg">No hay usuario logueado.</p>;
+        return <p className="text-center mt-10 text-primary-dark  font-sans text-lg">No hay usuario logueado.</p>;
 
     const handleChange = (event) => {
         setForm({ ...form, [event.target.name]: event.target.value });
@@ -68,7 +68,10 @@ export const EditUserPage = () => {
                 ))}
 
                 <div className="md:col-span-2 flex flex-col sm:flex-row gap-4 mt-6 justify-center">
-                    <button type="submit" className="btn-primary flex-1 w-full">Guardar Cambios</button>
+                    <button type="submit" 
+                    className="px-6 py-2 text-sm rounded-full btn-primary mt-8"
+                    >Guardar Cambios
+                    </button>
                 </div>
             </form>
         </div>

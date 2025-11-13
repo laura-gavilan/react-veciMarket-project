@@ -5,6 +5,12 @@ import { api } from "../core/http/axios";
 export const EditCommercePage = () => {
     const { commerceId } = useParams();
     const navigate = useNavigate();
+    const [toast, setToast] = useState(null);
+
+    const showToast = (message, duration = 3000) => {
+        setToast(message);
+        setTimeout(() => setToast(null), duration);
+    };
 
     const [form, setForm] = useState({
         name: "",
@@ -44,11 +50,11 @@ export const EditCommercePage = () => {
         event.preventDefault();
         try {
             await api.patch(`/commerces/${commerceId}`, form);
-            alert("Comercio actualizado correctamente");
+            showToast("Comercio actualizado correctamente");
             navigate(`/admin/commerce/${commerceId}`);
         } catch (error) {
             console.error("Error actualizando comercio:", error);
-            alert("No se pudo actualizar el comercio");
+            showToast("No se pudo actualizar el comercio");
         }
     };
 
@@ -196,6 +202,13 @@ export const EditCommercePage = () => {
                     </button>
                 </form>
             </div>
+
+
+            {toast && (
+                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50 text-sm">
+                    {toast}
+                </div>
+            )}
         </div>
     );
 };

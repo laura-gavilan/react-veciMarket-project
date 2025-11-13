@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext.jsx";
 import { useOrdersContext } from "../contexts/OrdersContext.jsx";
 import { useAuth } from "../core/auth/useAuth.jsx";
+import { useState } from "react";
 
 
 export const CartPage = () => {
@@ -15,6 +16,12 @@ export const CartPage = () => {
     const { addOrder } = useOrdersContext();
     const navigate = useNavigate();
     const { user } = useAuth();
+    const [toast, setToast] = useState(null);
+
+    const showToast = (message, duration = 3000) => {
+        setToast(message);
+        setTimeout(() => setToast(null), duration);
+    };
 
 
     if (!cart || !cart.items || cart.items.length === 0) {
@@ -33,12 +40,12 @@ export const CartPage = () => {
 
     const handleCheckout = async () => {
         if (!cart.items || cart.items.length === 0) {
-            alert("Tu carrito está vacío.");
+            showToast("Tu carrito está vacío.");
             return;
         }
 
         if (!user?._id) {
-            alert("Debes iniciar sesión para finalizar la compra y ver tu pedido.");
+            showToast("Debes iniciar sesión para finalizar la compra y ver tu pedido.");
             navigate("/login");
             return;
         }
@@ -46,21 +53,21 @@ export const CartPage = () => {
         try {
             const newOrder = await checkout();
             if (newOrder) {
-                alert("✅ Compra realizada correctamente");
+                showToast("✅ Compra realizada correctamente");
                 navigate("/orders");
             } else {
-                alert("Ocurrió un error al finalizar la compra.");
+                showToast("Ocurrió un error al finalizar la compra.");
             }
         } catch (error) {
             console.error("Error al finalizar compra:", error);
-            alert("Ocurrió un error al finalizar la compra.");
+            showToast("Ocurrió un error al finalizar la compra.");
         }
     };
 
 
     return (
         <div className="max-w-4xl mx-auto p-8">
-            <h2 className="text-3xl font-semibold mb-6 text-center text-primary-dark">Tu cesta de la compra</h2>
+            <h2 className="text-3xl font-semibold mb-6 text-center text-primary">Mi cesta de la compra</h2>
 
             {loading && <p className="text-center text-primary-dark">Cargando...</p>}
 
@@ -92,7 +99,7 @@ export const CartPage = () => {
                         <div className="flex flex-col items-center gap-2 mt-4 md:mt-0">
                             <div className="flex items-center gap-2">
                                 <button
-                                    className="px-3 py-1 bg-primary-light rounded-lg"
+                                    className="px-3 py-1 rounded-lg"
                                     onClick={() =>
                                         updateItem(item.productId._id, item.qty - 1)
                                     }
@@ -102,7 +109,7 @@ export const CartPage = () => {
                                 </button>
                                 <span className="text-lg font-semibold">{item.qty}</span>
                                 <button
-                                    className="px-3 py-1 bg-primary-light rounded-lg"
+                                    className="px-3 py-1 rounded-lg"
                                     onClick={() =>
                                         updateItem(item.productId._id, item.qty + 1)
                                     }
@@ -136,6 +143,11 @@ export const CartPage = () => {
                 </div>
             </div>
 
+            {toast && (
+                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50 text-sm">
+                    {toast}
+                </div>
+            )}
         </div>
     );
 };

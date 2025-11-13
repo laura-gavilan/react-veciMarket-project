@@ -5,6 +5,7 @@ import { api } from "../core/http/axios";
 export const CreateProductPage = () => {
     const { commerceId } = useParams();
     const navigate = useNavigate();
+    const [toast, setToast] = useState(null);
 
     const [form, setForm] = useState({
         name: "",
@@ -16,6 +17,12 @@ export const CreateProductPage = () => {
     });
 
     const [errors, setErrors] = useState(null);
+
+    const showToast = (message, duration = 3000) => {
+        setToast(message);
+        setTimeout(() => setToast(null), duration);
+    };
+
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -40,7 +47,7 @@ export const CreateProductPage = () => {
             };
 
             await api.post("/products", payload);
-            alert("Producto creado correctamente");
+            showToast("Producto creado correctamente");
             navigate(`/admin/commerce/${commerceId}`);
         } catch (error) {
             console.error("Error creando producto:", error);
@@ -159,6 +166,12 @@ export const CreateProductPage = () => {
                     </button>
                 </form>
             </div>
+
+            {toast && (
+                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50 text-sm">
+                    {toast}
+                </div>
+            )}
         </div >
     );
 };

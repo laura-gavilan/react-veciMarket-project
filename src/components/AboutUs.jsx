@@ -2,7 +2,7 @@ export const AboutUs = () => {
     return (
         <div className="min-h-[calc(100vh-80px)] text-primary-dark flex flex-col items-center px-6 py-20">
 
-            <h1 className="text-3xl md:text-5xl font-title font-semibold mb-6 text-center">
+            <h1 className="text-xl md:text-5xl font-title font-semibold mb-6 text-center">
                 Quiénes somos
     
             </h1>
@@ -28,7 +28,7 @@ export const AboutUs = () => {
             </div>
 
             <h2 className="text-3xl md:text-5xl font-title font-semibold tracking-wide mb-6 text-center">
-                <span className="text-3xl md:text-5xl font-title font-semibold mb-6 text-center">
+                <span className="text-primary-dark text-3xl md:text-5xl font-title font-semibold mb-6 text-center">
                     VeciMarket
                 </span>
             </h2>

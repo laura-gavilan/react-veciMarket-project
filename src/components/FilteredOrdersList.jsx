@@ -10,15 +10,15 @@ export const FilteredOrders = ({
     updateOrderStatus,
     deleteOrder,
     canEdit = false,
-    user 
+    user
 }) => {
 
     const isAdmin = user?.role === "admin";
 
     const visibleOrders = filteredOrders.filter(order => {
-        if (isAdmin) return true; 
-        if (user?._id) return order.userId === user._id; 
-        return false; 
+        if (isAdmin) return true;
+        if (user?._id) return order.userId === user._id;
+        return false;
     });
 
     return (
@@ -64,7 +64,7 @@ export const FilteredOrders = ({
                                         <div className="flex justify-center mt-2">
                                             <button
                                                 onClick={() => saveNotes(order._id)}
-                                                className="mt-1 btn-primary"
+                                                className="px-3 py-1 text-xs rounded-full btn-primary"
                                             >
                                                 Guardar
                                             </button>
@@ -115,10 +115,10 @@ export const FilteredOrders = ({
                                             return <option key={status.value} value={status.value}>{status.label}</option>
                                         })}
                                     </select>
-                                    <div className="flex justify-center mt-2">
+                                    <div className="flex justify-center mt-1">
                                         <button
                                             onClick={() => deleteOrder(order._id)}
-                                            className="btn-secondary w-8 px-2 py-1 text-sm"
+                                            className="bg-red-500 text-white rounded px-2 py-1 text-xs hover:bg-red-600 transition-colors"
                                         >
                                             X
                                         </button>

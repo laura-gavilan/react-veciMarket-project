@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
 import { useEffect, useState } from "react";
+import { CartButton } from "../components/CartButton";
 
 export const Home = () => {
     const { commerces } = useCommerce();
@@ -61,7 +62,7 @@ export const Home = () => {
 
 
             <section className="py-16 px-6 text-center">
-                <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-primary-dark">
+                <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-primary">
                     Categorías destacadas
                 </h2>
                 <div className="flex flex-wrap justify-center gap-4">
@@ -69,7 +70,7 @@ export const Home = () => {
                         <Link
                             key={category}
                             to={`/commerce?category=${category.toLowerCase()}`}
-                            className="px-6 py-3 bg-[var(--color-mostaza)] text-primary-dark font-semibold rounded-full shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300"
+                            className="px-6 py-3 bg-accent-primary text-primary-dark font-semibold rounded-full shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300"
                         >
                             {category}
                         </Link>
@@ -84,13 +85,13 @@ export const Home = () => {
 
 
             <section className="py-16 px-6 max-auto mx-auto bg-gray-warm">
-                <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-primary-dark text-center">
+                <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-primary text-center">
                     Comercios destacados
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
                     {featuredCommerces.map(commerce => (
                         <Link key={commerce._id} to={`/commerce/${commerce._id}`} className="block group">
-                            <div className="bg-white rounded-3xl shadow-xl border border-primary-light overflow-hidden transition-transform duration-300 hover:shadow-2xl hover:-translate-y-1">
+                            <div className="bg-white rounded-2xl shadow-md border border-primary-light overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1 h-full flex flex-col">
                                 {commerce.image && (
                                     <img
                                         src={commerce.image}
@@ -119,15 +120,15 @@ export const Home = () => {
 
 
             <section className="py-16 px-6 max-w-7xl mx-auto">
-                <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-primary-dark  text-center">
+                <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-primary  text-center">
                     Productos destacados
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
                     {featuredProducts.map(product => (
                         <Link key={product._id} to={`/commerce/${product.commerceId}`} className="block group">
-                            <div className="bg-white rounded-3xl shadow-xl border border-primary-light overflow-hidden transition-transform duration-300 hover:shadow-2xl hover:-translate-y-1">
+                            <div className="bg-white rounded-2xl shadow-md border border-primary-light overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between h-full">
                                 {product.images?.[0] && (
-                                    <div className="w-full h-34 overflow-hidden">
+                                    <div className="w-full h-[120px]  overflow-hidden">
                                         <img
                                             src={product.images[0]}
                                             alt={product.name}
@@ -143,6 +144,10 @@ export const Home = () => {
                                         {product.price.toFixed(2)} €
                                     </p>
                                 </div>
+                                
+                                <div className="flex justify-center pb-3">
+                                    <CartButton product={product} small />
+                                </div>
                             </div>
                         </Link>
                     ))}
@@ -156,7 +161,7 @@ export const Home = () => {
 
 
             <section className="py-16 px-6 max-w-7xl mx-auto text-center">
-                <h2 className="text-3xl md:text-4xl font-title font-semibold mb-6 text-primary-dark">
+                <h2 className="text-3xl md:text-4xl font-title font-semibold mb-6 text-primary">
                     Ubicación de los comercios
                 </h2>
                 <div className="w-full h-96 md:h-[500px] rounded-3xl overflow-hidden shadow-xl">

@@ -21,7 +21,7 @@ export const UserPage = () => {
 
     return (
         <div className="max-w-2xl mx-auto mt-10 p-8 bg-white rounded-3xl shadow-xl border border-primary-light">
-            <h1 className="text-2xl md:text-3xl font-title font-semibold mb-6 text-primary-dark text-center">
+            <h1 className="text-2xl md:text-3xl font-title font-semibold mb-6 text-primary text-center">
                 Perfil de {user.name}
             </h1>
 

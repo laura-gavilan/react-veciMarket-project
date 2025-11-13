@@ -24,6 +24,7 @@ import { useOrdersContext } from "./OrdersContext.jsx";
 export const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
+
 export const CartProvider = ({ children }) => {
     const { user } = useAuth();
     const userId = user?._id;
@@ -31,9 +32,16 @@ export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState(null);
     const [loading, setLoading] = useState(true);
     const { addOrder } = useOrdersContext();
+    const [toast, setToast] = useState(null);
 
     const fetchCart = async () => {
         setLoading(true);
+
+        const showToast = (message, duration = 3000) => {
+            setToast(message);
+            setTimeout(() => setToast(null), duration);
+        };
+
 
         if (!userId) {
             let guestCart = getCartsFromLocalStorage("guest");
@@ -53,7 +61,6 @@ export const CartProvider = ({ children }) => {
             return;
         }
         try {
-            // Fusionar carrito guest con usuario logueado
             mergeGuestCartWithUserCart(userId);
 
             const carts = await getCartsApi(userId);
@@ -197,7 +204,7 @@ export const CartProvider = ({ children }) => {
                 updatedAt: new Date().toISOString()
             }));
             saveCartsInLocalStorage("guest", [{ ...cart, items: [], status: "ordered", updatedAt: new Date().toISOString() }]);
-            alert("✅ Compra realizada como invitado. Para ver el estado de tu pedido debes registrarte o iniciar sesión.");
+            showToast("✅ Compra realizada como invitado. Para ver el estado de tu pedido debes registrarte o iniciar sesión.");
             return newOrder;
         }
     };
@@ -212,6 +219,11 @@ export const CartProvider = ({ children }) => {
     return (
         <CartContext.Provider value={{ cart, loading, fetchCart, addItem, updateItem, removeItem, clearCart, checkout }}>
             {children}
+            {toast && (
+                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50 text-sm">
+                    {toast}
+                </div>
+            )}
         </CartContext.Provider>
     );
 };

@@ -35,7 +35,7 @@ export const AdminPage = () => {
     );
 
     return (
-        <div className="min-h-screen bg-neutral-warm py-12 px-6 flex flex-col gap-12">
+        <div className="min-h-screen bg-neutral-warm py-12 px-6 flex flex-col gap-6">
             <h1 className="text-4xl md:text-5xl font-extrabold text-primary-dark text-center">
                 Tus Comercios
             </h1>

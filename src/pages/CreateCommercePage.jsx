@@ -9,6 +9,13 @@ export const CreateCommercePage = () => {
     const { addCommerce } = useCommerce();
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [toast, setToast] = useState(null);
+
+    const showToast = (message, duration = 3000) => {
+        setToast(message);
+        setTimeout(() => setToast(null), duration);
+    };
+
 
     const [form, setForm] = useState({
         name: "",
@@ -51,7 +58,7 @@ export const CreateCommercePage = () => {
             navigate("/commerce");
         } catch (error) {
             console.error("Error al crear comercio:", error);
-            alert("No se pudo crear el comercio. Revisa los datos.");
+            showToast("No se pudo crear el comercio. Revisa los datos.");
         }
     };
 
@@ -148,13 +155,21 @@ export const CreateCommercePage = () => {
 
                     <button
                         type="submit"
-                        className="flex-1 bg-primary text-accent py-3 rounded-2xl font-semibold shadow-md hover:bg-primary-light hover:scale-105 transition-all"
+                        className="px-4 py-2 bg-accent-primary text-primary-dark rounded-2xl font-semibold shadow-md hover:bg-primary-light hover:text-accent transition-all"
                     >
                         Crear Comercio
                     </button>
                 </form>
             </div>
+
+            {toast && (
+                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50 text-sm">
+                    {toast}
+                </div>
+            )}
         </div>
+
+
     );
 };
 

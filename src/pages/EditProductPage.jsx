@@ -8,6 +8,12 @@ export const EditProductPage = () => {
     const { commerceId, productId } = useParams();
     const navigate = useNavigate();
     const { updateProduct } = useProduct();
+    const [toast, setToast] = useState(null);
+
+    const showToast = (message, duration = 3000) => {
+        setToast(message);
+        setTimeout(() => setToast(null), duration);
+    };
 
 
     const [form, setForm] = useState({
@@ -35,12 +41,12 @@ export const EditProductPage = () => {
                     });
                     setCurrentImage(product.images?.[0] || "");
                 } else {
-                    alert("Producto no encontrado");
+                    showToast("Producto no encontrado");
                     navigate(-1);
                 }
             } catch (error) {
                 console.error("Error al cargar producto:", error);
-                alert("No se pudo cargar el producto");
+                showToast("No se pudo cargar el producto");
                 navigate(-1);
             }
         };
@@ -71,7 +77,7 @@ export const EditProductPage = () => {
         e.preventDefault();
         const priceValue = parseFloat(form.price);
         if (isNaN(priceValue) || priceValue < 0) {
-            alert("Introduce un precio válido");
+            showToast("Introduce un precio válido");
             return;
         }
 
@@ -105,7 +111,7 @@ export const EditProductPage = () => {
             };
             updateProduct(productId, updatedProduct);
 
-            alert("Producto actualizado correctamente");
+            showToast("Producto actualizado correctamente");
             navigate(`/admin/commerce/${commerceId}`);
         } catch (error) {
             console.error("Error al actualizar producto:", error);
@@ -192,7 +198,7 @@ export const EditProductPage = () => {
 
                     <div className="flex gap-4 mt-6">
                         <button type="submit"
-                            className="flex-1 bg-primary-dark text-accent py-3 rounded-2xl font-semibold shadow-md hover:bg-primary-light hover:scale-105 transition-all"
+                            className="flex-1 bg-accent-primary text-accent py-3 rounded-2xl font-semibold shadow-md hover:bg-primary-light hover:scale-105 transition-all"
                         >
                             Guardar Cambios
                         </button>
@@ -200,13 +206,20 @@ export const EditProductPage = () => {
                         <button
                             type="button"
                             onClick={() => navigate(-1)}
-                            className="flex-1 bg-primary-light text-primary-dark py-3 rounded-2xl font-semibold shadow-md hover:bg-primary-dark hover:text-accent transition-all"
+                            className="flex-1 bg-primary-light text-primary-dark py-3  rounded-2xl font-semibold shadow-md hover:bg-primary hover:text-accent transition-all"
                         >
                             Cancelar
                         </button>
                     </div>
                 </form>
             </div>
+
+
+            {toast && (
+                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50 text-sm">
+                    {toast}
+                </div>
+            )}
         </div>
     );
 };

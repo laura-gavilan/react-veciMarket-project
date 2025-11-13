@@ -78,16 +78,16 @@ export const Category = ({ products, refreshProducts, ownerId, commerceId }) => 
                                     </div>
 
                                     {isOwner && (
-                                        <div className="flex gap-3 mt-3">
+                                        <div className="flex gap-3 mt-3 justify-center">
                                             <button
                                                 onClick={() => navigate(`/admin/commerce/${commerceId}/edit/${product._id}`)}
-                                                className="flex-1 btn-primary"
+                                                className="px-3 py-1 text-sm rounded-lg btn-primary hover:scale-105 transition-transform"
                                             >
                                                 Editar
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(product._id)}
-                                                className="flex-1 bg-red-600 text-white py-2 rounded-xl font-medium hover:bg-red-700 hover:scale-105 transition-all shadow-sm hover:shadow-md"
+                                                className="px-3 py-1 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700 hover:scale-105 transition-transform"
                                             >
                                                 Eliminar
                                             </button>
