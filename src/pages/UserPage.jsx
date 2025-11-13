@@ -5,9 +5,9 @@ export const UserPage = () => {
     const { user, deleteUser, loading } = useUser();
 
     if (loading)
-        return <p className="text-center mt-8 text-[var(--color-burdeos-dark)] font-sans">Cargando usuario...</p>;
+        return <p className="text-center mt-8 text-primary-dark font-sans">Cargando usuario...</p>;
     if (!user)
-        return <p className="text-center mt-8 text-[var(--color-burdeos-dark)] font-sans">No hay usuario logueado.</p>;
+        return <p className="text-center mt-8 text-primary-dark font-sans">No hay usuario logueado.</p>;
 
     const handleDelete = async () => {
         const confirmDelete = window.confirm(
@@ -20,12 +20,12 @@ export const UserPage = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto mt-10 p-8 bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)]">
-            <h1 className="text-2xl md:text-3xl font-title font-semibold mb-6 text-[var(--color-burdeos-dark)] text-center">
+        <div className="max-w-2xl mx-auto mt-10 p-8 bg-white rounded-3xl shadow-xl border border-primary-light">
+            <h1 className="text-2xl md:text-3xl font-title font-semibold mb-6 text-primary-dark text-center">
                 Perfil de {user.name}
             </h1>
 
-            <div className="space-y-3 text-[var(--color-burdeos-darker)] font-sans">
+            <div className="space-y-3 text-primary-dark font-sans">
                 <p><strong>Nombre de usuario:</strong> {user.username}</p>
                 <p><strong>Nombre:</strong> {user.name}</p>
                 <p><strong>Primer Apellido:</strong> {user.firstName}</p>

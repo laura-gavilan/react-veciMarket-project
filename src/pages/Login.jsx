@@ -52,14 +52,14 @@ export const Login = () => {
         <Container className="flex items-center justify-center min-h-[70vh]">
             <div className="flex items-center justify-center min-h-screen w-full px-6 bg-gradient-to-b from-gray-50 via-gray-100 to-white">
                 <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-10">
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-10 text-[var(--color-burdeos-dark)]">
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-10 text-primary-dark">
                         Inicia sesión
                     </h2>
 
                     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                         {LOGIN.map(({ input }) => (
                             <div key={input.name} className="flex flex-col text-left">
-                                <label className="text-sm font-semibold mb-1 text-[var(--color-burdeos-dark)]">
+                                <label className="text-sm font-semibold mb-1 text-primary-dark">
                                     {input.label}
                                 </label>
                                 <input
@@ -69,7 +69,7 @@ export const Login = () => {
                                     value={form[input.name]}
                                     onChange={handleChange}
                                     required={input.required}
-                                    className="w-full px-4 py-3 border rounded-xl border-[var(--color-burdeos-light)] focus:outline-none focus:ring-2 focus:ring-gradient-burdeos-mostaza transition-all duration-300"
+                                    className="w-full px-4 py-3 border rounded-xl border-primary-light focus:outline-none focus:ring-2 focus:ring-gradient-burdeos-mostaza transition-all duration-300"
                                 />
                             </div>
                         ))}
@@ -78,15 +78,15 @@ export const Login = () => {
 
                         <button
                             type="submit"
-                            className="mt-4 w-full py-3 rounded-full font-semibold text-white bg-gradient-to-r from-[var(--color-mostaza)] to-[var(--color-burdeos-light)] shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300"
+                            className="mt-4 w-full py-3 rounded-full font-semibold text-white bg-gradient-to-r from-accent-primary to-primary-light)] shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300"
                         >
                             Entrar
                         </button>
                     </form>
 
-                    <p className="text-center text-sm mt-6 text-[var(--color-burdeos-darker)]">
+                    <p className="text-center text-sm mt-6 text-primary-dark">
                         ¿No tienes cuenta?{" "}
-                        <a href="/register" className="text-[var(--color-burdeos-light)] font-semibold hover:underline">
+                        <a href="/register" className="text-primary-light font-semibold hover:underline">
                             Regístrate
                         </a>
                     </p>

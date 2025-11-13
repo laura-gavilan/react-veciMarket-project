@@ -3,9 +3,11 @@ import {
     addFavoriteToLocalStorage,
     getFavoritesFromLocalStorage,
     saveFavoritesInLocalStorage,
+    deleteFavoriteFromLocalStorage,
 } from "../core/favorites/favorites.service";
 import { useAuth } from "../core/auth/useAuth";
 import { addFavoriteApi, deleteFavoritesApi, getFavoritesApi } from "../core/favorites/favorites.api";
+import { useNavigate } from "react-router-dom";
 
 export const FavoritesContext = createContext(null);
 
@@ -13,29 +15,21 @@ export const FavoritesProvider = ({ children }) => {
     const { user } = useAuth();
     const [favorites, setFavorites] = useState([]);
     const userId = user?._id;
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadFavorites = async () => {
             try {
                 if (!userId) {
-                    const localFavs = getFavoritesFromLocalStorage(null);
-                    setFavorites(localFavs);
+                    setFavorites([]);
                     return;
                 }
 
 
                 const data = await getFavoritesApi(userId);
                 const serverFavs = Array.isArray(data.favoritos) ? data.favoritos : [];
-                const guestFavs = getFavoritesFromLocalStorage(null);
-
-                const merged = [
-                    ...serverFavs,
-                    ...guestFavs.filter(guest => !serverFavs.some(server => server._id === guest._id)),
-                ];
-
-                setFavorites(merged);
-                saveFavoritesInLocalStorage(userId, merged);
-                saveFavoritesInLocalStorage(null, []);
+                setFavorites(serverFavs);
+                saveFavoritesInLocalStorage(userId, serverFavs);
             } catch (error) {
                 console.error("Error cargando favoritos desde API", error);
                 const localFavs = getFavoritesFromLocalStorage(userId);
@@ -45,15 +39,16 @@ export const FavoritesProvider = ({ children }) => {
         loadFavorites();
     }, [userId]);
 
+
     const addFavorite = async (product) => {
-        if (!product?._id) {
-            console.error("Producto inválido", product);
+        if (!userId) {
+            alert("Debes iniciar sesión para ver tu wishlist.");
+            navigate("/login");
             return;
         }
 
-        if (!userId) {
-            addFavoriteToLocalStorage(null, product);
-            setFavorites(prev => [...prev, product]);
+        if (!product?._id) {
+            console.error("Producto inválido", product);
             return;
         }
 
@@ -68,8 +63,6 @@ export const FavoritesProvider = ({ children }) => {
 
     const deleteFavorite = async (productId) => {
         if (!userId) {
-            deleteFavoriteFromLocalStorage(null, productId);
-            setFavorites(prev => prev.filter(f => f._id !== productId));
             return;
         }
 

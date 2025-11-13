@@ -55,7 +55,7 @@ export const CommerceDetailPage = () => {
 
     if (loading || !selectedCommerce) {
         return (
-            <div className="flex items-center justify-center min-h-screen text-[var(--color-burdeos-light)]">
+            <div className="flex items-center justify-center min-h-screen text-primary-dark">
                 <h1 className="text-2xl font-semibold animate-pulse">
                     Cargando comercio...
                 </h1>
@@ -66,15 +66,15 @@ export const CommerceDetailPage = () => {
     const { name, description, address, products } = selectedCommerce;
 
     return (
-        <div className="min-h-screen bg-[var(--color-gray-warm)] py-12 px-6 flex flex-col gap-14">
+        <div className="min-h-screen bg-gray-warm py-12 px-6 flex flex-col gap-14">
             <button
                 onClick={() => navigate(-1)}
-                className="self-start px-6 py-2 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] rounded-full shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all font-semibold"
+                className="self-start px-6 py-2 bg-primary-dark text-primary-light rounded-full shadow-md hover:bg-primary-light hover:scale-105 transition-all font-semibold"
             >
                 ← Volver
             </button>
 
-            <div className="bg-white rounded-3xl shadow-lg p-10 flex flex-col md:flex-row gap-6 border border-[var(--color-burdeos-light)] hover:shadow-2xl transition-all duration-300">
+            <div className="bg-white rounded-3xl shadow-lg p-10 flex flex-col md:flex-row gap-6 border border-primary-light hover:shadow-2xl transition-all duration-300">
                 {(selectedCommerce.image || selectedCommerce.images?.[0]) && (
                     <img
                         src={
@@ -91,7 +91,7 @@ export const CommerceDetailPage = () => {
 
                 <div className="flex-1 flex flex-col justify-between">
                     <div className="space-y-4">
-                        <h1 className="text-4xl md:text-5xl font-extrabold text-[var(--color-burdeos-dark)]">
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-primary-dark">
                             {name}
                         </h1>
                         <p className="text-[var(--color-burdeos-darker)] text-lg leading-relaxed">
@@ -99,19 +99,19 @@ export const CommerceDetailPage = () => {
                         </p>
                     </div>
 
-                    <div className="grid sm:grid-cols-2 gap-4 text-[var(--color-burdeos-darker)] mt-8 text-sm md:text-base">
-                        <p><span className="font-semibold text-[var(--color-burdeos-dark)]">📍 Calle:</span> {address.street}</p>
-                        <p><span className="font-semibold text-[var(--color-burdeos-dark)]">🏙️ Ciudad:</span> {address.city}</p>
-                        <p><span className="font-semibold text-[var(--color-burdeos-dark)]">📞 Teléfono:</span> {address.phone}</p>
-                        <p><span className="font-semibold text-[var(--color-burdeos-dark)]">📧 Email:</span> {address.email}</p>
-                        <p className="sm:col-span-2"><span className="font-semibold text-[var(--color-burdeos-dark)]">🕒 Horario:</span> {address.schedule}</p>
+                    <div className="grid sm:grid-cols-2 gap-4 text-primary-dark mt-8 text-sm md:text-base">
+                        <p><span className="font-semibold text-primary-dark">📍 Calle:</span> {address.street}</p>
+                        <p><span className="font-semibold text-primary-dark">🏙️ Ciudad:</span> {address.city}</p>
+                        <p><span className="font-semibold text-primary-dark">📞 Teléfono:</span> {address.phone}</p>
+                        <p><span className="font-semibold text-primary-dark">📧 Email:</span> {address.email}</p>
+                        <p className="sm:col-span-2"><span className="font-semibold text-primary-dark">🕒 Horario:</span> {address.schedule}</p>
                     </div>
                 </div>
             </div>
 
-            <div className="bg-white rounded-3xl shadow-lg p-10 border border-[var(--color-burdeos-light)]">
+            <div className="bg-white rounded-3xl shadow-lg p-10 border border-primary-light">
                 <div className="flex justify-between items-center mb-8">
-                    <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] border-b-2 border-[var(--color-burdeos-light)] pb-2">
+                    <h2 className="text-3xl md:text-4xl font-bold text-primary-dark border-b-2 border-primary-light pb-2">
                         Productos
                     </h2>
                 </div>
@@ -121,7 +121,7 @@ export const CommerceDetailPage = () => {
                         {products.map((product) => (
                             <div
                                 key={product._id}
-                                className="group bg-white rounded-2xl shadow-md border border-[var(--color-burdeos-light)] overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
+                                className="group bg-white rounded-2xl shadow-md border border-primary-light overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col cursor-pointer"
                                 onClick={() => {
                                     setModalProduct(product);
                                 }}
@@ -144,10 +144,10 @@ export const CommerceDetailPage = () => {
 
                                 <div className="p-4 flex flex-col justify-between flex-1">
                                     <div>
-                                        <h3 className="text-base font-semibold text-[var(--color-burdeos-dark)] truncate">
+                                        <h3 className="text-base font-semibold text-primary-dark truncate">
                                             {product.name}
                                         </h3>
-                                        <p className="text-[var(--color-burdeos-light)] font-bold mt-1 text-sm">
+                                        <p className="text-primary-light font-bold mt-1 text-sm">
                                             {product.price.toFixed(2)} €
                                         </p>
                                     </div>
@@ -165,7 +165,7 @@ export const CommerceDetailPage = () => {
                 )}
 
                 {products?.length > 0 && (
-                    <p className="text-[var(--color-burdeos-darker)] text-center mt-6">
+                    <p className="text-primary-dark text-center mt-6">
                         No hay productos disponibles por el momento.
                     </p>
                 )}
@@ -179,7 +179,7 @@ export const CommerceDetailPage = () => {
 
             {(address?.mapUrl || (address?.street && address?.city)) && (
                 <section className="py-10 px-6 w-full max-w-5xl mx-auto text-center">
-                    <h2 className="text-3xl md:text-4xl font-semibold mb-8 text-[var(--color-burdeos-dark)] border-b-2 border-[var(--color-burdeos-light)] inline-block pb-1">
+                    <h2 className="text-3xl md:text-4xl font-semibold mb-8 text-primary-dark border-b-2 border-primary-light inline-block pb-1">
                         Ubicación del comercio
                     </h2>
 

@@ -67,8 +67,8 @@ export const CommercePage = () => {
 
     return (
         <div className="min-h-screen px-6 py-12 flex flex-col items-center max-w-7xl mx-auto">
-            <h1 className="text-center mb-8 text-4xl md:text-5xl font-title font-bold text-[var(--color-burdeos-dark)] leading-tight">
-                Explora los <span className="text-[var(--color-mostaza)]">productos</span> y <span className="text-[var(--color-mostaza)]">comercios</span> de tu barrio
+            <h1 className="text-center mb-8 text-4xl md:text-5xl font-title font-bold text-primary-dark leading-tight">
+                Explora los <span className="text-accent">productos</span> y <span className="text-accent">comercios</span> de tu barrio
             </h1>
 
             <div className="mb-8 w-full md:w-1/2 relative">
@@ -77,12 +77,12 @@ export const CommercePage = () => {
                     placeholder="Buscar producto..."
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
-                    className="w-full px-5 py-3 rounded-full border border-[var(--color-burdeos-dark)] bg-white text-[var(--color-burdeos-dark)] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] shadow-sm transition-all duration-300"
+                    className="w-full px-5 py-3 rounded-full border border-primary-dark bg-white text-primary-dark placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-accent shadow-sm transition-all duration-300"
                 />
                 {search && (
                     <button
                         onClick={() => setSearch("")}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[var(--color-burdeos-dark)] transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary-dark transition-colors"
                     >
                         ✕
                     </button>
@@ -95,8 +95,8 @@ export const CommercePage = () => {
                         key={category}
                         onClick={() => { setSelectedCategory(category); setShowProducts(true); }}
                         className={`px-5 py-2 rounded-full font-semibold transition-all duration-300 ${selectedCategory === category
-                            ? "bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] shadow-md scale-105"
-                            : "bg-white text-[var(--color-burdeos-dark)] border border-[var(--color-burdeos-dark)] hover:bg-[var(--color-mostaza-pastel)] hover:scale-105"
+                            ? "bg-accent text-primary-dark shadow-md scale-105"
+                            : "bg-white text-primary-dark border border-primary-dark hover:bg-accent-light hover:scale-105"
                             }`}
                     >
                         {categoryNames[category]}
@@ -134,10 +134,10 @@ export const CommercePage = () => {
                                         />
                                     )}
                                 </div>
-                                <h3 className="text-lg md:text-xl font-title font-semibold text-[var(--color-burdeos-dark)] mt-2">
+                                <h3 className="text-lg md:text-xl font-title font-semibold text-primary-dark mt-2">
                                     {product.name}
                                 </h3>
-                                <p className="text-[var(--color-burdeos-darker)] mt-1 font-medium">
+                                <p className="text-primary-dark mt-1 font-medium">
                                     {product.price} €
                                 </p>
                                 {commerce && (
@@ -158,7 +158,7 @@ export const CommercePage = () => {
             )}
 
             <div className="w-full mt-12">
-                <h2 className="text-2xl font-title font-bold text-[var(--color-burdeos-dark)] mb-6">
+                <h2 className="text-2xl font-title font-bold text-primary-dark mb-6">
                     Comercios
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -166,7 +166,7 @@ export const CommercePage = () => {
                         filteredCommerces.map(commerce => (
                             <div
                                 key={commerce._id}
-                                className="group bg-white rounded-3xl shadow-xl p-6 border border-[var(--color-burdeos-light)] overflow-hidden cursor-pointer hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                                className="group bg-white rounded-3xl shadow-xl p-6 border border-primary-light overflow-hidden cursor-pointer hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
                                 onClick={() => navigate(`/commerce/${commerce._id}`)}
                             >
                                 {(commerce.image || commerce.images?.[0]) && (
@@ -178,10 +178,10 @@ export const CommercePage = () => {
                                         className="w-full h-44 sm:h-48 md:h-40 lg:h-36 object-cover rounded-2xl mb-4 transition-transform duration-300 group-hover:scale-105"
                                     />
                                 )}
-                                <h2 className="text-lg sm:text-xl font-title font-semibold text-[var(--color-burdeos-dark)] text-center mt-2 leading-snug">
+                                <h2 className="text-lg sm:text-xl font-title font-semibold text-primary-dark text-center mt-2 leading-snug">
                                     {commerce.name}
                                 </h2>
-                                <p className="text-[var(--color-burdeos-darker)] italic text-center mt-1 line-clamp-3 text-sm">
+                                <p className="text-lg sm:text-xl font-title font-semibold text-primary-dark text-center mt-2 leading-snug">
                                     {commerce.description}
                                 </p>
                             </div>
@@ -195,7 +195,7 @@ export const CommercePage = () => {
                     {showScrollTop && (
                         <button
                             onClick={scrollToTop}
-                            className="fixed bottom-6 right-6 bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] p-3 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 z-50"
+                            className="fixed bottom-6 right-6 bg-accent text-primary-dark p-3 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 z-50"
                         >
                             ↑
                         </button>

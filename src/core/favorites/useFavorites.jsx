@@ -33,7 +33,7 @@ export const useFavorites = () => {
         }
     };
 
-    const totalFavorites = favorites.lenght;
+    const totalFavorites = favorites.length;
 
     return { favorites, addFavorite, deleteFavorite, isFavorite, toggleFavorite, totalFavorites };
 };

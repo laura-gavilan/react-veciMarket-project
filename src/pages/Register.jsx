@@ -33,8 +33,8 @@ export const Register = () => {
 
     return (
         <Container className="flex items-center justify-center min-h-[140vh] px-6 py-16">
-            <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)] p-10 md:p-16 transition-all">
-                <h2 className="text-4xl md:text-5xl font-title font-semibold text-center mb-12 text-[var(--color-burdeos-dark)]">
+            <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-primary-light p-10 md:p-16 transition-all">
+                <h2 className="text-4xl md:text-5xl font-title font-semibold text-center mb-12 text-primary-dark">
                     Crea tu cuenta
                 </h2>
 
@@ -48,9 +48,9 @@ export const Register = () => {
                                 value={form[input.name]}
                                 onChange={onInputChange}
                                 required={input.required}
-                                className="peer border border-[var(--color-burdeos-light)] rounded-3xl px-4 pt-6 pb-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition-all shadow-sm"
+                                className="peer border border-primary-light rounded-3xl px-4 pt-6 pb-2 focus:outline-none focus:ring-2 focus:ring-accent-primary transition-all shadow-sm"
                             />
-                            <label className="absolute left-4 top-2 text-[var(--color-burdeos-dark)] text-sm transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-[var(--color-burdeos-dark)] peer-focus:text-sm">
+                            <label className="absolute left-4 top-2 text-primary-dark text-sm transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-primary-dark peer-focus:text-sm">
                                 {label.text}
                             </label>
                         </div>
@@ -59,16 +59,16 @@ export const Register = () => {
                     <div className="md:col-span-2 flex justify-center pt-4">
                         <button
                             type="submit"
-                            className="px-10 py-3 bg-gradient-to-r from-[var(--color-mostaza)] via-[var(--color-mostaza-pastel)] to-[var(--color-burdeos-light)] text-[var(--color-burdeos-dark)] font-semibold rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+                            className="px-10 py-3 btn-primary rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
                         >
                             Regístrate
                         </button>
                     </div>
                 </form>
 
-                <p className="text-center text-sm mt-6 text-[var(--color-burdeos-dark)]">
+                <p className="text-center text-sm mt-6 text-primary-dark">
                     ¿Ya tienes cuenta?{" "}
-                    <a href="/login" className="text-[var(--color-burdeos-light)] font-semibold hover:underline">
+                    <a href="/login" className="text-primary-light font-semibold hover:underline">
                         Inicia sesión
                     </a>
                 </p>

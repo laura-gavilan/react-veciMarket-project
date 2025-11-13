@@ -1,12 +1,10 @@
 export const AboutUs = () => {
     return (
-        <div className="min-h-[calc(100vh-80px)] text-[var(--color-burdeos-darker)] flex flex-col items-center px-6 py-20">
+        <div className="min-h-[calc(100vh-80px)] text-primary-dark flex flex-col items-center px-6 py-20">
 
             <h1 className="text-3xl md:text-5xl font-title font-semibold mb-6 text-center">
-                Quiénes{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-mostaza)] to-[var(--color-burdeos-dark)]">
-                    Somos
-                </span>
+                Quiénes somos
+    
             </h1>
 
             <p className="text-base md:text-lg max-w-3xl text-center mb-16">
@@ -21,22 +19,22 @@ export const AboutUs = () => {
                 ].map((item, index) => (
                     <div
                         key={index}
-                        className="p-8 bg-[var(--color-gray-warm)] rounded-3xl shadow-lg elevation text-center transition-all"
+                        className="p-8 bg-general rounded-3xl shadow-lg elevation text-center transition-all"
                     >
-                        <h3 className="font-title font-semibold text-2xl mb-4 text-[var(--color-burdeos-dark)]">{item.title}</h3>
-                        <p className="text-[var(--color-burdeos-darker)]">{item.text}</p>
+                        <h3 className="font-title font-semibold text-2xl mb-4 text-primary">{item.title}</h3>
+                        <p className="text-primary-dark">{item.text}</p>
                     </div>
                 ))}
             </div>
 
             <h2 className="text-3xl md:text-5xl font-title font-semibold tracking-wide mb-6 text-center">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-burdeos-dark)] to-[var(--color-mostaza-pastel)]">
+                <span className="text-3xl md:text-5xl font-title font-semibold mb-6 text-center">
                     VeciMarket
                 </span>
             </h2>
 
             <div className="text-center">
-                <p className="text-[var(--color-burdeos-darker)] mb-6 text-base md:text-lg">
+                <p className="text-primary-dark mb-6 text-base md:text-lg">
                     Únete a nuestra comunidad y descubre todo lo que VeciMarket tiene para ofrecer.
                 </p>
                 <a

@@ -1,27 +1,21 @@
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext.jsx";
 import { useOrdersContext } from "../contexts/OrdersContext.jsx";
 import { useAuth } from "../core/auth/useAuth.jsx";
 
 
 export const CartPage = () => {
-    const { user } = useAuth();
     const {
         cart,
         loading,
         updateItem,
         removeItem,
-        clearCart
+        checkout
     } = useCart();
     const { addOrder } = useOrdersContext();
+    const navigate = useNavigate();
+    const { user } = useAuth();
 
-    // if (!user) {
-    //     return (
-    //         <div className="p-8 text-center">
-    //             <h2 className="text-2xl font-semibold mb-2">🛒 Cesta</h2>
-    //             <p>Debes iniciar sesión para ver tu cesta.</p>
-    //         </div>
-    //     );
-    // }
 
     if (!cart || !cart.items || cart.items.length === 0) {
         return (
@@ -33,48 +27,48 @@ export const CartPage = () => {
     }
 
     const total = cart.items.reduce(
-        (acc, item) => acc + item.priceSnapshot * item.qty,
+        (acc, item) => acc + (item.priceSnapshot ?? item.productId?.price ?? 0) * item.qty,
         0
     );
 
-    const handleCheckout = () => {
-        // if (!user) {
-        //     alert("Debes iniciar sesión para finalizar la compra.");
-        //     return;
-        // }
-
+    const handleCheckout = async () => {
         if (!cart.items || cart.items.length === 0) {
             alert("Tu carrito está vacío.");
             return;
         }
 
-        const newOrder = {
-            userId: user._id || user.id || "guest",
-            items: cart.items.map((item) => ({
-                productId: item.productId._id,
-                qty: item.qty || 1,
-            })),
-            status: "pendiente",
-            createdAt: new Date().toISOString(),
-        };
+        if (!user?._id) {
+            alert("Debes iniciar sesión para finalizar la compra y ver tu pedido.");
+            navigate("/login");
+            return;
+        }
 
-        addOrder(newOrder);
-        clearCart();
-
-        alert("✅ Compra finalizada. Tu pedido ha sido creado.");
+        try {
+            const newOrder = await checkout();
+            if (newOrder) {
+                alert("✅ Compra realizada correctamente");
+                navigate("/orders");
+            } else {
+                alert("Ocurrió un error al finalizar la compra.");
+            }
+        } catch (error) {
+            console.error("Error al finalizar compra:", error);
+            alert("Ocurrió un error al finalizar la compra.");
+        }
     };
+
 
     return (
         <div className="max-w-4xl mx-auto p-8">
-            <h2 className="text-3xl font-semibold mb-6 text-center">Tu cesta de la compra</h2>
+            <h2 className="text-3xl font-semibold mb-6 text-center text-primary-dark">Tu cesta de la compra</h2>
 
-            {loading && <p className="text-center text-gray-500">Cargando...</p>}
+            {loading && <p className="text-center text-primary-dark">Cargando...</p>}
 
             <div className="space-y-6">
-                {cart.items.map((item) => (
+                {cart.items.map((item, index) => (
                     <div
-                        key={item.productId._id}
-                        className="flex flex-col md:flex-row items-center justify-between bg-white dark:bg-gray-800 shadow-md rounded-2xl p-4"
+                        key={`${item.productId?._id}-${index}`}
+                        className="flex flex-col md:flex-row items-center justify-between bg-white shadow-md rounded-3xl p-4"
                     >
                         <div className="flex items-center gap-4">
                             <img
@@ -83,14 +77,14 @@ export const CartPage = () => {
                                 className="w-24 h-24 object-cover rounded-xl"
                             />
                             <div>
-                                <h3 className="text-lg font-semibold">
+                                <h3 className="text-lg font-semibold text-primary-dark">
                                     {item.productId?.name}
                                 </h3>
-                                <p className="text-gray-500">
+                                <p className="text-primary-dark">
                                     {item.productId?.description || "Sin descripción"}
                                 </p>
-                                <p className="font-bold mt-1">
-                                    Precio: {item.priceSnapshot} €
+                                <p className="font-bold mt-1 text-primary-dark">
+                                    Precio: {(item.priceSnapshot ?? item.productId?.price ?? 0).toFixed(2)} €
                                 </p>
                             </div>
                         </div>
@@ -98,7 +92,7 @@ export const CartPage = () => {
                         <div className="flex flex-col items-center gap-2 mt-4 md:mt-0">
                             <div className="flex items-center gap-2">
                                 <button
-                                    className="px-3 py-1 bg-gray-300 rounded-lg"
+                                    className="px-3 py-1 bg-primary-light rounded-lg"
                                     onClick={() =>
                                         updateItem(item.productId._id, item.qty - 1)
                                     }
@@ -108,7 +102,7 @@ export const CartPage = () => {
                                 </button>
                                 <span className="text-lg font-semibold">{item.qty}</span>
                                 <button
-                                    className="px-3 py-1 bg-gray-300 rounded-lg"
+                                    className="px-3 py-1 bg-primary-light rounded-lg"
                                     onClick={() =>
                                         updateItem(item.productId._id, item.qty + 1)
                                     }
@@ -118,7 +112,7 @@ export const CartPage = () => {
                             </div>
 
                             <button
-                                className="text-sm text-red-500 hover:underline"
+                                className="text-sm text-red-600 hover:underline"
                                 onClick={() => removeItem(item.productId._id)}
                             >
                                 Eliminar
@@ -128,9 +122,9 @@ export const CartPage = () => {
                 ))}
             </div>
 
-            <div className="mt-10 flex flex-col md:flex-row justify-between items-center border-t pt-6">
-                <h3 className="text-2xl font-bold">
-                    Total: <span className="text-blue-600">{total.toFixed(2)} €</span>
+            <div className="mt-10 flex flex-col md:flex-row justify-between items-center border-t border-primary-light pt-6">
+                <h3 className="text-2xl font-bold text-primary-dark">
+                    Total: <span className="text-accent-primary">{total.toFixed(2)} €</span>
                 </h3>
                 <div className="flex justify-center mt-8">
                     <button
@@ -141,7 +135,9 @@ export const CartPage = () => {
                     </button>
                 </div>
             </div>
+
         </div>
     );
 };
+
 

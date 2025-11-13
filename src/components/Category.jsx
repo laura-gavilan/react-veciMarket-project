@@ -3,7 +3,7 @@ import { useContext, useMemo } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { api } from "../core/http/axios";
 
-export const Category = ({ products, deleteProduct, refreshProducts, ownerId, commerceId }) => {
+export const Category = ({ products, refreshProducts, ownerId, commerceId }) => {
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
     const isOwner = user?._id === ownerId;
@@ -41,7 +41,7 @@ export const Category = ({ products, deleteProduct, refreshProducts, ownerId, co
         <div className="flex flex-col gap-14">
             {Object.keys(categories).map(category => (
                 <div key={category} className="space-y-6">
-                    <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] border-b-2 border-[var(--color-burdeos-light)] inline-block pb-1">
+                    <h2 className="text-3xl md:text-4xl font-bold text-primary-dark border-b-2 border-primary-light inline-block pb-1">
                         {categoryNames[category] || category}
                     </h2>
 
@@ -49,7 +49,7 @@ export const Category = ({ products, deleteProduct, refreshProducts, ownerId, co
                         {categories[category].map(product => (
                             <div
                                 key={product._id}
-                                className="group bg-white rounded-3xl shadow-md border border-[var(--color-burdeos-light)] overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
+                                className="group bg-neutral-warm rounded-3xl shadow-md border border-primary-light overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
                             >
                                 {product.images?.[0] && (
                                     <div className="w-full h-48 overflow-hidden rounded-t-3xl">
@@ -69,10 +69,10 @@ export const Category = ({ products, deleteProduct, refreshProducts, ownerId, co
 
                                 <div className="p-4 flex flex-col justify-between flex-1">
                                     <div>
-                                        <h3 className="text-lg font-semibold text-[var(--color-burdeos-dark)] truncate">
+                                        <h3 className="text-lg font-semibold text-primary truncate">
                                             {product.name}
                                         </h3>
-                                        <p className="text-[var(--color-burdeos-light)] font-bold mt-1 text-base">
+                                        <p className="text-primary-dark font-bold mt-1 text-base">
                                             {product.price.toFixed(2)} €
                                         </p>
                                     </div>
@@ -81,7 +81,7 @@ export const Category = ({ products, deleteProduct, refreshProducts, ownerId, co
                                         <div className="flex gap-3 mt-3">
                                             <button
                                                 onClick={() => navigate(`/admin/commerce/${commerceId}/edit/${product._id}`)}
-                                                className="flex-1 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] py-2 rounded-xl font-medium text-center hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all shadow-sm hover:shadow-md"
+                                                className="flex-1 btn-primary"
                                             >
                                                 Editar
                                             </button>

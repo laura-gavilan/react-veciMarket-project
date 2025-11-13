@@ -12,6 +12,8 @@ import {
     patchOrderStatusInLocalStorage,
     deleteOrderFromLocalStorage,
 } from "../core/orders/orders.service";
+import { useActionData } from "react-router-dom";
+import { useAuth } from "../core/auth/useAuth";
 
 const OrdersContext = createContext();
 export const useOrdersContext = () => useContext(OrdersContext);
@@ -20,13 +22,23 @@ export const OrdersProvider = ({ children }) => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const { user } = useAuth();
     //Cargar órdenes desde API o localStorage
     useEffect(() => {
+        if (!user?._id) {
+            // Si no hay usuario logueado, no hacemos ninguna petición
+            setOrders([]);
+            setLoading(false);
+            return;
+        }
+
         const fetchOrders = async () => {
             try {
                 setLoading(true);
-                const apiOrders = await getOrdersApi();
+                const allOrders = await getOrdersApi();
+                const apiOrders = user.role === "admin"
+                    ? allOrders
+                    : allOrders.filter(o => o.userId === user._id);
 
                 const cleaned = apiOrders.map((order) => ({
                     ...order,
@@ -48,7 +60,7 @@ export const OrdersProvider = ({ children }) => {
         };
 
         fetchOrders();
-    }, []);
+    }, [user]);
 
     // Nueva orden
     const addOrder = async (order) => {
@@ -56,9 +68,11 @@ export const OrdersProvider = ({ children }) => {
             const newOrder = await addOrderApi(order);
             setOrders((prev) => [newOrder, ...prev]);
             addOrderToLocalStorage(newOrder);
+            return newOrder;
         } catch (error) {
             console.error("Error al crear la orden:", error);
             setError(error);
+            return null;
         }
     };
 

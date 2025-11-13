@@ -2,7 +2,7 @@ import { useFavorites } from "../core/favorites/useFavorites";
 
 export const FavoriteButton = ({ product }) => {
     const { favorites, addFavorite, deleteFavorite } = useFavorites();
-    const isFavorite = favorites.some(f => f._id === product._id);
+    const isFavorite = favorites.some(favorite => favorite._id === product._id);
 
 
     const toggleFavorite = (event) => {

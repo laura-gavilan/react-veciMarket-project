@@ -1,4 +1,3 @@
-import React from "react";
 import { CartButton } from "./CartButton";
 import { useNavigate } from "react-router-dom";
 
@@ -27,8 +26,8 @@ export const ProductModal = ({ product, commerce, onClose }) => {
                     )}
                 </div>
 
-                <h2 className="text-2xl font-semibold text-[var(--color-burdeos-dark)] mb-2">{product.name}</h2>
-                <p className="text-lg font-medium text-[var(--color-burdeos-darker)] mb-4">{product.price} €</p>
+                <h2 className="text-2xl font-semibold text-primary-dark mb-2">{product.name}</h2>
+                <p className="text-lg font-medium text-primary-dark mb-4">{product.price} €</p>
 
 
                 <div className="flex gap-4 mb-4">

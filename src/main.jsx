@@ -20,11 +20,11 @@ createRoot(document.getElementById('root')).render(
           <CommerceProvider>
             <ProductProvider>
               <FavoritesProvider>
+                <OrdersProvider>
                 <CartProvider>
-                  <OrdersProvider>
                     <App />
-                  </OrdersProvider>
                 </CartProvider>
+                </OrdersProvider>
               </FavoritesProvider>
             </ProductProvider>
           </CommerceProvider>

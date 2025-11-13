@@ -113,9 +113,9 @@ export const EditProductPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-[var(--color-gray-warm)] p-6">
-            <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)] p-10 flex flex-col gap-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] text-center mb-6">
+        <div className="min-h-screen flex items-center justify-center bg-gray-warm p-6">
+            <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-primary-light p-10 flex flex-col gap-8">
+                <h1 className="text-3xl md:text-4xl font-bold text-primary-dark text-center mb-6">
                     Editar Producto
                 </h1>
 
@@ -125,41 +125,41 @@ export const EditProductPage = () => {
                             <img
                                 src={preview ? preview : currentImage}
                                 alt={form.name}
-                                className="mx-auto w-40 h-40 object-cover rounded-3xl border border-[var(--color-burdeos-light)] shadow-md"
+                                className="mx-auto w-40 h-40 object-cover rounded-3xl border border-primary-light shadow-md"
                             />
                         </div>
                     )}
 
                     <div className="flex flex-col">
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Subir nueva imagen</label>
+                        <label className="font-semibold text-primary-dark mb-2">Subir nueva imagen</label>
                         <input
                             type="file"
                             accept="image/*"
                             onChange={handleFileChange}
-                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
+                            className="px-4 py-2 border border-primary-lightrounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
                         />
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Nombre del producto</label>
+                        <label className="font-semibold text-primary-dark mb-2">Nombre del producto</label>
                         <input
                             type="text"
                             name="name"
                             value={form.name}
                             onChange={handleChange}
                             placeholder="Ej. Pan integral"
-                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                            className="px-4 py-2 border border-primary-light rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
                             required
                         />
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Categoría</label>
+                        <label className="font-semibold text-primary-dark mb-2">Categoría</label>
                         <select
                             name="category"
                             value={form.category}
                             onChange={handleChange}
-                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                            className="px-4 py-2 border border-primary-light] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
                             required
                         >
                             <option value="all">Todas</option>
@@ -176,7 +176,7 @@ export const EditProductPage = () => {
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Precio (€)</label>
+                        <label className="font-semibold text-primary-dark  mb-2">Precio (€)</label>
                         <input
                             type="number"
                             name="price"
@@ -185,19 +185,22 @@ export const EditProductPage = () => {
                             placeholder="Ej. 2.50"
                             min={0}
                             step={0.01}
-                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                            className="px-4 py-2 text-primary-dark  rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
                             required
                         />
                     </div>
 
                     <div className="flex gap-4 mt-6">
-                        <button type="submit" className="flex-1 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] py-3 rounded-2xl font-semibold shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all">
+                        <button type="submit"
+                            className="flex-1 bg-primary-dark text-accent py-3 rounded-2xl font-semibold shadow-md hover:bg-primary-light hover:scale-105 transition-all"
+                        >
                             Guardar Cambios
                         </button>
+
                         <button
                             type="button"
                             onClick={() => navigate(-1)}
-                            className="flex-1 bg-[var(--color-burdeos-light)] text-[var(--color-burdeos-dark)] py-3 rounded-2xl font-semibold shadow-md hover:bg-[var(--color-burdeos-dark)] hover:text-[var(--color-mostaza-pastel)] transition-all"
+                            className="flex-1 bg-primary-light text-primary-dark py-3 rounded-2xl font-semibold shadow-md hover:bg-primary-dark hover:text-accent transition-all"
                         >
                             Cancelar
                         </button>

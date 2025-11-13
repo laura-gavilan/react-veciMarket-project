@@ -7,7 +7,7 @@ export const FavoritesPage = () => {
 
     return (
         <div className="max-w-6xl mx-auto px-6 py-10">
-            <h1 className="text-3xl md:text-4xl font-title font-semibold mb-8 text-[var(--color-burdeos-dark)] text-center">
+            <h1 className="text-3xl md:text-4xl font-title font-semibold mb-8 text-primary-dark text-center">
                 Mis productos favoritos
             </h1>
 
@@ -22,7 +22,7 @@ export const FavoritesPage = () => {
                     {favorites.map((product, index) => (
                         <div
                             key={product._id || `fav-${index}`}
-                            className="relative bg-white border border-[var(--color-burdeos-light)] rounded-3xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                            className="relative bg-white border border-primary-light)] rounded-3xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                         >
                             {product.images?.[0] && (
                                 <img
@@ -32,10 +32,10 @@ export const FavoritesPage = () => {
                                 />
                             )}
 
-                            <h2 className="font-title font-semibold text-lg md:text-xl text-[var(--color-burdeos-dark)]">
+                            <h2 className="font-title font-semibold text-lg md:text-xl text-primary-dark">
                                 {product.name}
                             </h2>
-                            <p className="text-[var(--color-burdeos-darker)] mt-1 font-medium">{product.price} €</p>
+                            <p className="text-primary-dark mt-1 font-medium">{product.price} €</p>
 
                             <div className="mt-2">
                                 <FavoriteButton product={product} />

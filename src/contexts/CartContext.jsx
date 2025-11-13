@@ -5,13 +5,11 @@ import {
     addItemToCartApi,
     updateCartItemApi,
     deleteCartItemApi,
-    checkoutCartApi
 } from "../core/cart/cart.api.js";
 
 import {
     getCartsFromLocalStorage,
     addCartToLocalStorage,
-    updateCartInLocalStorage,
     addOrUpdateItemInCartLocal,
     deleteItemFromCartLocal,
     mergeGuestCartWithUserCart,
@@ -19,6 +17,9 @@ import {
 } from "../core/cart/cart.service.js";
 
 import { useAuth } from "../core/auth/useAuth.jsx";
+import { addOrderToLocalStorage } from "../core/orders/orders.service.js";
+import { useOrdersContext } from "./OrdersContext.jsx";
+
 
 export const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
@@ -29,23 +30,34 @@ export const CartProvider = ({ children }) => {
 
     const [cart, setCart] = useState(null);
     const [loading, setLoading] = useState(true);
+    const { addOrder } = useOrdersContext();
 
     const fetchCart = async () => {
         setLoading(true);
 
         if (!userId) {
-            const localCarts = getCartsFromLocalStorage(null);
-            let activeCart = localCarts[0] || { _id: "guest", items: [] };
-            setCart(activeCart);
+            let guestCart = getCartsFromLocalStorage("guest");
+            if (!guestCart.length) {
+                guestCart = [{
+                    _id: "guest-cart",
+                    userId: "guest",
+                    status: "active",
+                    items: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                }];
+                saveCartsInLocalStorage("guest", guestCart);
+            }
+            setCart(guestCart[0]);
             setLoading(false);
             return;
         }
-
         try {
+            // Fusionar carrito guest con usuario logueado
             mergeGuestCartWithUserCart(userId);
 
             const carts = await getCartsApi(userId);
-            let activeCart = carts.find(cart => cart.status === "active" && cart.userId === userId);
+            let activeCart = carts.find(c => c.status === "active" && c.userId === userId);
 
             if (!activeCart) {
                 activeCart = await createCartApi({ userId, status: "active" });
@@ -56,7 +68,7 @@ export const CartProvider = ({ children }) => {
         } catch (error) {
             console.error("Error cargando carrito API:", error);
             const localData = getCartsFromLocalStorage(userId);
-            const localCart = localData.find(cart => cart.status === "active" && cart.userId === userId) || null;
+            const localCart = localData.find(c => c.status === "active" && c.userId === userId) || null;
             setCart(localCart);
         } finally {
             setLoading(false);
@@ -77,15 +89,27 @@ export const CartProvider = ({ children }) => {
         }
 
         // Guest
-        let guestCart = getCartsFromLocalStorage("guest");
-        if (!guestCart.length) {
-            guestCart = [{ _id: "guest-cart", items: [] }];
-            saveCartsInLocalStorage("guest", guestCart);
+        let guestCarts = getCartsFromLocalStorage("guest");
+        if (!guestCarts.length) {
+            guestCarts = [{
+                _id: "guest-cart",
+                userId: "guest",
+                status: "active",
+                items: [],
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            }];
+            saveCartsInLocalStorage("guest", guestCarts);
         }
-        const cartId = guestCart[0]._id;
+        const guestCart = guestCarts[0];
 
-        addOrUpdateItemInCartLocal("guest", cartId, { productId: product, qty });
-        setCart(guestCart[0]);
+        addOrUpdateItemInCartLocal("guest", guestCart._id, { productId: product, qty, priceSnapshot: product.price });
+        setCart(prev => ({
+            ...guestCart,
+            items: guestCart.items.find(item => item.productId._id === product._id)
+                ? guestCart.items.map(item => item.productId._id === product._id ? { ...item, qty } : item)
+                : [...guestCart.items, { productId: product, qty, priceSnapshot: product.price }]
+        }));
     };
 
 
@@ -94,8 +118,13 @@ export const CartProvider = ({ children }) => {
         if (!cart) return;
 
         if (!userId) {
-            addOrUpdateItemInCartLocal(null, cart._id, { productId: product, qty });
-            setCart(prev => ({ ...prev }));
+            addOrUpdateItemInCartLocal("guest", cart._id, { productId, qty });
+            setCart(prev => ({
+                ...prev,
+                items: prev.items.map(i =>
+                    i.productId._id === productId ? { ...i, qty } : i
+                )
+            }));
         } else {
             const updatedCart = await updateCartItemApi(cart._id, productId, { qty });
             setCart(updatedCart);
@@ -107,8 +136,11 @@ export const CartProvider = ({ children }) => {
         if (!cart) return;
 
         if (!userId) {
-            deleteItemFromCartLocal(null, cart._id, productId);
-            setCart(prev => ({ ...prev }));
+            deleteItemFromCartLocal("guest", cart._id, productId);
+            setCart(prev => ({
+                ...prev,
+                items: prev.items.filter(item => item.productId._id !== productId)
+            }));
         } else {
             const updatedCart = await deleteCartItemApi(cart._id, productId);
             setCart(updatedCart.cart || updatedCart);
@@ -126,22 +158,56 @@ export const CartProvider = ({ children }) => {
 
 
     const checkout = async () => {
-        if (!userId || !cart || cart.status === "ordered") return null;
+        if (!cart || cart.items.length === 0 || cart.status === "ordered") return null;
 
-        const result = await checkoutCartApi(cart._id);
-        setCart(result.cart);
-        updateCartInLocalStorage(userId, result.cart);
+        const newOrder = {
+            userId: user?._id || "guest",
+            items: cart.items.map((item) => ({
+                productId: item.productId._id,
+                name: item.productId.name,
+                qty: item.qty,
+                price: item.priceSnapshot
+            })),
+            status: "pending",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        };
 
-        const newCart = await createCartApi({ userId, status: "active" });
-        setCart(newCart);
-        addCartToLocalStorage(userId, newCart);
-
-        return result;
+        if (user?._id && addOrder) {
+            // Usuario logueado: enviamos a API y agregamos al estado global
+            try {
+                const result = await addOrder(newOrder); // Agrega al estado global de OrdersContext
+                await clearCart(); // limpiar carrito
+                const newCart = await createCartApi({ userId, status: "active" });
+                setCart(newCart);
+                addCartToLocalStorage(userId, newCart);
+                return result;
+            } catch (error) {
+                console.error("Error al crear la orden del usuario:", error);
+                return null;
+            }
+        } else {
+            // Invitado: solo guardamos localmente
+            addOrderToLocalStorage(newOrder);
+            await clearCart();
+            setCart((prev) => ({
+                ...prev,
+                items: [],
+                status: "ordered",
+                updatedAt: new Date().toISOString()
+            }));
+            saveCartsInLocalStorage("guest", [{ ...cart, items: [], status: "ordered", updatedAt: new Date().toISOString() }]);
+            alert("✅ Compra realizada como invitado. Para ver el estado de tu pedido debes registrarte o iniciar sesión.");
+            return newOrder;
+        }
     };
+
 
     useEffect(() => {
         fetchCart();
     }, [userId]);
+
+
 
     return (
         <CartContext.Provider value={{ cart, loading, fetchCart, addItem, updateItem, removeItem, clearCart, checkout }}>
@@ -149,3 +215,4 @@ export const CartProvider = ({ children }) => {
         </CartContext.Provider>
     );
 };
+

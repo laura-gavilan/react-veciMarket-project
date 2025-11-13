@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 export const CreateCommercePage = () => {
     const { addCommerce } = useCommerce();
-    const { user } = useAuth(); 
+    const { user } = useAuth();
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
@@ -44,11 +44,11 @@ export const CreateCommercePage = () => {
         try {
             const newCommerce = {
                 ...form,
-                ownerUserId: user?._id, 
+                ownerUserId: user?._id,
             };
 
             await addCommerce(newCommerce);
-            navigate("/commerce"); 
+            navigate("/commerce");
         } catch (error) {
             console.error("Error al crear comercio:", error);
             alert("No se pudo crear el comercio. Revisa los datos.");
@@ -56,13 +56,15 @@ export const CreateCommercePage = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-[var(--color-gray-warm)] p-6">
-            <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)] p-10 flex flex-col gap-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] text-center mb-6">Crear Comercio</h1>
+        <div className="min-h-screen flex items-center justify-center bg-gray-warm p-6">
+            <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-primary-light p-10 flex flex-col gap-8">
+                <h1 className="text-3xl md:text-4xl font-bold text-primary-dark text-center mb-6">
+                    Crear Comercio
+                </h1>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                     <div className="flex flex-col">
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Nombre</label>
+                        <label className="font-semibold text-primary mb-2">Nombre</label>
                         <input
                             type="text"
                             name="name"
@@ -74,7 +76,7 @@ export const CreateCommercePage = () => {
                     </div>
 
                     <div>
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Descripción</label>
+                        <label className="font-semibold text-primary-dark mb-2">Descripción</label>
                         <textarea
                             name="description"
                             value={form.description}
@@ -84,9 +86,9 @@ export const CreateCommercePage = () => {
                         />
                     </div>
 
-                    
+
                     <div>
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">URL de Imagen</label>
+                        <label className="font-semibold text-primary-dark mb-2">URL de Imagen</label>
                         <input
                             type="text"
                             name="image"
@@ -146,7 +148,8 @@ export const CreateCommercePage = () => {
 
                     <button
                         type="submit"
-                        className="flex-1 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] py-3 rounded-2xl font-semibold shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all">
+                        className="flex-1 bg-primary text-accent py-3 rounded-2xl font-semibold shadow-md hover:bg-primary-light hover:scale-105 transition-all"
+                    >
                         Crear Comercio
                     </button>
                 </form>

@@ -24,17 +24,16 @@ export const NavBar = () => {
                 { to: "/commerce", label: "Comercios & Productos" },
                 { to: "/user", label: "Perfil" },
                 { to: "/admin", label: "Mis comercios" },
-                { to: "/favorites", label: "Favoritos" },
-                { to: "/cart", label: "Cesta" },
-                { to: "/orders", label: "Pedidos" },
                 { to: "/commerce/new", label: "Crear comercio" },
+                { to: "/orders", label: "Pedidos" },
             ];
         } else {
             return [
+                { to: "/", label: "Inicio" },
+                { to: "/aboutUs", label: "Sobre nosotros" },
                 { to: "/commerce", label: "Comercios & Productos" },
                 { to: "/user", label: "Perfil" },
-                { to: "/favorites", label: "Favoritos" },
-                { to: "/cart", label: "Cesta" },
+                { to: "/orders", label: "Pedidos" },
             ];
         }
     }, [user]);
@@ -49,12 +48,12 @@ export const NavBar = () => {
         <nav className="sticky top-0 z-50 w-full  shadow-md transition-all duration-300">
             <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 gap-8">
                 <Link to="/" className="flex items-center gap-2">
-                    <span className="font-title text-h4 text-[var(--color-burdeos-dark)] font-semibold">VeciMarket</span>
+                    <span className="font-title text-h4 text-primary font-semibold">VeciMarket</span>
                 </Link>
 
-                <div className="hidden md:flex items-center gap-8 text-[1rem] font-semibold text-[var(--color-burdeos-dark)]">
+                <div className="hidden md:flex items-center gap-8 text-[1rem] font-semibold text-primary-dark">
                     {links.map(({ to, label }) => (
-                        <Link key={to} to={to} className="hover:text-[var(--color-mostaza)] transition-colors duration-300">
+                        <Link key={to} to={to} className="hover:text-accent-primary transition-colors duration-300">
                             {label}
                         </Link>
                     ))}
@@ -64,14 +63,6 @@ export const NavBar = () => {
                     <div className="hidden md:flex items-center gap-6 relative">
                         {!user && (
                             <>
-                                <Link to="/login" className="flex items-center justify-center w-6 h-6">
-                                    <img
-                                        src="/icons/login.png"
-                                        alt="Login"
-                                        className="w-full h-full object-contain"
-                                    />
-                                </Link>
-                                
 
                                 <Link to="/cart" className="flex items-center justify-center w-6 h-6">
                                     <img
@@ -81,10 +72,10 @@ export const NavBar = () => {
                                     />
                                 </Link>
 
-                                <Link to="/favorites" className="flex items-center justify-center w-6 h-6">
+                                <Link to="/login" className="flex items-center justify-center w-6 h-6">
                                     <img
-                                        src="/icons/favourite.png"
-                                        alt="Favorites"
+                                        src="/icons/login.png"
+                                        alt="Login"
                                         className="w-full h-full object-contain"
                                     />
                                 </Link>
@@ -93,6 +84,22 @@ export const NavBar = () => {
 
                         {user && (
                             <>
+                                <Link to="/favorites" className="flex items-center justify-center w-6 h-6">
+                                    <img
+                                        src="/icons/favourite.png"
+                                        alt="Favoritos"
+                                        className="w-full h-full object-contain"
+                                    />
+                                </Link>
+
+                                <Link to="/cart" className="flex items-center justify-center w-6 h-6">
+                                    <img
+                                        src="/icons/cart_shopping.png"
+                                        alt="Cesta"
+                                        className="w-full h-full object-contain"
+                                    />
+                                </Link>
+
                                 <button
                                     onClick={() => setUserMenu(!userMenu)}
                                     className=" w-6 h-6">
@@ -103,25 +110,9 @@ export const NavBar = () => {
                                     />
                                 </button>
 
-                                <Link to="/cart" className="flex items-center justify-center w-6 h-6">
-                                    <img
-                                        src="/icons/cart_shopping.png"
-                                        alt="Cesta"
-                                        className="w-full h-full object-contain"
-                                    />
-                                </Link>
-
-                                <Link to="/favorites" className="flex items-center justify-center w-6 h-6">
-                                    <img
-                                        src="/icons/favourite.png"
-                                        alt="Favoritos"
-                                        className="w-full h-full object-contain"
-                                    />
-                                </Link>
-
 
                                 {userMenu && (
-                                    <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg z-50">
+                                    <div  className="absolute right-0 mt-20 w-40 bg-white border rounded shadow-lg z-50">
                                         <button
                                             onClick={handleLogout}
                                             className="w-full text-left px-4 py-2 hover:bg-gray-100"
@@ -156,20 +147,26 @@ export const NavBar = () => {
                             key={to}
                             to={to}
                             onClick={() => setOpen(false)}
-                            className="hover:text-[var(--color-mostaza)] transition-colors duration-300"
+                            className="hover:text-accent-primary transition-colors duration-300"
                         >
                             {label}
                         </Link>
                     ))}
 
                     {!user ? (
-                        <Link to="/login" onClick={() => setOpen(false)} className="w-10 h-10">
-                            <img
-                                src="/icons/login.png"
-                                alt="Login"
-                                className="w-full h-full object-contain"
-                            />
-                        </Link>
+                        <>
+                            <Link to="/cart" onClick={() => setOpen(false)}>
+                                Cesta
+                            </Link>
+
+                            <Link to="/login" onClick={() => setOpen(false)} className="w-10 h-10">
+                                <img
+                                    src="/icons/login.png"
+                                    alt="Login"
+                                    className="w-full h-full object-contain"
+                                />
+                            </Link>
+                        </>
                     ) : (
                         <button
                             onClick={handleLogout}
@@ -178,14 +175,6 @@ export const NavBar = () => {
                             Cerrar sesión
                         </button>
                     )}
-
-                    <Link to="/cart" onClick={() => setOpen(false)}>
-                        Cesta
-                    </Link>
-
-                    <Link to="/favorites" onClick={() => setOpen(false)}>
-                        Favoritos
-                    </Link>
                 </div>
             )}
         </nav >

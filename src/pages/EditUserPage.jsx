@@ -32,7 +32,7 @@ export const EditUserPage = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto mt-12 p-8 bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)]">
+        <div className="max-w-3xl mx-auto mt-12 p-8 bg-white rounded-3xl shadow-xl border border-primary-light">
             <button
                 type="button"
                 onClick={() => navigate("/user")}
@@ -41,11 +41,11 @@ export const EditUserPage = () => {
                 ← Volver
             </button>
 
-            <h1 className="text-3xl md:text-4xl font-title font-semibold mb-8 text-[var(--color-burdeos-dark)] text-center">
+            <h1 className="text-3xl md:text-4xl font-title font-semibold mb-8 text-primary-dark text-center">
                 Editar Perfil de {user.name}
             </h1>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 text-[var(--color-burdeos-darker)] font-sans">
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 text-primary-dark font-sans">
                 {[
                     { label: "Nombre de usuario", name: "username", type: "text" },
                     { label: "Nombre", name: "name", type: "text" },
@@ -56,13 +56,13 @@ export const EditUserPage = () => {
                     { label: "Dirección", name: "address", type: "text", fullWidth: true }
                 ].map((field) => (
                     <div key={field.name} className={field.fullWidth ? "md:col-span-2 flex flex-col" : "flex flex-col"}>
-                        <label className="mb-2 font-semibold text-[var(--color-burdeos-dark)]">{field.label}:</label>
+                        <label className="mb-2 font-semibold text-primary-dark">{field.label}:</label>
                         <input
                             type={field.type}
                             name={field.name}
                             value={form[field.name]}
                             onChange={handleChange}
-                            className="border border-gray-300 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
+                            className="border border-primary-lightrounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
                         />
                     </div>
                 ))}

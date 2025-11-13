@@ -10,9 +10,9 @@ export const CreateProductPage = () => {
         name: "",
         description: "",
         price: "",
-        category: ["all"], 
+        category: ["all"],
         releaseDate: "",
-        images: [], 
+        images: [],
     });
 
     const [errors, setErrors] = useState(null);
@@ -54,16 +54,16 @@ export const CreateProductPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-[var(--color-gray-warm)] p-6">
-            <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-[var(--color-burdeos-light)] p-10 flex flex-col gap-5">
+        <div className="min-h-screen flex items-center justify-center bg-gray-warm p-6">
+            <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-primary-light p-10 flex flex-col gap-5">
                 <button
                     onClick={() => navigate(-1)}
-                    className="self-start px-6 py-2 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] rounded-full shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all font-semibold"
+                    className="self-start px-6 py-2 bg-primary-dark text-accent rounded-full shadow-md hover:bg-primary-light hover:scale-105 transition-all font-semibold"
                 >
                     ← Volver
                 </button>
 
-                <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-burdeos-dark)] text-center mb-5">
+                <h1 className="text-3xl md:text-4xl font-bold text-primary-dark text-center mb-5">
                     Crear Nuevo Producto
                 </h1>
 
@@ -77,33 +77,33 @@ export const CreateProductPage = () => {
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                     <div className="flex flex-col">
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Nombre del producto</label>
+                        <label className="font-semibold text-primary-dark mb-2">Nombre del producto</label>
                         <input
                             type="text"
                             name="name"
                             value={form.name}
                             onChange={handleChange}
                             placeholder="Ej. Pan integral"
-                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                            className="px-4 py-2 border border-primary-light rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-dark transition"
                             required
                         />
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Descripción</label>
+                        <label className="font-semibold text-primary-dark mb-2">Descripción</label>
                         <textarea
                             name="description"
                             value={form.description}
                             onChange={handleChange}
                             placeholder="Describe el producto..."
                             rows={4}
-                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition resize-none"
+                            className="px-4 py-2 border border-primary-light rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-dark transition resize-none"
                             required
                         />
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Precio (€)</label>
+                        <label className="font-semibold text-primary-dark mb-2">Precio (€)</label>
                         <input
                             type="number"
                             name="price"
@@ -112,30 +112,30 @@ export const CreateProductPage = () => {
                             placeholder="Ej. 2.50"
                             step={0.01}
                             min={0}
-                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                            className="px-4 py-2 border border-primary-light rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
                             required
                         />
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Fecha de lanzamiento</label>
+                        <label className="font-semibold text-primary-darkmb-2">Fecha de lanzamiento</label>
                         <input
                             type="date"
                             name="releaseDate"
                             value={form.releaseDate}
                             onChange={handleChange}
-                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                            className="px-4 py-2 border border-primary-lightrounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
                             required
                         />
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="font-semibold text-[var(--color-burdeos-dark)] mb-2">Categoría</label>
+                        <label className="font-semibold text-primary-dark mb-2">Categoría</label>
                         <select
                             name="category"
                             value={form.category[0]}
                             onChange={handleChange}
-                            className="px-4 py-2 border border-[var(--color-burdeos-light)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                            className="px-4 py-2 border border-primary-light rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
                             required
                         >
                             <option value="all">Todas</option>
@@ -153,12 +153,12 @@ export const CreateProductPage = () => {
 
                     <button
                         type="submit"
-                        className="mt-4 w-full bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] py-3 rounded-2xl font-semibold shadow-md hover:bg-[var(--color-burdeos-light)] hover:scale-105 transition-all"
+                        className="mt-4 w-full bg-primary-dark text-accent py-3 rounded-2xl font-semibold shadow-md hover:bg-primary-light hover:scale-105 transition-all"
                     >
                         Crear Producto
                     </button>
                 </form>
             </div>
-        </div>
+        </div >
     );
 };

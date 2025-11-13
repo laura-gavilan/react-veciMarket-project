@@ -37,11 +37,14 @@ export const addOrUpdateItemInCartLocal = (userId, cartId, item) => {
             if (exists) {
                 cart.items = cart.items.map(cartItem =>
                     cartItem.productId._id === item.productId._id
-                        ? { ...cartItem, qty: item.qty }
+                        ? { ...cartItem, qty: item.qty, priceSnapshot: item.priceSnapshot || cartItem.priceSnapshot || cartItem.productId.price || 0 }
                         : cartItem
                 );
             } else {
-                cart.items.push(item);
+                cart.items.push({
+                    ...item,
+                    priceSnapshot: item.priceSnapshot || item.productId.price || 0
+                });
             }
         }
         return cart;

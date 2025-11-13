@@ -22,62 +22,48 @@ body {
     --text-h5: 20px;
     --text-h6: 16px;
 
-    /*Colores principales */
-    --color-burdeos-dark: #6B0F1A;
-    --color-burdeos-light: #A83250;
-    --color-mostaza: #F2C94C;
-    --color-mostaza-pastel: #FBE8A6;
+/* Colores principales de la marca */
+--color-primary: #6B0F1A;         /* Antes: --color-burdeos-dark */
+--color-primary-light: #A83250;   /* Antes: --color-burdeos-light */
+--color-accent-primary: #f2c94c;        /* Antes: --color-mostaza */
+--color-accent-primary-light: #FBE8A6;  /* Antes: --color-mostaza-pastel */
 
-    /* 🎨 Colores de apoyo */
-    --color-gray-warm: #F5F2F0;
-    --color-burdeos-darker: #3C0D12;
+/* Colores neutrales / de apoyo */
+--color-neutral-warm: #F5F2F0;          /* Antes: --color-gray-warm */
+--color-primary-dark: #3C0D12;    /* Antes: --color-burdeos-darker */
+}
+
+h1,h2,h3,h4,h5 {
+    @apply font-title text-h2/[125%] font-semibold;
 }
 
 
-h1 {
-    @apply font-title text-h1/[125%] font-semibold text-[var(--color-burdeos-dark)];
-}
 
-h2 {
-    @apply font-title text-h2/[125%] font-semibold text-[var(--color-burdeos-dark)];
-}
-
-h3 {
-    @apply font-title text-h3/[125%] font-semibold text-[var(--color-burdeos-dark)];
-}
-
-h4 {
-    @apply font-title text-h4/[125%] font-semibold text-[var(--color-burdeos-dark)];
-}
-
-h5 {
-    @apply font-title text-h5/[125%] font-semibold text-[var(--color-burdeos-dark)];
-}
 
 h6 {
-    @apply font-title text-h6/[125%] font-semibold text-[var(--color-burdeos-dark)];
+    @apply font-title text-h6/[125%] font-semibold;
 }
 
 p {
-    @apply font-sans text-base/[150%] font-normal text-[var(--color-burdeos-darker)];
+    @apply font-sans text-base/[150%] font-normal;
 }
 
 /* Botones */
 .btn-primary {
-    @apply bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] font-semibold rounded-full px-6 py-3 shadow-md hover:bg-[var(--color-burdeos-light)] transition-all;
+    @apply bg-accent-primary text-primary-dark font-semibold rounded-full px-6 py-3 shadow-md hover:bg-primary-light transition-all;
 }
 
 .btn-secondary {
-    @apply bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] font-semibold rounded-full px-6 py-3 shadow-md hover:bg-[var(--color-burdeos-light)] transition-all;
+    @apply bg-primary-dark text-accent-primary-light font-semibold rounded-full px-6 py-3 shadow-md hover:bg-primary-light transition-all;
 }
 
 /* Fondos generales */
 .bg-general {
-    @apply bg-[var(--color-gray-warm)];
+    @apply bg-neutral-warm;
 }
 
 .bg-secondary {
-    @apply bg-[var(--color-mostaza-pastel)];
+    @apply bg-accent-primary-light;
 }
 
 /* Hover */
