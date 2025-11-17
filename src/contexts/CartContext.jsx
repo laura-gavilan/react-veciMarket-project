@@ -12,7 +12,6 @@ import {
     addCartToLocalStorage,
     addOrUpdateItemInCartLocal,
     deleteItemFromCartLocal,
-    mergeGuestCartWithUserCart,
     saveCartsInLocalStorage
 } from "../core/cart/cart.service.js";
 
@@ -61,8 +60,6 @@ export const CartProvider = ({ children }) => {
             return;
         }
         try {
-            mergeGuestCartWithUserCart(userId);
-
             const carts = await getCartsApi(userId);
             let activeCart = carts.find(c => c.status === "active" && c.userId === userId);
 

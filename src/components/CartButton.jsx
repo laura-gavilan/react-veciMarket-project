@@ -44,7 +44,6 @@ export const CartButton = ({ product }) => {
                 {loading ? "Añadiendo..." : "Añadir"}
             </button>
 
-            {/* Toast flotante */}
             {toast && (
                 <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50 text-sm">
                     {toast}

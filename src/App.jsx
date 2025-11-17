@@ -9,8 +9,8 @@ import { Footer } from './components/Footer';
 import { CommercePage } from './pages/CommercePage';
 import { AdminPage } from './pages/AdminPage';
 import { ContactPage } from './pages/ContactPage';
-import { CommerceDetailPage } from './pages/CommerceDetailPage';
-import { AdminDetailPage } from './pages/AdminDetailsPage';
+
+// import { AdminDetailPage } from './pages/AdminDetailsPage';
 import { CreateProductPage } from './pages/CreateProductPage.jsx';
 import { EditProductPage } from './pages/EditProductPage.jsx';
 import { EditCommercePage } from './pages/EditCommercePage.jsx';
@@ -21,6 +21,8 @@ import { ScrollToTop } from './components/ScrollToTop.jsx';
 import { CreateCommercePage } from './pages/CreateCommercePage.jsx';
 import { CartPage } from './pages/CartPage';
 import { OrdersPage } from './pages/OrdersPage.jsx';
+import { CommerceDetailsAdminPage} from './pages/CommerceDetailsAdminPage.jsx';
+import { CommerceProductPage } from './pages/CommerceProductPage.jsx';
 
 export const App = () => {
   return (
@@ -34,7 +36,7 @@ export const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/aboutUs" element={<AboutUsPage />} />
           <Route path="/commerce" element={<CommercePage />} />
-          <Route path="/commerce/:commerceId" element={<CommerceDetailPage />} />
+          <Route path="/commerce/:commerceId" element={<CommerceProductPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
@@ -43,7 +45,7 @@ export const App = () => {
 
           <Route element={<PrivateRoute />}>
             <Route path="/admin" element={<AdminPage />} />
-            <Route path="/admin/commerce/:commerceId" element={<AdminDetailPage />} />
+            <Route path="/admin/commerce/:commerceId" element={<CommerceDetailsAdminPage />} />
             <Route path="/admin/commerce/:commerceId/edit" element={<EditCommercePage />} />
             <Route path="/admin/commerce/:commerceId/create" element={<CreateProductPage />} />
             <Route path="/admin/commerce/:commerceId/edit/:productId" element={<EditProductPage />} />

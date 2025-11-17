@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
 import { useNavigate } from "react-router-dom";
-import { FavoriteButton } from "../components/FavoriteButton";
-import { CartButton } from "../components/CartButton";
 import { ProductModal } from "../components/ProductModal";
+import { SearchBar } from "../components/SearchBar";
+import { CategoryFilter } from "../components/CategoryFilter";
+import { ProductCard } from "../components/ProductCard";
+import { CommerceCard } from "../components/CommerceCard";
 
 export const CommercePage = () => {
     const { commerces } = useCommerce();
@@ -15,8 +17,7 @@ export const CommercePage = () => {
     const [selectedCategory, setSelectedCategory] = useState("all");
     const [showProducts, setShowProducts] = useState(true);
     const [filteredProducts, setFilteredProducts] = useState([]);
-    const [filteredCommerces, setFilteredCommerces] = useState([]);
-    const [showScrollTop, setShowScrollTop] = useState(false);
+
 
     const [modalProduct, setModalProduct] = useState(null);
     const [modalCommerce, setModalCommerce] = useState(null);
@@ -39,13 +40,6 @@ export const CommercePage = () => {
         other: "Otras",
     };
 
-    useEffect(() => {
-        const handleScroll = () => setShowScrollTop(window.scrollY > 300);
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-
-    const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
     useEffect(() => { loadAllProducts(); }, []);
 
@@ -55,15 +49,15 @@ export const CommercePage = () => {
             return;
         }
         const searchLower = search.toLowerCase();
-        const filteredProds = products.filter(product => {
-            const matchesSearch = product.name.toLowerCase().includes(searchLower);
-            const matchesCategory =
-                selectedCategory === "all" ? true : product.category.includes(selectedCategory);
-            return matchesSearch && matchesCategory;
-        });
-        setFilteredProducts(filteredProds);
-        setFilteredCommerces(commerces);
-    }, [search, products, commerces, selectedCategory, showProducts]);
+
+        setFilteredProducts(
+            products.filter(product =>
+                product.name.toLowerCase().includes(searchLower) &&
+                (selectedCategory === "all" || product.category.includes(selectedCategory))
+            )
+        );
+
+    }, [search, products, selectedCategory, showProducts]);
 
     return (
         <div className="min-h-screen px-6 py-12 flex flex-col items-center max-w-7xl mx-auto">
@@ -71,89 +65,36 @@ export const CommercePage = () => {
                 Explora los <span className="text-accent-primary">productos</span> y <span className="text-accent-primary">comercios</span> de tu barrio
             </h1>
 
-            <div className="mb-8 w-full md:w-1/2 relative">
-                <input
-                    type="text"
-                    placeholder="Buscar producto..."
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                    className="w-full px-5 py-3 rounded-full border border-primary-dark bg-white text-primary-dark placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-accent shadow-sm transition-all duration-300"
-                />
-                {search && (
-                    <button
-                        onClick={() => setSearch("")}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary-dark transition-colors"
-                    >
-                        ✕
-                    </button>
-                )}
-            </div>
+            <SearchBar search={search} setSearch={setSearch} />
 
-            <div className="w-full mb-10 flex flex-wrap gap-3 justify-center">
-                {categories.map(category => (
-                    <button
-                        key={category}
-                        onClick={() => { setSelectedCategory(category); setShowProducts(true); }}
-                        className={`px-5 py-2 rounded-full font-semibold transition-all duration-300 ${selectedCategory === category
-                            ? "bg-accent-primary text-primary-dark shadow-md scale-105"
-                            : "bg-white text-primary-dark border border-primary-dark hover:bg-accent-light hover:scale-105"
-                            }`}
-                    >
-                        {categoryNames[category]}
-                    </button>
-                ))}
-                {showProducts && (
-                    <button
-                        onClick={() => setShowProducts(false)}
-                        className="px-5 py-2 rounded-full border bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all duration-300"
-                    >
-                        Ocultar todos
-                    </button>
-                )}
-            </div>
+            <CategoryFilter
+                categories={categories}
+                categoryName={categoryNames}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                setShowProducts={setShowProducts}
+                showProducts={showProducts} />
 
-            {showProducts && selectedCategory && filteredProducts.length > 0 && (
+
+            {showProducts && filteredProducts.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
                     {filteredProducts.map(product => {
                         const commerce = commerces.find(commerce => commerce._id === product.commerceId);
                         return (
-                            <div
-                                key={product._id}
-                                className="group relative bg-white rounded-3xl shadow-xl overflow-hidden cursor-pointer p-5 flex flex-col justify-between text-center hover:shadow-3xl hover:-translate-y-1 transition-all duration-300 h-full"
+                            <ProductCard
+                                key={`${product._id}-${product.commerceId}`}
+                                product={product}
+                                commerce={commerce}
                                 onClick={() => {
                                     setModalProduct(product);
                                     setModalCommerce(commerce);
-                                }}
-                            >
-                                <div className="w-full h-44 overflow-hidden">
-                                    {product.images?.[0] && (
-                                        <img
-                                            src={product.images[0].startsWith("/") ? product.images[0] : `/products/${product.images[0]}`}
-                                            alt={product.name}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                        />
-                                    )}
-                                </div>
-                                <h3 className="text-lg md:text-xl font-title font-semibold text-primary-dark mt-2">
-                                    {product.name}
-                                </h3>
-                                <p className="text-primary-dark mt-1 font-medium">
-                                    {product.price} €
-                                </p>
-                                {commerce && (
-                                    <p className="text-gray-500 text-sm mt-1 truncate">Comercio:{commerce.name}</p>
-                                )}
-                                <FavoriteButton product={product} />
-                                <div className="flex justify-center">
-                                    <CartButton product={product} small />
-                                </div>
-                            </div>
+                                }} />
                         );
                     })}
                 </div>
             )}
 
-            {showProducts && selectedCategory && filteredProducts.length === 0 && (
+            {showProducts && filteredProducts.length === 0 && (
                 <p className="text-center text-gray-500 mt-4">
                     No hay productos en esta categoría.
                 </p>
@@ -164,54 +105,29 @@ export const CommercePage = () => {
                     Comercios
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {filteredCommerces.length > 0 ? (
-                        filteredCommerces.map(commerce => (
-                            <div
-                                key={commerce._id}
-                                className="group bg-white rounded-3xl shadow-xl p-6 border border-primary-light overflow-hidden cursor-pointer hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-                                onClick={() => navigate(`/commerce/${commerce._id}`)}
-                            >
-                                {(commerce.image || commerce.images?.[0]) && (
-                                    <img
-                                        src={(commerce.image || commerce.images[0]).startsWith("/")
-                                            ? (commerce.image || commerce.images[0])
-                                            : `/commerces/${commerce.images?.[0] || commerce.image}`}
-                                        alt={commerce.name}
-                                        className="w-full h-44 sm:h-48 md:h-40 lg:h-36 object-cover rounded-2xl mb-4 transition-transform duration-300 group-hover:scale-105"
-                                    />
-                                )}
-                                <h2 className="text-lg sm:text-xl font-title font-semibold text-primary-dark text-center mt-2 leading-snug">
-                                    {commerce.name}
-                                </h2>
-                                <p className="text-lg sm:text-xl font-title font-semibold text-primary-dark text-center mt-2 leading-snug">
-                                    {commerce.description}
-                                </p>
-                            </div>
-                        ))
-                    ) : (
+                    {commerces.length > 0 && commerces.map(commerce => (
+                        <CommerceCard
+                            key={commerce._id}
+                            commerce={commerce}
+                            onClick={() => navigate(`/commerce/${commerce._id}`)} />
+
+                    ))}
+
+                    {commerces.length === 0 && (
                         <p className="col-span-full text-center text-gray-500">
                             No se encontraron comercios.
                         </p>
                     )}
-
-                    {showScrollTop && (
-                        <button
-                            onClick={scrollToTop}
-                            className="fixed bottom-6 right-6 bg-accent text-primary-dark p-3 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 z-50"
-                        >
-                            ↑
-                        </button>
-                    )}
                 </div>
             </div>
 
-            {modalProduct && (
+            {modalProduct && 
                 <ProductModal
                     product={modalProduct}
                     commerce={modalCommerce}
                     onClose={() => setModalProduct(null)}
                 />
-            )}
+            };
         </div>
     );
 };
