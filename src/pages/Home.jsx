@@ -3,6 +3,8 @@ import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
 import { useEffect, useState } from "react";
 import { CartButton } from "../components/CartButton";
+import { CommerceCard } from "../components/CommerceCard";
+import { ProductCard } from "../components/ProductCard";
 
 export const Home = () => {
     const { commerces } = useCommerce();
@@ -24,7 +26,6 @@ export const Home = () => {
 
     return (
         <div className="font-sans">
-
             <section className="relative max-w-auto mx-auto px-6 py-30 shadow-2xl overflow-hidden">
                 <div
                     className="absolute inset-0 bg-cover bg-right bg-no-repeat"
@@ -90,24 +91,12 @@ export const Home = () => {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
                     {featuredCommerces.map(commerce => (
-                        <Link key={commerce._id} to={`/commerce/${commerce._id}`} className="block group">
-                            <div className="bg-white rounded-2xl shadow-md border border-primary-light overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1 h-full flex flex-col">
-                                {commerce.image && (
-                                    <img
-                                        src={commerce.image}
-                                        alt={commerce.name}
-                                        className="w-full h-44 object-cover rounded-t-3xl transition-transform duration-300 group-hover:scale-105"
-                                    />
-                                )}
-                                <div className="p-5 text-center">
-                                    <h3 className="text-lg md:text-xl font-title font-semibold text-primary-dark mb-2">
-                                        {commerce.name}
-                                    </h3>
-                                    <p className="text-primary-dark text-sm line-clamp-3">
-                                        {commerce.description}
-                                    </p>
-                                </div>
-                            </div>
+                        <Link
+                            key={commerce._id}
+                            to={`/commerce/${commerce._id}`}
+                            className="block"
+                        >
+                            <CommerceCard commerce={commerce} />
                         </Link>
                     ))}
                 </div>
@@ -125,30 +114,12 @@ export const Home = () => {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
                     {featuredProducts.map(product => (
-                        <Link key={product._id} to={`/commerce/${product.commerceId}`} className="block group">
-                            <div className="bg-white rounded-2xl shadow-md border border-primary-light overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between h-full">
-                                {product.images?.[0] && (
-                                    <div className="w-full h-[120px]  overflow-hidden">
-                                        <img
-                                            src={product.images[0]}
-                                            alt={product.name}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                        />
-                                    </div>
-                                )}
-                                <div className="p-5 text-center">
-                                    <h3 className="text-lg md:text-xl font-title font-semibold text-primary-dark  mb-2">
-                                        {product.name}
-                                    </h3>
-                                    <p className="text-primary-dark  mt-1 font-medium">
-                                        {product.price.toFixed(2)} €
-                                    </p>
-                                </div>
-                                
-                                <div className="flex justify-center pb-3">
-                                    <CartButton product={product} small />
-                                </div>
-                            </div>
+                        <Link
+                            key={product._id}
+                            to={`/commerce/${product.commerceId}`}
+                            className="block"
+                        >
+                            <ProductCard product={product} />
                         </Link>
                     ))}
                 </div>
@@ -193,7 +164,6 @@ export const Home = () => {
                     </Link>
                 </div>
             </section>
-
 
             {showScrollTop && (
                 <button

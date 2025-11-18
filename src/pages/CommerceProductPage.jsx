@@ -4,16 +4,17 @@ import { useProduct } from "../core/products/ProductContext";
 import { CommerceCard } from "../components/CommerceCard";
 import { ProductCard } from "../components/ProductCard";
 import { useEffect, useState } from "react";
+import { ProductModal } from "../components/ProductModal";
 
 export const CommerceProductPage = () => {
     const { commerceId } = useParams();
     const { commerces, fetchCommerces } = useCommerce();
     const { products, loadAllProducts } = useProduct();
-
     const [loading, setLoading] = useState(true);
+    const [modalProduct, setModalProduct] = useState(null);
+
 
     useEffect(() => {
-        // Cargar comercios si aún no están
         const loadData = async () => {
             if (commerces.length === 0) await fetchCommerces();
             if (products.length === 0) await loadAllProducts();
@@ -35,16 +36,14 @@ export const CommerceProductPage = () => {
     const commerceProducts = products.filter(p => p.commerceId === commerceId);
 
     const handleProductClick = (product) => {
+        setModalProduct(product);
         console.log("Producto seleccionado:", product);
-        // Aquí podrías abrir un modal o navegar a detalle
     };
 
     return (
         <div className="container mx-auto p-6 space-y-8">
-            {/* Información del comercio */}
             <CommerceCard commerce={commerce} />
 
-            {/* Productos del comercio */}
             <div>
                 <h2 className="text-2xl font-title font-bold text-primary-dark mb-4">
                     Productos de {commerce.name}
@@ -64,6 +63,13 @@ export const CommerceProductPage = () => {
                     <p className="text-center text-gray-500">No hay productos disponibles.</p>
                 )}
             </div>
+
+            {modalProduct && (
+                <ProductModal
+                    product={modalProduct}
+                    onClose={() => setModalProduct(null)}
+                />
+            )}
         </div>
     );
 };

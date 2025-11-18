@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useOrdersContext } from "../contexts/OrdersContext";
-import { FilteredOrders } from "../components/FilteredOrdersList";
+import { FilteredOrders } from "../components/FilteredOrders";
 import { useAuth } from "../core/auth/useAuth";
 import { useNavigate } from "react-router-dom";
 

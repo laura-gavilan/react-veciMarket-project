@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext.jsx";
-import { useOrdersContext } from "../contexts/OrdersContext.jsx";
 import { useAuth } from "../core/auth/useAuth.jsx";
 import { useState } from "react";
-
+import { CreditCardModal } from "../components/CreditCardModal.jsx";
 
 export const CartPage = () => {
     const {
@@ -13,16 +12,18 @@ export const CartPage = () => {
         removeItem,
         checkout
     } = useCart();
-    const { addOrder } = useOrdersContext();
     const navigate = useNavigate();
     const { user } = useAuth();
     const [toast, setToast] = useState(null);
+    const [showCardModal, setShowCardModal] = useState(false);
+    const [cardNumber, setCardNumber] = useState("");
+    const [expiry, setExpiry] = useState("");
+    const [cvc, setCvc] = useState("");
 
     const showToast = (message, duration = 3000) => {
         setToast(message);
         setTimeout(() => setToast(null), duration);
     };
-
 
     if (!cart || !cart.items || cart.items.length === 0) {
         return (
@@ -38,32 +39,47 @@ export const CartPage = () => {
         0
     );
 
-    const handleCheckout = async () => {
-        if (!cart.items || cart.items.length === 0) {
-            showToast("Tu carrito está vacío.");
-            return;
-        }
-
+    
+    const openPaymentModal = () => {
         if (!user?._id) {
             showToast("Debes iniciar sesión para finalizar la compra y ver tu pedido.");
             navigate("/login");
             return;
         }
 
+        setShowCardModal(true);
+    };
+
+    
+    const confirmPayment = async () => {
+        if (cardNumber.length < 16 || expiry.length < 4 || cvc.length < 3) {
+            showToast("Introduce todos los datos de la tarjeta correctamente.");
+            return;
+        }
+
         try {
             const newOrder = await checkout();
             if (newOrder) {
+                setShowCardModal(false);
                 showToast("✅ Compra realizada correctamente");
                 navigate("/orders");
             } else {
                 showToast("Ocurrió un error al finalizar la compra.");
             }
         } catch (error) {
-            console.error("Error al finalizar compra:", error);
-            showToast("Ocurrió un error al finalizar la compra.");
+            console.error("Error:", error);
+            showToast("Error al procesar el pago.");
         }
     };
 
+    const handleCheckout = () => {
+        if (!user?._id) {
+            showToast("Debes iniciar sesión para finalizar la compra.");
+            return navigate("/login");
+        }
+
+        setShowCardModal(true); 
+    };
 
     return (
         <div className="max-w-4xl mx-auto p-8">
@@ -135,7 +151,7 @@ export const CartPage = () => {
                 </h3>
                 <div className="flex justify-center mt-8">
                     <button
-                        onClick={handleCheckout}
+                        onClick={openPaymentModal}
                         className="btn-primary elevation w-full md:w-auto"
                     >
                         Finalizar compra
@@ -143,11 +159,24 @@ export const CartPage = () => {
                 </div>
             </div>
 
+            <CreditCardModal
+                isOpen={showCardModal}
+                onClose={() => setShowCardModal(false)}
+                onConfirm={confirmPayment}
+                cardNumber={cardNumber}
+                setCardNumber={setCardNumber}
+                expiry={expiry}
+                setExpiry={setExpiry}
+                cvc={cvc}
+                setCvc={setCvc}
+            />
+
             {toast && (
                 <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50 text-sm">
                     {toast}
                 </div>
             )}
+
         </div>
     );
 };

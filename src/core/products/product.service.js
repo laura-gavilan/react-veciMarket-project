@@ -4,7 +4,14 @@ export const saveProductsInLocalStorage = (products) => {
 
 export const getProductsFromLocalStorage = () => {
     const data = localStorage.getItem("products");
-    return data ? JSON.parse(data) : [];
+    if (!data || data === "undefined") return [];
+
+    try {
+        return JSON.parse(data);
+    } catch (error) {
+        console.error("JSON parse error in products:", error);
+        return [];
+    }
 };
 
 export const addProductToLocalStorage = (product) => {

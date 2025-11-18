@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from './../core/user/useUser';
+import { EditUserForm } from "../components/EditUserForm";
 
 export const EditUserPage = () => {
     const { user, updateUserData, loading } = useUser();
@@ -21,12 +22,9 @@ export const EditUserPage = () => {
     if (!user)
         return <p className="text-center mt-10 text-primary-dark  font-sans text-lg">No hay usuario logueado.</p>;
 
-    const handleChange = (event) => {
-        setForm({ ...form, [event.target.name]: event.target.value });
-    };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+
+    const handleSubmit = async () => {
         await updateUserData(form);
         navigate("/user");
     };
@@ -45,35 +43,10 @@ export const EditUserPage = () => {
                 Editar Perfil de {user.name}
             </h1>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 text-primary-dark font-sans">
-                {[
-                    { label: "Nombre de usuario", name: "username", type: "text" },
-                    { label: "Nombre", name: "name", type: "text" },
-                    { label: "Primer Apellido", name: "firstName", type: "text" },
-                    { label: "Segundo Apellido", name: "lastName", type: "text" },
-                    { label: "Email", name: "email", type: "email" },
-                    { label: "Teléfono", name: "phoneNumber", type: "text" },
-                    { label: "Dirección", name: "address", type: "text", fullWidth: true }
-                ].map((field) => (
-                    <div key={field.name} className={field.fullWidth ? "md:col-span-2 flex flex-col" : "flex flex-col"}>
-                        <label className="mb-2 font-semibold text-primary-dark">{field.label}:</label>
-                        <input
-                            type={field.type}
-                            name={field.name}
-                            value={form[field.name]}
-                            onChange={handleChange}
-                            className="border border-primary-lightrounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
-                        />
-                    </div>
-                ))}
-
-                <div className="md:col-span-2 flex flex-col sm:flex-row gap-4 mt-6 justify-center">
-                    <button type="submit" 
-                    className="px-6 py-2 text-sm rounded-full btn-primary mt-8"
-                    >Guardar Cambios
-                    </button>
-                </div>
-            </form>
+            <EditUserForm
+                form={form}
+                setForm={setForm}
+                onSubmit={handleSubmit} />
         </div>
     );
 };
