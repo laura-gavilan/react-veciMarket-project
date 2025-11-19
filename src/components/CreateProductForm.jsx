@@ -104,7 +104,7 @@ export const CreateProductForm = ({ onSubmit }) => {
 
             <button
                 type="submit"
-                className="mt-4 w-full bg-primary-dark text-accent py-3 rounded-2xl font-semibold shadow-md hover:bg-primary-light hover:scale-105 transition-all"
+                className="mt-4 w-full bg-primary-light text-accent py-3 rounded-2xl font-semibold shadow-md hover:bg-primary-light hover:scale-105 transition-all"
             >
                 Crear Producto
             </button>

@@ -32,7 +32,7 @@ export const Register = () => {
     };
 
     return (
-        <Container className="flex items-center justify-center min-h-[140vh] px-6 py-16">
+        <Container className="flex items-center justify-center min-h-[140vh] px-6 py-6">
             <div className="w-full max-w-xl bg-white rounded-3xl shadow-xl border border-primary-light p-10 md:p-16 transition-all">
                 <h2 className="text-xl md:text-2xl font-title font-semibold text-center mb-8 text-primary-dark">
                     Crea tu cuenta

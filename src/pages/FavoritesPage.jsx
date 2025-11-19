@@ -1,5 +1,6 @@
 import { useFavorites } from "../core/favorites/useFavorites";
 import { FavoriteButton } from "../components/FavoriteButton.jsx";
+import { CartButton } from "../components/CartButton.jsx";
 
 export const FavoritesPage = () => {
     const { favorites } = useFavorites();
@@ -22,13 +23,13 @@ export const FavoritesPage = () => {
                     {favorites.map((product, index) => (
                         <div
                             key={product._id || `fav-${index}`}
-                            className="relative bg-white border border-primary-light)] rounded-3xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                            className="relative bg-white border border-primary-light)] rounded-3xl shadow-md p-4  flex flex-col items-center text-center justify-between h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                         >
                             {product.images?.[0] && (
                                 <img
                                     src={product.images[0].startsWith("/") ? product.images[0] : `/products/${product.images[0]}`}
                                     alt={product.name}
-                                    className="w-28 h-28 md:w-32 md:h-32 object-cover rounded-2xl mb-4 transition-transform duration-300 hover:scale-105"
+                                    className="w-24 h-24 md:w-28 md:h-28 object-cover rounded-2xl mb-4 transition-transform duration-300 hover:scale-105"
                                 />
                             )}
 
@@ -37,8 +38,9 @@ export const FavoritesPage = () => {
                             </h2>
                             <p className="text-primary-dark mt-1 font-medium">{product.price} €</p>
 
-                            <div className="mt-2">
+                            <div className="mt-3 flex gap-2 justify-center">
                                 <FavoriteButton product={product} />
+                                <CartButton product={product} />
                             </div>
                         </div>
                     ))}

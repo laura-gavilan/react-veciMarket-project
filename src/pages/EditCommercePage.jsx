@@ -56,7 +56,7 @@ export const EditCommercePage = () => {
                     ← Volver
                 </button>
 
-                <h1 className="text-3xl md:text-4xl font-bold text-primary-dark text-center">
+                <h1 className="text-3xl md:text-4xl font-bold text-primary text-center">
                     Editar Comercio
                 </h1>
 

@@ -48,7 +48,7 @@ export const ProductCardInfo = ({ product, isOwner, commerceId, navigate, handle
                         </button>
                         <button
                             onClick={() => handleDelete(product._id)}
-                            className="px-3 py-1 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700 hover:scale-105 transition-transform"
+                            className="text-sm text-red-600 hover:underline"
                         >
                             Eliminar
                         </button>

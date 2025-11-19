@@ -10,7 +10,7 @@ export const NavBar = () => {
     const [userMenu, setUserMenu] = useState(false);
 
 
-    const links = useMemo(() => {
+    const getLinks = () => {
         if (!user) {
             return [
                 { to: "/", label: "Inicio" },
@@ -36,7 +36,9 @@ export const NavBar = () => {
                 { to: "/orders", label: "Pedidos" },
             ];
         }
-    }, [user]);
+    };
+
+    const links = getLinks();
 
     const handleLogout = () => {
         logout();
@@ -46,9 +48,28 @@ export const NavBar = () => {
 
     return (
         <nav className="sticky top-0 z-50 w-full  shadow-md transition-all duration-300">
-            <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 gap-8">
-                <Link to="/" className="flex items-center gap-2">
-                    <span className="font-title text-h4 text-primary font-semibold">VeciMarket</span>
+            <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
+
+                <div className="flex items-center md:hidden">
+                    <button onClick={() => setOpen(!open)}>
+                        <img
+                            src={open ? "/xmark-solid-full.svg" : "/burger-menu.png"}
+                            alt="Menú"
+                            className="w-10 h-10"
+                        />
+                    </button>
+                </div>
+
+                {/* Desktop */}
+                <Link
+                    to="/"
+                    className={`font-title text-h4 text-primary font-semibold 
+                ${open ? "hidden" : "flex"} 
+                md:flex 
+                absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0
+            `}
+                >
+                    VeciMarket
                 </Link>
 
                 <div className="hidden md:flex items-center gap-8 text-[1rem] font-semibold text-primary-dark">
@@ -58,13 +79,12 @@ export const NavBar = () => {
                         </Link>
                     ))}
 
-                    {/* Iconos */}
 
                     <div className="hidden md:flex items-center gap-6 relative">
                         {!user && (
                             <>
 
-                                <Link to="/cart" className="flex items-center justify-center w-6 h-6">
+                                <Link to="/cart" className=" w-6 h-6">
                                     <img
                                         src="/icons/cart_shopping.png"
                                         alt="Cart"
@@ -72,7 +92,7 @@ export const NavBar = () => {
                                     />
                                 </Link>
 
-                                <Link to="/login" className="flex items-center justify-center w-6 h-6">
+                                <Link to="/login" className=" w-6 h-6">
                                     <img
                                         src="/icons/login.png"
                                         alt="Login"
@@ -112,7 +132,7 @@ export const NavBar = () => {
 
 
                                 {userMenu && (
-                                    <div  className="absolute right-0 mt-20 w-40 bg-white border rounded shadow-lg z-50">
+                                    <div className="absolute right-0 mt-20 w-40 bg-white border rounded shadow-lg z-50">
                                         <button
                                             onClick={handleLogout}
                                             className="w-full text-left px-4 py-2 hover:bg-gray-100"
@@ -128,45 +148,52 @@ export const NavBar = () => {
 
 
                 {/* movil */}
-                <div className="flex items-center gap-4 md:hidden">
-                    <button className="focus:outline-none" onClick={() => setOpen(!open)}>
-                        <img
-                            src={open ? "/xmark-solid-full.svg" : "/burger-menu.png"}
-                            alt="Menú"
-                            className="w-10 h-10 transition-transform duration-300"
-                        />
-                    </button>
-                </div>
+                {!open && (
+                    <div className="flex items-center gap-4 md:hidden ml-auto">
+
+                        {!user && (
+                            <>
+                                <Link to="/cart" className="w-7 h-7">
+                                    <img src="/icons/cart_shopping.png" className="w-full h-full" />
+                                </Link>
+
+                                <Link to="/login" className="w-7 h-7">
+                                    <img src="/icons/login.png" className="w-full h-full" />
+                                </Link>
+                            </>
+                        )}
+
+                        {user && (
+                            <>
+                                <Link to="/favorites" className="w-7 h-7">
+                                    <img src="/icons/favourite.png" className="w-full h-full" />
+                                </Link>
+
+                                <Link to="/cart" className="w-7 h-7">
+                                    <img src="/icons/cart_shopping.png" className="w-full h-full" />
+                                </Link>
+                            </>
+                        )}
+                    </div>
+                )}
             </div>
 
-
+            {/* MENÚ MOVIL — SIN ICONOS */}
             {open && (
-                <div className="md:hidden flex flex-col items-center gap-4 py-4 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] shadow-inner border-t border-[var(--color-burdeos-light)] text-lg font-semibold transition-all duration-300">
+                <div className="md:hidden flex flex-col items-center gap-4 py-4 bg-[var(--color-burdeos-dark)] text-[var(--color-mostaza-pastel)] text-lg font-semibold">
                     {links.map(({ to, label }) => (
                         <Link
                             key={to}
                             to={to}
                             onClick={() => setOpen(false)}
-                            className="hover:text-accent-primary transition-colors duration-300"
+                            className="hover:text-accent-primary"
                         >
                             {label}
                         </Link>
                     ))}
 
                     {!user ? (
-                        <>
-                            <Link to="/cart" onClick={() => setOpen(false)}>
-                                Cesta
-                            </Link>
-
-                            <Link to="/login" onClick={() => setOpen(false)} className="w-10 h-10">
-                                <img
-                                    src="/icons/login.png"
-                                    alt="Login"
-                                    className="w-full h-full object-contain"
-                                />
-                            </Link>
-                        </>
+                        <></>
                     ) : (
                         <button
                             onClick={handleLogout}
@@ -177,6 +204,6 @@ export const NavBar = () => {
                     )}
                 </div>
             )}
-        </nav >
+        </nav>
     );
 };
