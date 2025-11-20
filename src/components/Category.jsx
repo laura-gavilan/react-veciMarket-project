@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useContext, useMemo } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { api } from "../core/http/axios";
 import { ProductCard } from "./ProductCard";
@@ -10,15 +10,12 @@ export const Category = ({ products, refreshProducts, ownerId, commerceId }) => 
     const navigate = useNavigate();
     const isOwner = user?._id === ownerId;
 
-    const categories = useMemo(() => {
-        const catMap = {};
+    const categories = {};
         products.forEach(product => {
             const cat = product.category || "other";
-            if (!catMap[cat]) catMap[cat] = [];
-            catMap[cat].push(product);
+            if (!categories[cat]) categories[cat] = [];
+            categories[cat].push(product);
         });
-        return catMap;
-    }, [products]);
 
     const handleDelete = async (productId) => {
         if (!window.confirm("¿Eliminar producto?")) return;
