@@ -1,17 +1,13 @@
 import { Link } from "react-router-dom";
 import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
-import { useEffect, useState } from "react";
-import { CartButton } from "../components/CartButton";
+import { useEffect, useMemo, useState } from "react";
 import { CommerceCard } from "../components/CommerceCard";
 import { ProductCard } from "../components/ProductCard";
 
 export const Home = () => {
     const { commerces } = useCommerce();
     const { products } = useProduct();
-
-    const featuredCommerces = commerces.slice(0, 5);
-    const featuredProducts = products.slice(0, 5);
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     useEffect(() => {
@@ -23,6 +19,37 @@ export const Home = () => {
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
+
+    
+    const featuredCommerces = useMemo(() => commerces.slice(0, 5), [commerces]);
+    const featuredProducts = useMemo(() => products.slice(0, 5),[products]);
+
+    const categoryLinks = useMemo(() =>
+        ["Alimentación", "Libros", "Hogar", "Deportes", "Belleza"].map(category => (
+            <Link
+                key={category}
+                to={`/commerce?category=${category.toLowerCase()}`}
+                className="px-6 py-3 bg-accent-primary text-primary-dark font-semibold rounded-full shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300"
+            >
+                {category}
+            </Link>
+        ))
+    , []);
+
+    const commerceCards = useMemo(() =>
+        featuredCommerces.map(commerce => (
+            <Link key={commerce._id} to={`/commerce/${commerce._id}`} className="block">
+                <CommerceCard commerce={commerce} />
+            </Link>
+        )), [featuredCommerces]);
+
+    const productCards = useMemo(() =>
+        featuredProducts.map(product => (
+            <Link key={product._id} to={`/commerce/${product.commerceId}`} className="block">
+                <ProductCard product={product} />
+            </Link>
+        )), [featuredProducts]);
+
 
     return (
         <div className="font-sans">
@@ -67,15 +94,7 @@ export const Home = () => {
                     Categorías destacadas
                 </h2>
                 <div className="flex flex-wrap justify-center gap-4">
-                    {["Alimentación", "Libros", "Hogar", "Deportes", "Belleza"].map(category => (
-                        <Link
-                            key={category}
-                            to={`/commerce?category=${category.toLowerCase()}`}
-                            className="px-6 py-3 bg-accent-primary text-primary-dark font-semibold rounded-full shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300"
-                        >
-                            {category}
-                        </Link>
-                    ))}
+                    {categoryLinks}
                 </div>
                 <div className="mt-10">
                     <Link to="/commerce" className="btn-secondary">
@@ -90,15 +109,7 @@ export const Home = () => {
                     Comercios destacados
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
-                    {featuredCommerces.map(commerce => (
-                        <Link
-                            key={commerce._id}
-                            to={`/commerce/${commerce._id}`}
-                            className="block"
-                        >
-                            <CommerceCard commerce={commerce} />
-                        </Link>
-                    ))}
+                    {commerceCards}
                 </div>
                 <div className="mt-10 text-center">
                     <Link to="/commerce" className="btn-secondary">
@@ -113,15 +124,7 @@ export const Home = () => {
                     Productos destacados
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
-                    {featuredProducts.map(product => (
-                        <Link
-                            key={product._id}
-                            to={`/commerce/${product.commerceId}`}
-                            className="block"
-                        >
-                            <ProductCard product={product} />
-                        </Link>
-                    ))}
+                    {productCards}
                 </div>
                 <div className="mt-10 text-center">
                     <Link to="/commerce" className="btn-secondary">

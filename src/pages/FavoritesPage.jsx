@@ -1,26 +1,14 @@
 import { useFavorites } from "../core/favorites/useFavorites";
 import { FavoriteButton } from "../components/FavoriteButton.jsx";
 import { CartButton } from "../components/CartButton.jsx";
+import { useMemo } from "react";
 
 export const FavoritesPage = () => {
     const { favorites } = useFavorites();
     const hasFavorites = Array.isArray(favorites) && favorites.length > 0;
 
-    return (
-        <div className="max-w-6xl mx-auto px-6 py-10">
-            <h1 className="text-3xl md:text-4xl font-title font-semibold mb-8 text-primary text-center">
-                Mis productos favoritos
-            </h1>
-
-            {!hasFavorites && (
-                <p className="text-center text-gray-500 mt-4">
-                    No tienes productos favoritos.
-                </p>
-            )}
-
-            {hasFavorites && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {favorites.map((product, index) => (
+    const favoriteCards = useMemo(() => {
+        return favorites.map((product, index) => (
                         <div
                             key={product._id || `fav-${index}`}
                             className="relative bg-white border border-primary-light)] rounded-3xl shadow-md p-4  flex flex-col items-center text-center justify-between h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
@@ -43,7 +31,24 @@ export const FavoritesPage = () => {
                                 <CartButton product={product} />
                             </div>
                         </div>
-                    ))}
+                    ))
+    }, [favorites]);
+
+    return (
+        <div className="max-w-6xl mx-auto px-6 py-10">
+            <h1 className="text-3xl md:text-4xl font-title font-semibold mb-8 text-primary text-center">
+                Mis productos favoritos
+            </h1>
+
+            {!hasFavorites && (
+                <p className="text-center text-gray-500 mt-4">
+                    No tienes productos favoritos.
+                </p>
+            )}
+
+            {hasFavorites && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {favoriteCards}
                 </div>
             )}
         </div>

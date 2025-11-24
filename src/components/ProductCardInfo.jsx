@@ -1,16 +1,35 @@
-export const ProductCardInfo = ({ product, isOwner, commerceId, navigate, handleDelete }) => {
+import { memo, useMemo } from "react";
+
+export const ProductCardInfo = memo(({ product, isOwner, commerceId, navigate, handleDelete }) => {
     if (!product) return null;
 
-    let imageSrc = null;
-
-    if (product.images?.[0]) {
+    const imageSrc = useMemo(() => {
+        if (!product.images?.[0]) return null;
         const img = product.images[0];
-
-        imageSrc = (img.startsWith("http") || img.startsWith("/products/"))
+        return img.startsWith("http") || img.startsWith("/products/")
             ? img
             : `/products/${img}`;
-    }
+    }, [product.images]);
 
+    const ownerButtons = useMemo(() => {
+        if (!isOwner) return null;
+        return (
+            <div className="flex gap-3 mt-3 justify-center">
+                <button
+                    onClick={() => navigate(`/admin/commerce/${commerceId}/edit/${product._id}`)}
+                    className="px-3 py-1 text-sm rounded-lg btn-primary hover:scale-105 transition-transform"
+                >
+                    Editar
+                </button>
+                <button
+                    onClick={() => handleDelete(product._id)}
+                    className="text-sm text-red-600 hover:underline"
+                >
+                    Eliminar
+                </button>
+            </div>
+        );
+    }, [isOwner, commerceId, product._id, navigate, handleDelete]);
 
 
     return (
@@ -38,23 +57,8 @@ export const ProductCardInfo = ({ product, isOwner, commerceId, navigate, handle
                     </p>
                 </div>
 
-                {isOwner && (
-                    <div className="flex gap-3 mt-3 justify-center">
-                        <button
-                            onClick={() => navigate(`/admin/commerce/${commerceId}/edit/${product._id}`)}
-                            className="px-3 py-1 text-sm rounded-lg btn-primary hover:scale-105 transition-transform"
-                        >
-                            Editar
-                        </button>
-                        <button
-                            onClick={() => handleDelete(product._id)}
-                            className="text-sm text-red-600 hover:underline"
-                        >
-                            Eliminar
-                        </button>
-                    </div>
-                )}
+                {ownerButtons}
             </div>
         </div>
     );
-};
+});

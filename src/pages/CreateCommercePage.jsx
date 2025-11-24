@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../core/auth/useAuth';
-
 import { useCommerce } from './../core/commerce/CommerceContext';
 import { useState } from 'react';
 import { CreateCommerceForm } from '../components/CreateCommerceForm';

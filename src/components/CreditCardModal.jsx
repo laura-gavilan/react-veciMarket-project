@@ -1,4 +1,6 @@
-export const CreditCardModal = ({ isOpen, onClose, onConfirm, cardNumber, setCardNumber, expiry, setExpiry, cvc, setCvc }) => {
+import { memo } from "react";
+
+export const CreditCardModal = memo(({ isOpen, onClose, onConfirm, cardNumber, setCardNumber, expiry, setExpiry, cvc, setCvc }) => {
     if (!isOpen) return null;
 
     return (
@@ -56,4 +58,4 @@ export const CreditCardModal = ({ isOpen, onClose, onConfirm, cardNumber, setCar
             </div>
         </div>
     );
-};
+});
