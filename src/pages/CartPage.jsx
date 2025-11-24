@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext.jsx";
 import { useAuth } from "../core/auth/useAuth.jsx";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CreditCardModal } from "../components/CreditCardModal.jsx";
+import { CartItems } from "../components/CartItems.jsx";
+
 
 export const CartPage = () => {
     const {
@@ -25,6 +27,21 @@ export const CartPage = () => {
         setTimeout(() => setToast(null), duration);
     };
 
+    const total = useMemo(() => {
+        if (!cart?.items?.length) return 0;
+
+        if (cart?.items?.length)
+            return cart.items.reduce((acc, item) => {
+                const price = item.priceSnapshot ?? item.productId?.price ?? 0;
+                return acc + price * item.qty;
+            }, 0);
+    }, [cart?.items]);
+
+
+    const cartItems = useMemo(() => {
+        return cart.items.filter(item => item?.productId?._id);
+    }, [cart.items]);
+
     if (!cart || !cart.items || cart.items.length === 0) {
         return (
             <div className="p-8 text-center">
@@ -34,12 +51,6 @@ export const CartPage = () => {
         );
     }
 
-    const total = cart.items.reduce(
-        (acc, item) => acc + (item.priceSnapshot ?? item.productId?.price ?? 0) * item.qty,
-        0
-    );
-
-    
     const openPaymentModal = () => {
         if (!user?._id) {
             showToast("Debes iniciar sesión para finalizar la compra y ver tu pedido.");
@@ -50,7 +61,7 @@ export const CartPage = () => {
         setShowCardModal(true);
     };
 
-    
+
     const confirmPayment = async () => {
         if (cardNumber.length < 16 || expiry.length < 4 || cvc.length < 3) {
             showToast("Introduce todos los datos de la tarjeta correctamente.");
@@ -78,7 +89,7 @@ export const CartPage = () => {
             return navigate("/login");
         }
 
-        setShowCardModal(true); 
+        setShowCardModal(true);
     };
 
     return (
@@ -88,61 +99,13 @@ export const CartPage = () => {
             {loading && <p className="text-center text-primary-dark">Cargando...</p>}
 
             <div className="space-y-6">
-                {cart.items.map((item, index) => (
-                    <div
-                        key={`${item.productId?._id}-${index}`}
-                        className="flex flex-col md:flex-row items-center justify-between bg-white shadow-md rounded-3xl p-4"
-                    >
-                        <div className="flex items-center gap-4">
-                            <img
-                                src={item.productId?.images?.[0]}
-                                alt={item.productId?.name}
-                                className="w-24 h-24 object-cover rounded-xl"
-                            />
-                            <div>
-                                <h3 className="text-lg font-semibold text-primary-dark">
-                                    {item.productId?.name}
-                                </h3>
-                                <p className="text-primary-dark">
-                                    {item.productId?.description || "Sin descripción"}
-                                </p>
-                                <p className="font-bold mt-1 text-primary-dark">
-                                    Precio: {(item.priceSnapshot ?? item.productId?.price ?? 0).toFixed(2)} €
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col items-center gap-2 mt-4 md:mt-0">
-                            <div className="flex items-center gap-2">
-                                <button
-                                    className="px-3 py-1 rounded-lg"
-                                    onClick={() =>
-                                        updateItem(item.productId._id, item.qty - 1)
-                                    }
-                                    disabled={item.qty <= 1}
-                                >
-                                    -
-                                </button>
-                                <span className="text-lg font-semibold">{item.qty}</span>
-                                <button
-                                    className="px-3 py-1 rounded-lg"
-                                    onClick={() =>
-                                        updateItem(item.productId._id, item.qty + 1)
-                                    }
-                                >
-                                    +
-                                </button>
-                            </div>
-
-                            <button
-                                className="text-sm text-red-600 hover:underline"
-                                onClick={() => removeItem(item.productId._id)}
-                            >
-                                Eliminar
-                            </button>
-                        </div>
-                    </div>
-                ))}
+                {cartItems.map((item, index) => (
+                        <CartItems
+                        key={`${item.productId._id}-${index}`}
+                        item={item}
+                        updateItem={updateItem}
+                        removeItem={removeItem} />
+                    ))}
             </div>
 
             <div className="mt-10 flex flex-col md:flex-row justify-between items-center border-t border-primary-light pt-6">

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import { useProduct } from "../core/products/ProductContext";
@@ -6,7 +6,6 @@ import { useCommerce } from "../core/commerce/CommerceContext";
 import { BackButton } from "../components/BackButton";
 import { CommerceHeader } from "../components/CommerceHeader";
 import { OwnerActions } from "../components/OwnerActions";
-import { ProductsSection } from "../components/ProductsSection";
 import { ScrollToTop } from "../components/ScrollToTop";
 import { ProductCardInfo } from "../components/ProductCardInfo";
 
@@ -18,8 +17,13 @@ export const CommerceDetailsAdminPage = () => {
     const navigate = useNavigate();
     const [showScrollTop, setShowScrollTop] = useState(false);
 
-    const selectedCommerce = commerces.find(commerce => commerce._id === commerceId);
-    const isOwner = user?._id === selectedCommerce?.ownerUserId?._id;
+    const selectedCommerce = useMemo(() =>
+        commerces.find(commerce => commerce._id === commerceId),
+        [commerces, commerceId]);
+
+    const isOwner = useMemo(() =>
+        user?._id === selectedCommerce?.ownerUserId?._id,
+        [user?._id, selectedCommerce?.ownerUserId?._id]);
 
     useEffect(() => {
         if (commerces.length === 0) fetchCommerces();
@@ -35,9 +39,23 @@ export const CommerceDetailsAdminPage = () => {
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    const refreshProducts = () => {
-        if (selectedCommerce) loadProductsByCommerce(selectedCommerce._id);
-    };
+    const renderedProducts = useMemo(() => {
+        if (!selectedCommerce) return [];
+
+        return products
+            .filter(product => product.commerceId === selectedCommerce._id)
+            .map(product => (
+                <ProductCardInfo
+                    key={product._id}
+                    product={product}
+                    isOwner={isOwner}
+                    commerceId={selectedCommerce._id}
+                    navigate={navigate}
+                    handleDelete={deleteProduct}
+                />
+            ));
+    }, [products, selectedCommerce?._id, isOwner, navigate, deleteProduct]);
+
 
     if (!selectedCommerce)
         return (
@@ -66,18 +84,7 @@ export const CommerceDetailsAdminPage = () => {
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                {products
-                    .filter(product => product.commerceId === selectedCommerce._id)
-                    .map(product => (
-                        <ProductCardInfo
-                            key={product._id}
-                            product={product}
-                            isOwner={isOwner}
-                            commerceId={selectedCommerce._id}
-                            navigate={navigate}
-                            handleDelete={deleteProduct}
-                        />
-                    ))}
+                {renderedProducts}
 
                 {showScrollTop && <ScrollToTop />}
             </div>

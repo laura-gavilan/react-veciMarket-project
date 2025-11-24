@@ -1,9 +1,10 @@
+import { memo, useMemo } from "react";
 import { useNavigate } from "react-router-dom"
 
-export const OwnerActions = ({ commerceId, onDelete }) => {
+export const OwnerActions = memo(({ commerceId, onDelete }) => {
     const navigate = useNavigate();
 
-    return (
+    const buttons = useMemo(() => {
         <div className="flex flex-wrap gap-4 mt-4">
             <button
                 onClick={() => navigate(`/admin/commerce/${commerceId}/edit`)}
@@ -26,5 +27,7 @@ export const OwnerActions = ({ commerceId, onDelete }) => {
                 🗑️ Eliminar Comercio
             </button>
         </div>
-    );
-};
+    }, [commerceId, onDelete, navigate]);
+
+    return buttons;
+});

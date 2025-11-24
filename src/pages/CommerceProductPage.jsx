@@ -3,7 +3,7 @@ import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
 import { CommerceCard } from "../components/CommerceCard";
 import { ProductCard } from "../components/ProductCard";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ProductModal } from "../components/ProductModal";
 
 export const CommerceProductPage = () => {
@@ -23,22 +23,30 @@ export const CommerceProductPage = () => {
         loadData();
     }, []);
 
+
+    const commerce = useMemo(() =>
+        commerces.find(commerce => commerce._id === commerceId
+        ), [commerces, commerceId]);
+
+
+    const commerceProducts = useMemo(
+        () => products.filter(product => product.commerceId === commerceId
+        ), [products, commerceId]);
+
+    const memoProductsCards = useMemo(() => {
+        return commerceProducts.map(product => (
+            <ProductCard
+                key={product._id}
+                product={product}
+                commerce={commerce}
+                onClick={() => setModalProduct(product)}
+            />
+        ))
+    }, [commerceProducts, commerce, setModalProduct]);
+
     if (loading) {
         return <p className="text-center mt-10 text-gray-500">Cargando comercio y productos...</p>;
     }
-
-    const commerce = commerces.find(c => c._id === commerceId);
-
-    if (!commerce) {
-        return <p className="text-center mt-10 text-red-500">No se encontró el comercio.</p>;
-    }
-
-    const commerceProducts = products.filter(p => p.commerceId === commerceId);
-
-    const handleProductClick = (product) => {
-        setModalProduct(product);
-        console.log("Producto seleccionado:", product);
-    };
 
     return (
         <div className="container mx-auto p-6 space-y-8">
@@ -50,14 +58,7 @@ export const CommerceProductPage = () => {
                 </h2>
                 {commerceProducts.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {commerceProducts.map(product => (
-                            <ProductCard
-                                key={product._id}
-                                product={product}
-                                commerce={commerce}
-                                onClick={() => handleProductClick(product)}
-                            />
-                        ))}
+                        {memoProductsCards}
                     </div>
                 ) : (
                     <p className="text-center text-gray-500">No hay productos disponibles.</p>

@@ -33,14 +33,13 @@ export const CartProvider = ({ children }) => {
     const { addOrder } = useOrdersContext();
     const [toast, setToast] = useState(null);
 
+    const showToast = (message, duration = 3000) => {
+        setToast(message);
+        setTimeout(() => setToast(null), duration);
+    };
+
     const fetchCart = async () => {
         setLoading(true);
-
-        const showToast = (message, duration = 3000) => {
-            setToast(message);
-            setTimeout(() => setToast(null), duration);
-        };
-
 
         if (!userId) {
             let guestCart = getCartsFromLocalStorage("guest");
@@ -71,8 +70,8 @@ export const CartProvider = ({ children }) => {
             addCartToLocalStorage(userId, activeCart);
         } catch (error) {
             console.error("Error cargando carrito API:", error);
-            const localData = getCartsFromLocalStorage(userId);
-            const localCart = localData.find(c => c.status === "active" && c.userId === userId) || null;
+            const localCart = getCartsFromLocalStorage(userId)
+                .find(c => c.status === "active" && c.userId === userId) || { items: [] };
             setCart(localCart);
         } finally {
             setLoading(false);
@@ -80,15 +79,17 @@ export const CartProvider = ({ children }) => {
     };
 
     const addItem = async (product, qty = 1) => {
-        if (!product?._id) return;
+        if (!product?._id) return showToast("Producto inválido");;
 
         // Usuario logueado
         if (userId) {
-            if (!cart) throw new Error("No hay carrito disponible");
+            if (!cart) throw new showToast("No hay carrito disponible");
             const payload = { productId: product._id, qty, priceSnapshot: product.price };
             const updatedCart = await addItemToCartApi(cart._id, payload);
             setCart(updatedCart);
-            addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId: product, qty });
+            if (updatedCart?._id) {
+                addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId: product, qty });
+            }
             return;
         }
 
@@ -108,12 +109,7 @@ export const CartProvider = ({ children }) => {
         const guestCart = guestCarts[0];
 
         addOrUpdateItemInCartLocal("guest", guestCart._id, { productId: product, qty, priceSnapshot: product.price });
-        setCart(prev => ({
-            ...guestCart,
-            items: guestCart.items.find(item => item.productId._id === product._id)
-                ? guestCart.items.map(item => item.productId._id === product._id ? { ...item, qty } : item)
-                : [...guestCart.items, { productId: product, qty, priceSnapshot: product.price }]
-        }));
+                setCart({ ...guestCart, items: getCartsFromLocalStorage("guest")[0].items });
     };
 
 
@@ -132,7 +128,7 @@ export const CartProvider = ({ children }) => {
         } else {
             const updatedCart = await updateCartItemApi(cart._id, productId, { qty });
             setCart(updatedCart);
-            addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId, qty });
+             if (updatedCart?._id) addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId, qty });
         }
     };
 
@@ -194,13 +190,9 @@ export const CartProvider = ({ children }) => {
             // Invitado: solo guardamos localmente
             addOrderToLocalStorage(newOrder);
             await clearCart();
-            setCart((prev) => ({
-                ...prev,
-                items: [],
-                status: "ordered",
-                updatedAt: new Date().toISOString()
-            }));
-            saveCartsInLocalStorage("guest", [{ ...cart, items: [], status: "ordered", updatedAt: new Date().toISOString() }]);
+            const emptyCart = { ...cart, items: [], status: "ordered", updatedAt: new Date().toISOString() };
+            setCart(emptyCart);
+            saveCartsInLocalStorage("guest", [emptyCart]);
             showToast("✅ Compra realizada como invitado. Para ver el estado de tu pedido debes registrarte o iniciar sesión.");
             return newOrder;
         }

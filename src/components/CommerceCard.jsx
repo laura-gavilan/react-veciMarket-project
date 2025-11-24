@@ -1,8 +1,16 @@
-export const CommerceCard = ({ commerce, onClick }) => {
-    const imageSrc = (commerce.image || commerce.images?.[0])?.startsWith("/")
-        ? (commerce.image || commerce.images?.[0])
-        : `/commerces/${commerce.images?.[0] || commerce.image}`;
+import { memo, useMemo } from "react";
 
+export const CommerceCard = memo(({ commerce, onClick }) => {
+
+    const imageSrc = useMemo(() => {
+        const img = commerce.image || commerce.images?.[0];
+        if (!img) return null;
+
+        return img.startsWith("/")
+            ? img
+            : `/commerces/${img}`;
+    }, [commerce.image, commerce.images]);
+    
     return (
         <div
             className="group bg-white rounded-3xl shadow-xl p-6 border border-primary-light overflow-hidden cursor-pointer hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
@@ -23,4 +31,4 @@ export const CommerceCard = ({ commerce, onClick }) => {
             </p>
         </div>
     );
-};
+});

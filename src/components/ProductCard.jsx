@@ -1,7 +1,8 @@
+import { memo } from "react";
 import { CartButton } from "./CartButton";
 import { FavoriteButton } from "./FavoriteButton";
 
-export const ProductCard = ({ product, commerce, onClick }) => {
+export const ProductCard = memo(({ product, commerce, onClick }) => {
     let imageSrc = null;
 
     if (product.images?.[0]) {
@@ -41,4 +42,4 @@ export const ProductCard = ({ product, commerce, onClick }) => {
             </div>
         </div>
     );
-}
+});

@@ -1,4 +1,6 @@
-export const FilteredOrders = ({
+import { memo, useMemo } from "react";
+
+export const FilteredOrders = memo(({
     filteredOrders,
     statusOptions,
     statusLabels,
@@ -15,16 +17,17 @@ export const FilteredOrders = ({
 
     const isAdmin = user?.role === "admin";
 
-    const visibleOrders = filteredOrders.filter(order => {
-        if (isAdmin) return true;
-        if (user?._id) return order.userId === user._id;
-        return false;
-    });
+    const visibleOrders = useMemo(() => {
+        return filteredOrders.filter(order => {
+            if (isAdmin) return true;
+            if (user?._id) return order.userId === user._id;
+            return false;
+        });
+    }, [filteredOrders, user, isAdmin]);
 
-    return (
-        <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2">
-                {visibleOrders.map(order => {
+
+    const orders = useMemo(() => {
+        return visibleOrders.map(order => {
                     const { subtotal, tax, total } = getTotals(order);
                     const noteValue = notesState[order._id] ?? order.notes ?? "";
                     const statusColor = getStatusColor(order.status).split(' ')[0];
@@ -128,8 +131,14 @@ export const FilteredOrders = ({
 
                         </div>
                     )
-                })}
+                })
+    }, [visibleOrders, notesState, statusLabels, statusOptions, canEdit, isAdmin, handleNotesChange, saveNotes, getStatusColor, getTotals, updateOrderStatus, deleteOrder]);
+
+    return (
+        <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2">
+                {orders}
             </div>
         </div>
     )
-}
+});
