@@ -27,6 +27,12 @@ export const CartPage = () => {
         setTimeout(() => setToast(null), duration);
     };
 
+    const cartItems = useMemo(() => {
+        if (!cart || !cart.items) return [];
+        return cart.items.filter(item => item?.productId?._id);
+    }, [cart]);
+
+
     const total = useMemo(() => {
         if (!cart?.items?.length) return 0;
 
@@ -35,12 +41,8 @@ export const CartPage = () => {
                 const price = item.priceSnapshot ?? item.productId?.price ?? 0;
                 return acc + price * item.qty;
             }, 0);
-    }, [cart?.items]);
+    }, [cart]);
 
-
-    const cartItems = useMemo(() => {
-        return cart.items.filter(item => item?.productId?._id);
-    }, [cart.items]);
 
     if (!cart || !cart.items || cart.items.length === 0) {
         return (
@@ -100,12 +102,12 @@ export const CartPage = () => {
 
             <div className="space-y-6">
                 {cartItems.map((item, index) => (
-                        <CartItems
+                    <CartItems
                         key={`${item.productId._id}-${index}`}
                         item={item}
                         updateItem={updateItem}
                         removeItem={removeItem} />
-                    ))}
+                ))}
             </div>
 
             <div className="mt-10 flex flex-col md:flex-row justify-between items-center border-t border-primary-light pt-6">

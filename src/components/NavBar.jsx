@@ -1,18 +1,21 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, memo, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import { useAuth } from "../core/auth/useAuth";
 import { useCart } from "../core/cart/useCart";
 
 
-export const NavBar = () => {
+export const NavBar = memo(() => {
     const { user } = useContext(AuthContext);
     const { logout } = useAuth();
     const [open, setOpen] = useState(false);
     const [userMenu, setUserMenu] = useState(false);
     const { getTotalItems } = useCart();
-    const totalItems = getTotalItems();
     const [animate, setAnimate] = useState(false);
+
+    const totalItems = useMemo(() => {
+        return getTotalItems();
+    }, [getTotalItems]);
 
     useEffect(() => {
         if (totalItems > 0) {
@@ -23,7 +26,7 @@ export const NavBar = () => {
     }, [totalItems]);
 
 
-    const getLinks = () => {
+    const links = useMemo(() => {
         if (!user) {
             return [
                 { to: "/", label: "Inicio" },
@@ -49,15 +52,17 @@ export const NavBar = () => {
                 { to: "/orders", label: "Pedidos" },
             ];
         }
-    };
+    }, [user]);
 
-    const links = getLinks();
 
-    const handleLogout = () => {
+    const handleLogout = useCallback(() => {
         logout();
         setUserMenu(false);
         setOpen(false);
-    };
+    }, [logout]);
+
+    const toggleUserMenu = useCallback(() => setUserMenu(prev => !prev), []);
+    const toggleMobileMenu = useCallback(() => setOpen(prev => !prev), []);
 
     return (
         <div className="pt-20">
@@ -65,7 +70,7 @@ export const NavBar = () => {
                 <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
 
                     <div className="flex items-center md:hidden">
-                        <button onClick={() => setOpen(!open)}>
+                        <button onClick={toggleMobileMenu}>
                             <img
                                 src={open ? "/xmark-solid-full.svg" : "/burger-menu.png"}
                                 alt="Menú"
@@ -147,7 +152,7 @@ export const NavBar = () => {
                                     </Link>
 
                                     {/* ICONO USUARIO CON PUNTO VERDE */}
-                                    <button onClick={() => setUserMenu(!userMenu)} className="relative w-6 h-6">
+                                    <button onClick={toggleUserMenu} className="relative w-6 h-6">
                                         <img
                                             src="/icons/login.png"
                                             alt="Usuario"
@@ -210,7 +215,7 @@ export const NavBar = () => {
                                         )}
                                     </Link>
 
-                                    <button className="relative w-7 h-7" onClick={() => setUserMenu(!userMenu)}>
+                                    <button className="relative w-7 h-7" onClick={toggleUserMenu}>
                                         <img src="/icons/login.png" className="w-full h-full" />
                                         <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-white"></span>
                                     </button>
@@ -260,4 +265,4 @@ export const NavBar = () => {
             </nav>
         </div>
     );
-};
+});

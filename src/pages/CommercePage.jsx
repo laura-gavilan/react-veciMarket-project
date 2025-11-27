@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +41,10 @@ export const CommercePage = () => {
 
     useEffect(() => { loadAllProducts(); }, []);
 
+    const handleSearch = useCallback((value) => {
+        setSearch(value);
+    }, []);
+
     const filteredProducts = useMemo(() => {
         if (!showProducts) return [];
 
@@ -77,30 +81,13 @@ export const CommercePage = () => {
         ));
     }, [commerces, navigate]);
 
-
-    // useEffect(() => {
-    //     if (!showProducts) {
-    //         setFilteredProducts([]);
-    //         return;
-    //     }
-    //     const searchLower = search.toLowerCase();
-
-    //     setFilteredProducts(
-    //         products.filter(product =>
-    //             product.name.toLowerCase().includes(searchLower) &&
-    //             (selectedCategory === "all" || product.category.includes(selectedCategory))
-    //         )
-    //     );
-
-    // }, [search, products, selectedCategory, showProducts]);
-
     return (
         <div className="min-h-screen px-6 py-12 flex flex-col items-center max-w-7xl mx-auto">
             <h1 className="text-center mb-8 text-4xl md:text-5xl font-title font-bold text-primary-dark leading-tight">
                 Explora los <span className="text-accent-primary">productos</span> y <span className="text-accent-primary">comercios</span> de tu barrio
             </h1>
 
-            <SearchBar search={search} setSearch={setSearch} />
+            <SearchBar onSearch={handleSearch} />
 
             <CategoryFilter
                 categories={categories}

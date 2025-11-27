@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback, useMemo } from "react";
 import { getTokenFromLocalStorage, saveUserInLocalStorage, removeUserFromLocalStorage } from "../core/auth/auth.service";
 import { getProfileApi } from "../core/auth/auth.api";
 
@@ -31,18 +31,25 @@ export const UserProvider = ({ children }) => {
         loadCurrentUser();
     }, []);
 
-    const updateUser = (newUser) => {
+    const updateUser = useCallback((newUser) => {
         setUser(newUser);
         saveUserInLocalStorage(newUser);
-    };
+    }, []);
 
-    const clearUser = () => {
+    const clearUser = useCallback(() => {
         setUser(null);
         removeUserFromLocalStorage();
-    };
+    }, []);
+
+    const contextValue = useMemo(() => ({
+        user,
+        setUser: updateUser,
+        clearUser,
+        loading
+    }), [user, updateUser, clearUser, loading]);
 
     return (
-        <UserContext.Provider value={{ user, setUser: updateUser, clearUser }}>
+        <UserContext.Provider value={contextValue}>
             {children}
         </UserContext.Provider>
     );

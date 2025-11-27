@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import {
     createCartApi,
     getCartsApi,
@@ -33,12 +33,12 @@ export const CartProvider = ({ children }) => {
     const { addOrder } = useOrdersContext();
     const [toast, setToast] = useState(null);
 
-    const showToast = (message, duration = 3000) => {
+    const showToast = useCallback((message, duration = 3000) => {
         setToast(message);
         setTimeout(() => setToast(null), duration);
-    };
+    }, []);
 
-    const fetchCart = async () => {
+    const fetchCart = useCallback(async () => {
         setLoading(true);
 
         if (!userId) {
@@ -76,45 +76,50 @@ export const CartProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [userId]);
 
-    const addItem = async (product, qty = 1) => {
-        if (!product?._id) return showToast("Producto inválido");;
+    const addItem = useCallback(async (product, qty = 1) => {
+        if (!product?._id) {
+            showToast("Producto inválido");
+            return;
+        };
 
-        // Usuario logueado
         if (userId) {
-            if (!cart) throw new showToast("No hay carrito disponible");
+            if (!cart) {
+                showToast("No hay carrito disponible");
+                return;
+            };
+
             const payload = { productId: product._id, qty, priceSnapshot: product.price };
             const updatedCart = await addItemToCartApi(cart._id, payload);
             setCart(updatedCart);
+
             if (updatedCart?._id) {
                 addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId: product, qty });
             }
-            return;
+
+        } else {
+            let guestCarts = getCartsFromLocalStorage("guest");
+            if (!guestCarts.length) {
+                guestCarts = [{
+                    _id: "guest-cart",
+                    userId: "guest",
+                    status: "active",
+                    items: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                }];
+                saveCartsInLocalStorage("guest", guestCarts);
+            }
+
+            const guestCart = guestCarts[0];
+            addOrUpdateItemInCartLocal("guest", guestCart._id, { productId: product, qty, priceSnapshot: product.price });
+            setCart({ ...guestCart, items: getCartsFromLocalStorage("guest")[0].items });
         }
-
-        // Guest
-        let guestCarts = getCartsFromLocalStorage("guest");
-        if (!guestCarts.length) {
-            guestCarts = [{
-                _id: "guest-cart",
-                userId: "guest",
-                status: "active",
-                items: [],
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            }];
-            saveCartsInLocalStorage("guest", guestCarts);
-        }
-        const guestCart = guestCarts[0];
-
-        addOrUpdateItemInCartLocal("guest", guestCart._id, { productId: product, qty, priceSnapshot: product.price });
-                setCart({ ...guestCart, items: getCartsFromLocalStorage("guest")[0].items });
-    };
+    }, [cart, userId, showToast]);
 
 
-
-    const updateItem = async (productId, qty) => {
+    const updateItem = useCallback(async (productId, qty) => {
         if (!cart) return;
 
         if (!userId) {
@@ -128,11 +133,11 @@ export const CartProvider = ({ children }) => {
         } else {
             const updatedCart = await updateCartItemApi(cart._id, productId, { qty });
             setCart(updatedCart);
-             if (updatedCart?._id) addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId, qty });
+            if (updatedCart?._id) addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId, qty });
         }
-    };
+    }, [cart, userId]);
 
-    const removeItem = async (productId) => {
+    const removeItem = useCallback(async (productId) => {
         if (!cart) return;
 
         if (!userId) {
@@ -146,18 +151,18 @@ export const CartProvider = ({ children }) => {
             setCart(updatedCart.cart || updatedCart);
             deleteItemFromCartLocal(userId, cart._id, productId);
         }
-    };
+    }, [cart, userId]);
 
-    const clearCart = async () => {
+    const clearCart = useCallback(async () => {
         if (!cart?.items) return;
 
         for (const item of [...cart.items]) {
             await removeItem(item.productId._id);
         }
-    };
+    }, [cart, removeItem]);
 
 
-    const checkout = async () => {
+    const checkout = useCallback(async () => {
         if (!cart || cart.items.length === 0 || cart.status === "ordered") return null;
 
         const newOrder = {
@@ -196,17 +201,19 @@ export const CartProvider = ({ children }) => {
             showToast("✅ Compra realizada como invitado. Para ver el estado de tu pedido debes registrarte o iniciar sesión.");
             return newOrder;
         }
-    };
+    }, [cart, userId, addOrder, clearCart, userId, showToast]);
 
+
+    const contextValue = useMemo(() => ({
+        cart, loading, fetchCart, addItem, updateItem, removeItem, clearCart, checkout
+    }), [cart, loading, fetchCart, addItem, updateItem, removeItem, clearCart, checkout]);
 
     useEffect(() => {
         fetchCart();
-    }, [userId]);
-
-
+    }, [fetchCart]);
 
     return (
-        <CartContext.Provider value={{ cart, loading, fetchCart, addItem, updateItem, removeItem, clearCart, checkout }}>
+        <CartContext.Provider value={contextValue}>
             {children}
             {toast && (
                 <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50 text-sm">

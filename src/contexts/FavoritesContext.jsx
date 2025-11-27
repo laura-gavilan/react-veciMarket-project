@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
     addFavoriteToLocalStorage,
     getFavoritesFromLocalStorage,
@@ -39,23 +39,24 @@ export const FavoritesProvider = ({ children }) => {
         loadFavorites();
     }, [userId]);
 
-    const showToast = (message, duration = 2000) => {
+    const showToast = useCallback((message, duration = 2000) => {
         setToast(message);
-        setTimeout(() => setToast(null), duration);
-    };
+        const timeout = setTimeout(() => setToast(null), duration);
+        return () => clearTimeout(timeout);
+    }, []);
 
 
-    const addFavorite = async (product) => {
+    const addFavorite = useCallback(async (product) => {
         if (!userId) {
             showToast("Debes iniciar sesión para ver tu wishlist.");
             navigate("/login");
             return;
-        }
+        };
 
         if (!product?._id) {
             console.error("Producto inválido", product);
             return;
-        }
+        };
 
         try {
             await addFavoriteApi(userId, product._id);
@@ -66,12 +67,13 @@ export const FavoritesProvider = ({ children }) => {
             console.error("Error en addFavorite", error);
             showToast("No se pudo añadir a favoritos");
         }
-    };
+    },[userId, navigate, showToast]);
 
-    const deleteFavorite = async (productId) => {
+
+    const deleteFavorite = useCallback(async (productId) => {
         if (!userId) {
             return;
-        }
+        };
 
         try {
             await deleteFavoritesApi(userId, productId);
@@ -83,10 +85,12 @@ export const FavoritesProvider = ({ children }) => {
             console.error("Error en deleteFavorite", error);
             showToast("No se pudo eliminar el favorito");
         }
-    };
+    }, [userId, showToast]);
+
+    const contextValue = useMemo(() => ({ favorites, addFavorite, deleteFavorite }), [favorites]);
 
     return (
-        <FavoritesContext.Provider value={{ favorites, addFavorite, deleteFavorite }}>
+        <FavoritesContext.Provider value={contextValue}>
             {children}
             {toast && (
                 <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50">

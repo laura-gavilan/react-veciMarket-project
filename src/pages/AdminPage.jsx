@@ -1,5 +1,5 @@
 import { useCommerce } from "../core/commerce/CommerceContext";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { CommerceCard } from "../components/CommerceCard";
 import { useNavigate } from 'react-router-dom';
@@ -38,6 +38,7 @@ export const AdminPage = () => {
             </div>
         );
 
+        const onClickCommerceCard = useCallback( (id) => navigate(`/admin/commerce/${id}`),[]);
 
     return (
         <div className="min-h-screen bg-neutral-warm py-12 px-6 flex flex-col gap-6">
@@ -60,7 +61,7 @@ export const AdminPage = () => {
                         >
                             <CommerceCard
                                 commerce={commerce}
-                                onClick={() => navigate(`/admin/commerce/${commerce._id}`)} />
+                                onClick={() => onClickCommerceCard(commerce._id)} />
                         </li>
                     ))}
                 </ul>

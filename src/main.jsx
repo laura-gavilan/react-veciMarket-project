@@ -19,13 +19,13 @@ createRoot(document.getElementById('root')).render(
         <AuthProvider>
           <CommerceProvider>
             <ProductProvider>
-              <FavoritesProvider>
-                <OrdersProvider>
+              <OrdersProvider>
                 <CartProvider>
+                  <FavoritesProvider>
                     <App />
+                  </FavoritesProvider>
                 </CartProvider>
-                </OrdersProvider>
-              </FavoritesProvider>
+              </OrdersProvider>
             </ProductProvider>
           </CommerceProvider>
         </AuthProvider>

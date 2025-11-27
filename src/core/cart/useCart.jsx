@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { CartContext } from "../../contexts/CartContext";
 
 
@@ -8,13 +8,13 @@ export const useCart = () => {
 
     const { cart, loading, addItem, updateItem, removeItem, checkout } = context;
 
-    const getItemQty = (productId) => {
+    const getItemQty = useCallback((productId) => {
         return cart?.items?.find(item => item.productId._id === productId)?.qty || 0;
-    };
+    }, [cart]);
 
-    const getTotalItems = () => {
+    const getTotalItems = useCallback(() => {
         return cart?.items?.reduce((sum, item) => sum + item.qty, 0) || 0;
-    };
+    },[cart]);
 
     return { cart, loading, addItem, updateItem, removeItem, checkout, getItemQty, getTotalItems };
 };
