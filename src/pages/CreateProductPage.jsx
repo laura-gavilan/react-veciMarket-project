@@ -9,13 +9,13 @@ export const CreateProductPage = () => {
     const [toast, setToast] = useState(null);
     const [errors, setErrors] = useState(null);
 
-    const showToast = (message, duration = 3000) => {
+    const showToast = useCallback((message, duration = 3000) => {
         setToast(message);
         setTimeout(() => setToast(null), duration);
-    };
+    },[]);
 
 
-    const handleSubmit = async (form) => {
+    const handleSubmit = useCallback(async (form) => {
         setErrors(null);
 
         try {
@@ -39,7 +39,7 @@ export const CreateProductPage = () => {
                 setErrors([{ message: "No se pudo crear el producto" }]);
             }
         }
-    };
+    },[showToast, navigate, commerceId]);
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-warm p-6">

@@ -39,6 +39,13 @@ export const CommerceDetailsAdminPage = () => {
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
+    const handleDeleteCommerce = useCallback(async () => {
+        if (window.confirm("¿Seguro que quieres eliminar este comercio?")) {
+            await deleteCommerce(selectedCommerce._id);
+            navigate("/admin");
+        }
+    }, [deleteCommerce, selectedCommerce?._id, navigate]);
+
     const renderedProducts = useMemo(() => {
         if (!selectedCommerce) return [];
 
@@ -74,12 +81,7 @@ export const CommerceDetailsAdminPage = () => {
             {isOwner && (
                 <OwnerActions
                     commerceId={commerceId}
-                    onDelete={async () => {
-                        if (window.confirm("¿Seguro que quieres eliminar este comercio?")) {
-                            await deleteCommerce(selectedCommerce._id);
-                            navigate("/admin");
-                        }
-                    }}
+                    onDelete={handleDeleteCommerce}
                 />
             )}
 

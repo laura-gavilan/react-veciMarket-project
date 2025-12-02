@@ -12,17 +12,16 @@ import {
     addCartToLocalStorage,
     addOrUpdateItemInCartLocal,
     deleteItemFromCartLocal,
-    saveCartsInLocalStorage
+    saveCartsInLocalStorage,
+    clearUserCartsFromLocalStorage
 } from "../core/cart/cart.service.js";
 
 import { useAuth } from "../core/auth/useAuth.jsx";
 import { addOrderToLocalStorage } from "../core/orders/orders.service.js";
 import { useOrdersContext } from "./OrdersContext.jsx";
 
-
 export const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
-
 
 export const CartProvider = ({ children }) => {
     const { user } = useAuth();
@@ -58,12 +57,33 @@ export const CartProvider = ({ children }) => {
             setLoading(false);
             return;
         }
-        try {
-            const carts = await getCartsApi(userId);
-            let activeCart = carts.find(c => c.status === "active" && c.userId === userId);
 
+        try {
+            let carts = await getCartsApi(userId);
+            if (!Array.isArray(carts)) carts = [];
+
+            let activeCart = carts.find(cart => cart && cart.status === "active" && cart.userId === userId);
             if (!activeCart) {
                 activeCart = await createCartApi({ userId, status: "active" });
+            }
+
+            activeCart.items = activeCart.items?.filter(i => i?.productId?._id) || [];
+
+            const guestCart = getCartsFromLocalStorage("guest")[0];
+            if (guestCart?.items?.length) {
+                for (const item of guestCart.items) {
+                    const exists = activeCart.items.find(item => item.productId._id === item.productId._id);
+                    if (!exists) {
+                        await addItemToCartApi(activeCart._id, {
+                            productId: item.productId._id,
+                            qty: item.qty,
+                            priceSnapshot: item.priceSnapshot
+                        });
+                    }
+                }
+                carts = await getCartsApi(userId);
+                activeCart = carts.find(c => c.status === "active");
+                clearUserCartsFromLocalStorage("guest");
             }
 
             setCart(activeCart);
@@ -71,50 +91,57 @@ export const CartProvider = ({ children }) => {
         } catch (error) {
             console.error("Error cargando carrito API:", error);
             const localCart = getCartsFromLocalStorage(userId)
-                .find(c => c.status === "active" && c.userId === userId) || { items: [] };
+                .find(cart => cart.status === "active" && cart.userId === userId) || { items: [] };
             setCart(localCart);
         } finally {
             setLoading(false);
         }
     }, [userId]);
 
+
     const addItem = useCallback(async (product, qty = 1) => {
         if (!product?._id) {
             showToast("Producto inválido");
             return;
-        };
+        }
 
-        if (userId) {
-            if (!cart) {
-                showToast("No hay carrito disponible");
-                return;
-            };
+        if (!cart) return showToast("No hay carrito disponible");
 
-            const payload = { productId: product._id, qty, priceSnapshot: product.price };
-            const updatedCart = await addItemToCartApi(cart._id, payload);
-            setCart(updatedCart);
 
-            if (updatedCart?._id) {
-                addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId: product, qty });
+        setCart(prev => {
+            const exists = prev.items.find(item => item.productId._id === product._id);
+            if (exists) {
+                return {
+                    ...prev,
+                    items: prev.items.map(item =>
+                        item.productId._id === product._id
+                            ? { ...item, qty: item.qty + qty }
+                            : item
+                    )
+                };
+            } else {
+                return {
+                    ...prev,
+                    items: [...prev.items, { productId: { _id: product._id, ...product }, qty, priceSnapshot: product.price }]
+                };
             }
+        });
 
-        } else {
-            let guestCarts = getCartsFromLocalStorage("guest");
-            if (!guestCarts.length) {
-                guestCarts = [{
-                    _id: "guest-cart",
-                    userId: "guest",
-                    status: "active",
-                    items: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                }];
-                saveCartsInLocalStorage("guest", guestCarts);
+
+        try {
+            if (userId) {
+                const payload = { productId: product._id, qty, priceSnapshot: product.price };
+                await addItemToCartApi(cart._id, payload);
+                const carts = await getCartsApi(userId);
+                const updatedCart = carts.find(c => c.status === "active");
+                setCart(updatedCart);
+                addCartToLocalStorage(userId, updatedCart);
+            } else {
+                addOrUpdateItemInCartLocal("guest", cart._id, { productId: { _id: product._id, ...product }, qty, priceSnapshot: product.price });
             }
-
-            const guestCart = guestCarts[0];
-            addOrUpdateItemInCartLocal("guest", guestCart._id, { productId: product, qty, priceSnapshot: product.price });
-            setCart({ ...guestCart, items: getCartsFromLocalStorage("guest")[0].items });
+        } catch (error) {
+            console.error("Error al añadir producto al carrito", error);
+            showToast("No se pudo añadir el producto");
         }
     }, [cart, userId, showToast]);
 
@@ -122,56 +149,73 @@ export const CartProvider = ({ children }) => {
     const updateItem = useCallback(async (productId, qty) => {
         if (!cart) return;
 
-        if (!userId) {
-            addOrUpdateItemInCartLocal("guest", cart._id, { productId, qty });
-            setCart(prev => ({
-                ...prev,
-                items: prev.items.map(i =>
-                    i.productId._id === productId ? { ...i, qty } : i
-                )
-            }));
-        } else {
-            const updatedCart = await updateCartItemApi(cart._id, productId, { qty });
-            setCart(updatedCart);
-            if (updatedCart?._id) addOrUpdateItemInCartLocal(userId, updatedCart._id, { productId, qty });
+        setCart(prev => ({
+            ...prev,
+            items: prev.items.map(i =>
+                i.productId._id === productId ? { ...i, qty } : i
+            )
+        }));
+
+        try {
+            if (userId) {
+                await updateCartItemApi(cart._id, productId, { qty });
+                const carts = await getCartsApi(userId);
+                const updatedCart = carts.find(cart => cart.status === "active");
+                setCart(updatedCart);
+                addCartToLocalStorage(userId, updatedCart);
+            } else {
+                addOrUpdateItemInCartLocal("guest", cart._id, { productId, qty });
+            }
+        } catch (error) {
+            console.error("Error al actualizar el carrito", error);
+            showToast("No se pudo actualizar el producto");
         }
-    }, [cart, userId]);
+    }, [cart, userId, showToast]);
+
+
 
     const removeItem = useCallback(async (productId) => {
         if (!cart) return;
 
-        if (!userId) {
-            deleteItemFromCartLocal("guest", cart._id, productId);
-            setCart(prev => ({
-                ...prev,
-                items: prev.items.filter(item => item.productId._id !== productId)
-            }));
-        } else {
-            const updatedCart = await deleteCartItemApi(cart._id, productId);
-            setCart(updatedCart.cart || updatedCart);
-            deleteItemFromCartLocal(userId, cart._id, productId);
+        setCart(prev => ({
+            ...prev,
+            items: prev.items.filter(item => item.productId._id !== productId)
+        }));
+
+        try {
+            if (userId) {
+                await deleteCartItemApi(cart._id, productId);
+                const carts = await getCartsApi(userId);
+                const updatedCart = carts.find(cart => cart.status === "active");
+                setCart(updatedCart);
+                deleteItemFromCartLocal(userId, cart._id, productId);
+            } else {
+                deleteItemFromCartLocal("guest", cart._id, productId);
+            }
+        } catch (error) {
+            console.error("Error al eliminar producto del carrito", error);
+            showToast("No se pudo eliminar el producto");
         }
-    }, [cart, userId]);
+    }, [cart, userId, showToast]);
+
 
     const clearCart = useCallback(async () => {
         if (!cart?.items) return;
-
         for (const item of [...cart.items]) {
             await removeItem(item.productId._id);
         }
     }, [cart, removeItem]);
-
 
     const checkout = useCallback(async () => {
         if (!cart || cart.items.length === 0 || cart.status === "ordered") return null;
 
         const newOrder = {
             userId: user?._id || "guest",
-            items: cart.items.map((item) => ({
-                productId: item.productId._id,
-                name: item.productId.name,
-                qty: item.qty,
-                price: item.priceSnapshot
+            items: cart.items.map(i => ({
+                productId: i.productId._id,
+                name: i.productId.name,
+                qty: i.qty,
+                price: i.priceSnapshot
             })),
             status: "pending",
             createdAt: new Date().toISOString(),
@@ -179,10 +223,9 @@ export const CartProvider = ({ children }) => {
         };
 
         if (user?._id && addOrder) {
-            // Usuario logueado: enviamos a API y agregamos al estado global
             try {
-                const result = await addOrder(newOrder); // Agrega al estado global de OrdersContext
-                await clearCart(); // limpiar carrito
+                const result = await addOrder(newOrder);
+                await clearCart();
                 const newCart = await createCartApi({ userId, status: "active" });
                 setCart(newCart);
                 addCartToLocalStorage(userId, newCart);
@@ -192,7 +235,6 @@ export const CartProvider = ({ children }) => {
                 return null;
             }
         } else {
-            // Invitado: solo guardamos localmente
             addOrderToLocalStorage(newOrder);
             await clearCart();
             const emptyCart = { ...cart, items: [], status: "ordered", updatedAt: new Date().toISOString() };
@@ -201,8 +243,7 @@ export const CartProvider = ({ children }) => {
             showToast("✅ Compra realizada como invitado. Para ver el estado de tu pedido debes registrarte o iniciar sesión.");
             return newOrder;
         }
-    }, [cart, userId, addOrder, clearCart, userId, showToast]);
-
+    }, [cart, userId, addOrder, clearCart, user, showToast]);
 
     const contextValue = useMemo(() => ({
         cart, loading, fetchCart, addItem, updateItem, removeItem, clearCart, checkout
@@ -223,4 +264,3 @@ export const CartProvider = ({ children }) => {
         </CartContext.Provider>
     );
 };
-

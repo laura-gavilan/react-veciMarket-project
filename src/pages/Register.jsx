@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useAuth } from "../core/auth/useAuth";
 import { Container } from "../components/Container";
+import { Link } from "react-router-dom";
 
 const INITIAL_FORM = { firstName: "", lastName: "", name: "", email: "", password: "", bio: "", phoneNumber: "", address: "", role: "" };
 
@@ -20,16 +21,20 @@ export const Register = () => {
     const { register } = useAuth();
     const [form, setForm] = useState(INITIAL_FORM);
 
-    const onInputChange = (event) => {
+    const onInputChange = useCallback((event) => {
         const { name, value } = event.target;
         setForm({ ...form, [name]: value });
-    };
+    }, []);
 
-    const onRegisterSubmit = async (event) => {
+    const onRegisterSubmit = useCallback(async (event) => {
         event.preventDefault();
-        register(form);
-        setForm(INITIAL_FORM);
-    };
+        try {
+            await register(form);
+            setForm(INITIAL_FORM);
+        } catch (error) {
+            console.error("Error al registrarse:", error);
+        }
+    }, [register, form]);
 
     return (
         <Container className="flex items-center justify-center min-h-[140vh] px-6 py-6">
@@ -68,9 +73,9 @@ export const Register = () => {
 
                 <p className="text-center text-sm mt-4 text-primary-dark">
                     ¿Ya tienes cuenta?{" "}
-                    <a href="/login" className="text-primary-light font-semibold hover:underline">
+                    <Link to="/login" className="text-primary-light font-semibold hover:underline">
                         Inicia sesión
-                    </a>
+                    </Link>
                 </p>
             </div>
         </Container>

@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { CartContext } from "../../contexts/CartContext";
 
 
@@ -14,7 +14,11 @@ export const useCart = () => {
 
     const getTotalItems = useCallback(() => {
         return cart?.items?.reduce((sum, item) => sum + item.qty, 0) || 0;
-    },[cart]);
+    }, [cart]);
 
-    return { cart, loading, addItem, updateItem, removeItem, checkout, getItemQty, getTotalItems };
+    const valueMemo = useMemo(() => ({
+        cart, loading, addItem, updateItem, removeItem, checkout, getItemQty, getTotalItems
+    }), [cart, loading, addItem, updateItem, removeItem, checkout, getItemQty, getTotalItems]);
+
+    return valueMemo;
 };

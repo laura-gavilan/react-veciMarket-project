@@ -45,6 +45,16 @@ export const CommercePage = () => {
         setSearch(value);
     }, []);
 
+    const openProductModal = useCallback((product, commerce) => {
+        setModalProduct(product);
+        setModalCommerce(commerce);
+    }, []);
+
+    const navigateToCommerce = useCallback(
+        (id) => navigate(`/commerce/${id}`),
+        [navigate]
+    );
+
     const filteredProducts = useMemo(() => {
         if (!showProducts) return [];
 
@@ -64,22 +74,20 @@ export const CommercePage = () => {
                     key={`${product._id}-${product.commerceId}`}
                     product={product}
                     commerce={commerce}
-                    onClick={() => {
-                        setModalProduct(product);
-                        setModalCommerce(commerce);
-                    }} />
+                    onClick={() => openProductModal(product, commerce)}
+                />
             );
         })
-    }, [filteredProducts, commerces]);
+    }, [filteredProducts, commerces, openProductModal]);
 
     const memoCommercesCards = useMemo(() => {
         return commerces.map(commerce => (
             <CommerceCard
                 key={commerce._id}
                 commerce={commerce}
-                onClick={() => navigate(`/commerce/${commerce._id}`)} />
+                onClick={() => navigateToCommerce(commerce._id)} />
         ));
-    }, [commerces, navigate]);
+    }, [commerces, navigateToCommerce]);
 
     return (
         <div className="min-h-screen px-6 py-12 flex flex-col items-center max-w-7xl mx-auto">

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../core/auth/useAuth";
 import { Container } from "../components/Container";
+import { Link } from "react-router-dom";
 
 const INITIAL_FORM = { email: "", password: "" };
 
@@ -30,12 +31,12 @@ export const Login = () => {
     const [form, setForm] = useState(INITIAL_FORM);
     const [error, setError] = useState(null);
 
-    const handleChange = (event) => {
+    const handleChange = useCallback((event) => {
         const { name, value } = event.target;
         setForm((prev) => ({ ...prev, [name]: value }));
-    };
+    },[]);
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = useCallback(async (event) => {
         event.preventDefault();
         setError(null);
 
@@ -46,7 +47,7 @@ export const Login = () => {
             console.error("Error al iniciar sesión", error);
             setError(error.response?.data?.message || "Correo o contraseña incorrectos");
         }
-    };
+    },[login]);
 
     return (
         <Container className="flex items-center justify-center min-h-[70vh]">
@@ -86,9 +87,9 @@ export const Login = () => {
 
                     <p className="text-center text-sm mt-6 text-primary-dark">
                         ¿No tienes cuenta?{" "}
-                        <a href="/register" className="text-primary-light font-semibold hover:underline">
+                        <Link to="/register" className="text-primary-light font-semibold hover:underline">
                             Regístrate
-                        </a>
+                        </Link>
                     </p>
                 </div>
             </div>

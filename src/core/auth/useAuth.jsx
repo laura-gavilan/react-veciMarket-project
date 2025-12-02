@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { loginApi, logoutApi, registerApi, getProfileApi } from "./auth.api";
 import { AuthContext } from "../../contexts/AuthContext";
 import {
@@ -13,7 +13,24 @@ export const useAuth = () => {
     const { user, setUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const login = async ({ email, password }) => {
+    const getProfile = useCallback(async () => {
+        try {
+            console.log("Obteniendo usuario actual");
+            const { user } = await getProfileApi();
+
+            if (user) {
+                console.log("Usuario actual:", user);
+                setUser(user);
+                saveUserInLocalStorage(user);
+            } else {
+                console.log("No hay usuario logueado");
+            }
+        } catch (error) {
+            console.error("Error al obtener perfil:", error);
+        }
+    }, [setUser]);
+
+    const login = useCallback(async ({ email, password }) => {
         try {
             console.log(`Intentando login con: ${email}`);
             const authData = await loginApi({ email, password });
@@ -34,9 +51,9 @@ export const useAuth = () => {
         } catch (error) {
             console.error("Error en login:", error);
         }
-    };
+    }, [getProfile, navigate, setUser]);
 
-    const logout = async () => {
+    const logout = useCallback(async () => {
         console.log("Cerrando sesión");
         try {
             await logoutApi();
@@ -48,9 +65,9 @@ export const useAuth = () => {
 
             if (setUser) setUser(null);
         }
-    };
+    }, [setUser]);
 
-    const register = async (form) => {
+    const register = useCallback(async (form) => {
         try {
             console.log(`Registrando: ${form.email}`);
             const authData = await registerApi(form);
@@ -64,24 +81,13 @@ export const useAuth = () => {
         } catch (error) {
             console.error("Error en registro:", error);
         }
-    };
+    }, [navigate, setUser]);
 
-    const getProfile = async () => {
-        try {
-            console.log("Obteniendo usuario actual");
-            const { user } = await getProfileApi();
 
-            if (user) {
-                console.log("Usuario actual:", user);
-                setUser(user);
-                saveUserInLocalStorage(user);
-            } else {
-                console.log("No hay usuario logueado");
-            }
-        } catch (error) {
-            console.error("Error al obtener perfil:", error);
-        }
-    };
 
-    return { user, setUser, login, logout, register, getProfile };
+    const auth = useMemo(() => ({
+        user, setUser, login, logout, register, getProfile
+    }), [user, setUser, login, logout, register, getProfile]);
+
+    return auth;
 };

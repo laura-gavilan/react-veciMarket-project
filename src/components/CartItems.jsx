@@ -22,7 +22,7 @@ export const CartItems = memo(({ item, updateItem, removeItem }) => {
 
 
     return (
-        <div div className="flex flex-col md:flex-row items-center justify-between bg-white shadow-md rounded-3xl p-4" >
+        <div className="flex flex-col md:flex-row items-center justify-between bg-white shadow-md rounded-3xl p-4" >
             <div className="flex items-center gap-4">
                 <img
                     src={item.productId?.images?.[0]}

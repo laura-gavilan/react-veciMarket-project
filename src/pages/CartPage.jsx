@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext.jsx";
 import { useAuth } from "../core/auth/useAuth.jsx";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { CreditCardModal } from "../components/CreditCardModal.jsx";
 import { CartItems } from "../components/CartItems.jsx";
 
@@ -22,10 +22,10 @@ export const CartPage = () => {
     const [expiry, setExpiry] = useState("");
     const [cvc, setCvc] = useState("");
 
-    const showToast = (message, duration = 3000) => {
+    const showToast = useCallback((message, duration = 3000) => {
         setToast(message);
         setTimeout(() => setToast(null), duration);
-    };
+    },[]);
 
     const cartItems = useMemo(() => {
         if (!cart || !cart.items) return [];
@@ -64,7 +64,7 @@ export const CartPage = () => {
     };
 
 
-    const confirmPayment = async () => {
+    const confirmPayment = useCallback(async () => {
         if (cardNumber.length < 16 || expiry.length < 4 || cvc.length < 3) {
             showToast("Introduce todos los datos de la tarjeta correctamente.");
             return;
@@ -83,16 +83,16 @@ export const CartPage = () => {
             console.error("Error:", error);
             showToast("Error al procesar el pago.");
         }
-    };
+    },[cardNumber, expiry, cvc, showToast, checkout, navigate]);
 
-    const handleCheckout = () => {
-        if (!user?._id) {
-            showToast("Debes iniciar sesión para finalizar la compra.");
-            return navigate("/login");
-        }
+    // const handleCheckout = () => {
+    //     if (!user?._id) {
+    //         showToast("Debes iniciar sesión para finalizar la compra.");
+    //         return navigate("/login");
+    //     }
 
-        setShowCardModal(true);
-    };
+    //     setShowCardModal(true);
+    // };
 
     return (
         <div className="max-w-4xl mx-auto p-8">

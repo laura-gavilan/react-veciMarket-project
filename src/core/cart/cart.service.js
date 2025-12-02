@@ -2,7 +2,8 @@ const CART_KEY_ID = "carts_";
 const GUEST_CART_KEY = "guest_cart";
 
 const getCartKey = (userId) => {
-    return userId ? `${CART_KEY_ID}${userId}` : GUEST_CART_KEY;
+    if (!userId || userId === "guest") return GUEST_CART_KEY;
+    return `${CART_KEY_ID}${userId}`;
 };
 
 export const getCartsFromLocalStorage = (userId) => {
@@ -18,7 +19,14 @@ export const saveCartsInLocalStorage = (userId, carts) => {
 export const addCartToLocalStorage = (userId, cart) => {
     if (!cart?._id) return;
     const current = getCartsFromLocalStorage(userId);
-    saveCartsInLocalStorage(userId, [...current, cart]);
+    const exists = current.find(c => c._id === cart._id);
+    if (exists) {
+        // Reemplazamos el carrito existente
+        const updated = current.map(c => c._id === cart._id ? cart : c);
+        saveCartsInLocalStorage(userId, updated);
+    } else {
+        saveCartsInLocalStorage(userId, [...current, cart]);
+    }
 };
 
 
