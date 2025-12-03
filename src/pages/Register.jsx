@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../core/auth/useAuth";
 import { Container } from "../components/Container";
 
@@ -20,6 +20,12 @@ export const Register = () => {
     const { register } = useAuth();
     const [form, setForm] = useState(INITIAL_FORM);
 
+    const usernameRef = useRef(null);
+
+    useEffect(() => {
+        usernameRef.current.focus();
+    }, []);
+
     const onInputChange = (event) => {
         const { name, value } = event.target;
         setForm({ ...form, [name]: value });
@@ -29,6 +35,7 @@ export const Register = () => {
         event.preventDefault();
         register(form);
         setForm(INITIAL_FORM);
+        usernameRef.current.focus();
     };
 
     return (
@@ -42,6 +49,7 @@ export const Register = () => {
                     {REGISTER_FORM.map(({ input, label }) => (
                         <div key={input.name} className="relative flex flex-col">
                             <input
+                                ref={input.name === "username" ? usernameRef : null}
                                 name={input.name}
                                 type={input.type}
                                 placeholder=" "

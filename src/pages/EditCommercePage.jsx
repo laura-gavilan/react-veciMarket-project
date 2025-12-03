@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../core/http/axios";
 import { EditCommerceForm } from "../components/EditCommerceForm";
@@ -8,6 +8,7 @@ export const EditCommercePage = () => {
     const navigate = useNavigate();
     const [form, setForm] = useState(null);
     const [toast, setToast] = useState(null);
+    const formRef = useRef(null);
 
 
     const showToast = (message, duration = 3000) => {
@@ -44,6 +45,7 @@ export const EditCommercePage = () => {
             console.error("Error actualizando comercio:", error);
             showToast("No se pudo actualizar el comercio");
         }
+        formRef.current.focusFirst();
     };
 
     return (
@@ -65,6 +67,7 @@ export const EditCommercePage = () => {
                         onSubmit={handleSubmit}
                         form={form}
                         setForm={setForm}
+                        ref={formRef}
                     />
                 )}
 
