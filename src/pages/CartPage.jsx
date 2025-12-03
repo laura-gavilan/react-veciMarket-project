@@ -25,7 +25,7 @@ export const CartPage = () => {
     const showToast = useCallback((message, duration = 3000) => {
         setToast(message);
         setTimeout(() => setToast(null), duration);
-    },[]);
+    }, []);
 
     const cartItems = useMemo(() => {
         if (!cart || !cart.items) return [];
@@ -42,16 +42,6 @@ export const CartPage = () => {
                 return acc + price * item.qty;
             }, 0);
     }, [cart]);
-
-
-    if (!cart || !cart.items || cart.items.length === 0) {
-        return (
-            <div className="p-8 text-center">
-                <h2 className="text-2xl font-semibold mb-2">🛒 Tu cesta está vacía</h2>
-                <p>Agrega productos para comenzar tu compra.</p>
-            </div>
-        );
-    }
 
     const openPaymentModal = () => {
         if (!user?._id) {
@@ -83,7 +73,18 @@ export const CartPage = () => {
             console.error("Error:", error);
             showToast("Error al procesar el pago.");
         }
-    },[cardNumber, expiry, cvc, showToast, checkout, navigate]);
+    }, [cardNumber, expiry, cvc, showToast, checkout, navigate]);
+
+
+    if (!cart || !cart.items || cart.items.length === 0) {
+        return (
+            <div className="p-8 text-center">
+                <h2 className="text-2xl font-semibold mb-2">🛒 Tu cesta está vacía</h2>
+                <p>Agrega productos para comenzar tu compra.</p>
+            </div>
+        );
+    }
+
 
     // const handleCheckout = () => {
     //     if (!user?._id) {

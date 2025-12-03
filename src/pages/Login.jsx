@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useAuth } from "../core/auth/useAuth";
 import { Container } from "../components/Container";
 import { Link } from "react-router-dom";
@@ -47,7 +47,7 @@ export const Login = () => {
             console.error("Error al iniciar sesión", error);
             setError(error.response?.data?.message || "Correo o contraseña incorrectos");
         }
-    },[login]);
+    },[login,form]);
 
     return (
         <Container className="flex items-center justify-center min-h-[70vh]">

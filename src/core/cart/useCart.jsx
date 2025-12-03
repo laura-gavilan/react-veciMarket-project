@@ -9,11 +9,15 @@ export const useCart = () => {
     const { cart, loading, addItem, updateItem, removeItem, checkout } = context;
 
     const getItemQty = useCallback((productId) => {
-        return cart?.items?.find(item => item.productId._id === productId)?.qty || 0;
+        if (!cart?.items?.length) return 0;
+        const item = cart.items.find(i => i?.productId?._id === productId);
+        return item?.qty || 0;
     }, [cart]);
 
+    // Total de todos los items en el carrito
     const getTotalItems = useCallback(() => {
-        return cart?.items?.reduce((sum, item) => sum + item.qty, 0) || 0;
+        if (!cart?.items?.length) return 0;
+        return cart.items.reduce((sum, item) => sum + (item?.qty || 0), 0);
     }, [cart]);
 
     const valueMemo = useMemo(() => ({
