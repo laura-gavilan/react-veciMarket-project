@@ -62,7 +62,6 @@ export const EditCommerceForm = forwardRef(({ form, setForm, onSubmit }, ref) =>
                     onChange={handleChange}
                     placeholder="Nombre del comercio"
                     className="px-4 py-2 border border-primary-lightrounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)]"
-                    ref={firstInputRef}
                     required
                 />
             </div>
