@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useEffect, useCallback, useMemo } 
 import {
     createCartApi,
     getCartsApi,
-    getCartByIdApi,
     addItemToCartApi,
     updateCartItemApi,
     deleteCartItemApi,
@@ -21,9 +20,6 @@ import { useAuth } from "../core/auth/useAuth.jsx";
 import { addOrderToLocalStorage } from "../core/orders/orders.service.js";
 import { useOrdersContext } from "./OrdersContext.jsx";
 
-// -------------------------------
-// Context
-// -------------------------------
 export const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
@@ -43,16 +39,14 @@ export const CartProvider = ({ children }) => {
 
     const storageKey = useMemo(() => (userId ? `cart_${userId}` : "cart_guest"), [userId]);
 
-    // -------------------------------
     // Fetch / Merge Carrito
-    // -------------------------------
     const fetchCart = useCallback(async () => {
         setLoading(true);
 
         try {
             if (!userId) {
                 // Carrito de invitado
-                let guestCart = getCartsFromLocalStorage("cart_guest")?.[0];
+                let guestCart = getCartsFromLocalStorage("guest")?.[0];
                 if (!guestCart) {
                     guestCart = {
                         _id: "guest-cart",
@@ -62,7 +56,7 @@ export const CartProvider = ({ children }) => {
                         createdAt: new Date().toISOString(),
                         updatedAt: new Date().toISOString(),
                     };
-                    saveCartsInLocalStorage("cart_guest", [guestCart]);
+                    saveCartsInLocalStorage("guest", [guestCart]);
                 }
                 setCart(guestCart);
                 return;
@@ -72,49 +66,31 @@ export const CartProvider = ({ children }) => {
             let carts = (await getCartsApi(userId)) || [];
             carts = carts.filter(c => c.userId === userId);
             let activeCart = carts.find(c => c.status === "active") || (await createCartApi({ userId, status: "active" }));
-
             activeCart.items = activeCart.items?.filter(i => i?.productId?._id) || [];
 
-            // Merge carrito invitado directamente
-            const guestCart = getCartsFromLocalStorage("cart_guest")?.[0];
+            // Merge carrito invitado
+            const guestCart = getCartsFromLocalStorage("guest")?.[0];
             if (guestCart?.items?.length) {
                 for (const guestItem of guestCart.items) {
                     if (!guestItem?.productId?._id) continue;
 
                     const existingItem = activeCart.items.find(i => i.productId._id === guestItem.productId._id);
-
-                    try {
-                        if (existingItem) {
-                            // Sumar cantidades
-                            const newQty = existingItem.qty + guestItem.qty;
-                            await updateCartItemApi(activeCart._id, guestItem.productId._id, { qty: newQty });
-
-                            // Actualizar en memoria
-                            existingItem.qty = newQty;
-                        } else {
-                            // Añadir item nuevo
-                            await addItemToCartApi(activeCart._id, {
-                                productId: guestItem.productId._id,
-                                qty: guestItem.qty,
-                                priceSnapshot: guestItem.priceSnapshot
-                            });
-
-                            // Añadir a memoria
-                            activeCart.items.push({ ...guestItem });
-                        }
-                    } catch (error) {
-                        console.error("Error al mergear item del carrito:", error);
+                    if (existingItem) {
+                        existingItem.qty += guestItem.qty;
+                        await updateCartItemApi(activeCart._id, guestItem.productId._id, { qty: existingItem.qty });
+                    } else {
+                        activeCart.items.push({ ...guestItem });
+                        await addItemToCartApi(activeCart._id, {
+                            productId: guestItem.productId._id,
+                            qty: guestItem.qty,
+                            priceSnapshot: guestItem.priceSnapshot
+                        });
                     }
                 }
 
-                // Limpiar carrito invitado
-                clearUserCartsFromLocalStorage("cart_guest");
-
-                // Refrescar carrito activo desde API
-                activeCart = await getCartByIdApi(activeCart._id);
+                clearUserCartsFromLocalStorage("guest");
             }
 
-            // Guardar en state y LocalStorage
             setCart(activeCart);
             addCartToLocalStorage(userId, activeCart);
 
@@ -128,9 +104,6 @@ export const CartProvider = ({ children }) => {
     }, [userId, storageKey]);
 
 
-    // -------------------------------
-    // Helper para actualizar carrito
-    // -------------------------------
     const updateCartState = useCallback(
         (callback) => {
             let newCart;
@@ -145,9 +118,7 @@ export const CartProvider = ({ children }) => {
         [userId]
     );
 
-    // -------------------------------
-    // Añadir producto
-    // -------------------------------
+
     const addItem = useCallback(
         async (product, qty = 1) => {
             if (!product?._id) return showToast("Producto inválido");
@@ -174,9 +145,7 @@ export const CartProvider = ({ children }) => {
         [userId, showToast, updateCartState]
     );
 
-    // -------------------------------
     // Actualizar producto
-    // -------------------------------
     const updateItem = useCallback(
         async (productId, qty) => {
             const newCart = updateCartState(prevCart => ({
@@ -195,13 +164,9 @@ export const CartProvider = ({ children }) => {
                 console.error("Error al actualizar producto", error);
                 showToast("No se pudo actualizar el producto");
             }
-        },
-        [userId, showToast, updateCartState]
-    );
+        }, [userId, showToast, updateCartState]);
 
-    // -------------------------------
     // Eliminar producto
-    // -------------------------------
     const removeItem = useCallback(
         async (productId) => {
             const newCart = updateCartState(prevCart => ({
@@ -224,9 +189,7 @@ export const CartProvider = ({ children }) => {
         [userId, showToast, updateCartState]
     );
 
-    // -------------------------------
     // Vaciar carrito
-    // -------------------------------
     const clearCart = useCallback(async () => {
         if (!cart?.items?.length) return;
         for (const item of [...cart.items]) {
@@ -234,9 +197,7 @@ export const CartProvider = ({ children }) => {
         }
     }, [cart, removeItem]);
 
-    // -------------------------------
     // Checkout
-    // -------------------------------
     const checkout = useCallback(async () => {
         if (!cart || !cart.items.length || cart.status === "ordered") return null;
 
@@ -276,9 +237,7 @@ export const CartProvider = ({ children }) => {
         }
     }, [cart, userId, addOrder, clearCart, user, showToast]);
 
-    // -------------------------------
     // Context value
-    // -------------------------------
     const contextValue = useMemo(() => ({
         cart,
         loading,
