@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { addOrderApi, deleteOrderApi, getOrdersApi, updateOrderStatusApi } from "./orders.api";
 import { addOrderToLocalStorage, deleteOrderFromLocalStorage, getOrdersFromLocalStorage, patchOrderStatusInLocalStorage, saveOrdersInLocalStorage, updateOrderInLocalStorage } from "./orders.service";
 
@@ -26,7 +26,7 @@ export const useOrders = () => {
         fetchOrders();
     }, []);
 
-    const addOrder = async (orderData) => {
+    const addOrder = useCallback(async (orderData) => {
         try {
             const payload = {
                 userId: orderData.userId,
@@ -43,9 +43,9 @@ export const useOrders = () => {
             setOrders(getOrdersFromLocalStorage());
             setError(err);
         }
-    };
+    },[orders]);
 
-    const updateOrderStatus = async (orderId, status) => {
+    const updateOrderStatus = useCallback(async (orderId, status) => {
         try {
             const updatedOrder = await updateOrderStatusApi(orderId, status);
             const updatedOrders = orders.map((order) =>
@@ -59,10 +59,10 @@ export const useOrders = () => {
             setOrders(getOrdersFromLocalStorage());
             setError(error);
         }
-    };
+    },[orders]);
 
 
-    const deleteOrder = async (orderId) => {
+    const deleteOrder = useCallback(async (orderId) => {
         try {
             await deleteOrderApi(orderId);
             const updatedOrders = orders.filter((order) => order._id !== orderId);
@@ -74,12 +74,12 @@ export const useOrders = () => {
             setOrders(getOrdersFromLocalStorage());
             setError(error);
         }
-    };
+    },[orders]);
 
-    const updateOrder = (updatedOrder) => {
+    const updateOrder = useCallback((updatedOrder) => {
         updateOrderInLocalStorage(updatedOrder);
         setOrders(getOrdersFromLocalStorage());
-    };
+    },[]);
 
     return { orders, loading, error, addOrder, updateOrderStatus, deleteOrder, updateOrder };
 };

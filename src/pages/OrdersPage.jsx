@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useOrdersContext } from "../contexts/OrdersContext";
 import { FilteredOrders } from "../components/FilteredOrders";
 import { useAuth } from "../core/auth/useAuth";
@@ -77,9 +77,9 @@ export const OrdersPage = () => {
         setNotesState(updatedNotes);
     }, [orders, user]);
 
-    const handleNotesChange = (orderId, value) => {
+    const handleNotesChange = useCallback((orderId, value) => {
         setNotesState(prev => ({ ...prev, [orderId]: value }));
-    };
+    }, []);
 
     const saveNotes = (orderId) => {
         const noteText = notesState[orderId]?.trim();
@@ -89,6 +89,10 @@ export const OrdersPage = () => {
         savedNotes[orderId] = noteText;
         localStorage.setItem('orderNotes', JSON.stringify(savedNotes));
     };
+
+    const handleSearchChange = useCallback((event) => {
+        setSearchTerm(event.target.value);
+    }, []);
 
     const statusButtons = useMemo(() => {
         return statusOptions.map(status => {
@@ -141,7 +145,7 @@ export const OrdersPage = () => {
                         type="text"
                         placeholder="Buscar por ID de orden o usuario..."
                         value={searchTerm}
-                        onChange={event => setSearchTerm(event.target.value)}
+                        onChange={handleSearchChange}
                         className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)]"
                     />
                 </div>

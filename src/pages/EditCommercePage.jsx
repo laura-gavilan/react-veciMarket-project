@@ -10,10 +10,10 @@ export const EditCommercePage = () => {
     const [toast, setToast] = useState(null);
 
 
-    const showToast = (message, duration = 3000) => {
+    const showToast = useCallback((message, duration = 3000) => {
         setToast(message);
         setTimeout(() => setToast(null), duration);
-    };
+    },[]);
 
 
     useEffect(() => {
@@ -35,7 +35,7 @@ export const EditCommercePage = () => {
 
 
 
-    const handleSubmit = async (form) => {
+    const handleSubmit = useCallback(async (form) => {
         try {
             await api.patch(`/commerces/${commerceId}`, form);
             showToast("Comercio actualizado correctamente");
@@ -44,7 +44,7 @@ export const EditCommercePage = () => {
             console.error("Error actualizando comercio:", error);
             showToast("No se pudo actualizar el comercio");
         }
-    };
+    },[commerceId, showToast, navigate]);
 
     return (
         <div className="min-h-screen flex justify-center px-6 py-12 bg-gray-warm">
@@ -73,7 +73,6 @@ export const EditCommercePage = () => {
                 )}
 
             </div>
-
 
             {toast && (
                 <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50 text-sm">

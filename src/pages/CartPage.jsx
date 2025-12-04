@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext.jsx";
 import { useAuth } from "../core/auth/useAuth.jsx";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { CreditCardModal } from "../components/CreditCardModal.jsx";
 import { CartItems } from "../components/CartItems.jsx";
 
@@ -22,10 +22,16 @@ export const CartPage = () => {
     const [expiry, setExpiry] = useState("");
     const [cvc, setCvc] = useState("");
 
-    const showToast = (message, duration = 3000) => {
+    const showToast = useCallback((message, duration = 3000) => {
         setToast(message);
         setTimeout(() => setToast(null), duration);
-    };
+    }, []);
+
+    const cartItems = useMemo(() => {
+        if (!cart || !cart.items) return [];
+        return cart.items.filter(item => item?.productId?._id);
+    }, [cart]);
+
 
     const total = useMemo(() => {
         if (!cart?.items?.length) return 0;
@@ -35,21 +41,7 @@ export const CartPage = () => {
                 const price = item.priceSnapshot ?? item.productId?.price ?? 0;
                 return acc + price * item.qty;
             }, 0);
-    }, [cart?.items]);
-
-
-    const cartItems = useMemo(() => {
-        return cart.items.filter(item => item?.productId?._id);
-    }, [cart.items]);
-
-    if (!cart || !cart.items || cart.items.length === 0) {
-        return (
-            <div className="p-8 text-center">
-                <h2 className="text-2xl font-semibold mb-2">🛒 Tu cesta está vacía</h2>
-                <p>Agrega productos para comenzar tu compra.</p>
-            </div>
-        );
-    }
+    }, [cart]);
 
     const openPaymentModal = () => {
         if (!user?._id) {
@@ -62,7 +54,7 @@ export const CartPage = () => {
     };
 
 
-    const confirmPayment = async () => {
+    const confirmPayment = useCallback(async () => {
         if (cardNumber.length < 16 || expiry.length < 4 || cvc.length < 3) {
             showToast("Introduce todos los datos de la tarjeta correctamente.");
             return;
@@ -81,16 +73,27 @@ export const CartPage = () => {
             console.error("Error:", error);
             showToast("Error al procesar el pago.");
         }
-    };
+    }, [cardNumber, expiry, cvc, showToast, checkout, navigate]);
 
-    const handleCheckout = () => {
-        if (!user?._id) {
-            showToast("Debes iniciar sesión para finalizar la compra.");
-            return navigate("/login");
-        }
 
-        setShowCardModal(true);
-    };
+    if (!cart || !cart.items || cart.items.length === 0) {
+        return (
+            <div className="p-8 text-center">
+                <h2 className="text-2xl font-semibold mb-2">🛒 Tu cesta está vacía</h2>
+                <p>Agrega productos para comenzar tu compra.</p>
+            </div>
+        );
+    }
+
+
+    // const handleCheckout = () => {
+    //     if (!user?._id) {
+    //         showToast("Debes iniciar sesión para finalizar la compra.");
+    //         return navigate("/login");
+    //     }
+
+    //     setShowCardModal(true);
+    // };
 
     return (
         <div className="max-w-4xl mx-auto p-8">
@@ -100,12 +103,12 @@ export const CartPage = () => {
 
             <div className="space-y-6">
                 {cartItems.map((item, index) => (
-                        <CartItems
+                    <CartItems
                         key={`${item.productId._id}-${index}`}
                         item={item}
                         updateItem={updateItem}
                         removeItem={removeItem} />
-                    ))}
+                ))}
             </div>
 
             <div className="mt-10 flex flex-col md:flex-row justify-between items-center border-t border-primary-light pt-6">

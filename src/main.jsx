@@ -10,26 +10,39 @@ import { UserProvider } from './contexts/UserContext.jsx';
 import { FavoritesProvider } from './contexts/FavoritesContext.jsx';
 import { CartProvider } from './contexts/CartContext';
 import { OrdersProvider } from './contexts/OrdersContext.jsx';
+import { ErrorBoundary } from './components/ErrorBoundary.jsx';
+import { PageError } from './components/PageError.jsx';
 
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <BrowserRouter>
-      <UserProvider>
-        <AuthProvider>
-          <CommerceProvider>
-            <ProductProvider>
-              <FavoritesProvider>
+  <ErrorBoundary
+    fallback={
+      <PageError
+        tittle="Error en la aplicación"
+        message="Ha ocurrido un error. Por favor, recarga la página."
+        onRetry={() => window.location.reload()}
+        retryText="Recargar la página"
+        fullPage />
+    }>
+      
+    <StrictMode>
+      <BrowserRouter>
+        <UserProvider>
+          <AuthProvider>
+            <CommerceProvider>
+              <ProductProvider>
                 <OrdersProvider>
-                <CartProvider>
-                    <App />
-                </CartProvider>
+                  <CartProvider>
+                    <FavoritesProvider>
+                      <App />
+                    </FavoritesProvider>
+                  </CartProvider>
                 </OrdersProvider>
-              </FavoritesProvider>
-            </ProductProvider>
-          </CommerceProvider>
-        </AuthProvider>
-      </UserProvider>
-    </BrowserRouter>
-  </StrictMode>
+              </ProductProvider>
+            </CommerceProvider>
+          </AuthProvider>
+        </UserProvider>
+      </BrowserRouter>
+    </StrictMode>
+  </ErrorBoundary>
 );

@@ -21,10 +21,10 @@ export const EditProductPage = () => {
     
     const [toast, setToast] = useState(null);
 
-    const showToast = (message, duration = 3000) => {
+    const showToast = useCallback((message, duration = 3000) => {
         setToast(message);
         setTimeout(() => setToast(null), duration);
-    };
+    },[]);
 
 
     useEffect(() => {
@@ -51,11 +51,11 @@ export const EditProductPage = () => {
             }
         };
         fetchData();
-    }, [commerceId, productId, navigate]);
+    }, [commerceId, productId, navigate, showToast]);
 
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
+    const handleFileChange = useCallback((event) => {
+        const file = event.target.files[0];
         if (file) {
             console.log("Archivo seleccionado:", file);
             setNewImage(file);
@@ -63,9 +63,9 @@ export const EditProductPage = () => {
             console.log("Preview URL:", previewUrl);
             setPreview(previewUrl);
         }
-    };
+    },[]);
 
-    const handleSubmit = async (form) => {
+    const handleSubmit = useCallback(async (form) => {
         const priceValue = parseFloat(form.price);
         if (isNaN(priceValue) || priceValue < 0) {
             showToast("Introduce un precio válido");
@@ -107,7 +107,7 @@ export const EditProductPage = () => {
         } catch (error) {
             console.error("Error al actualizar producto:", error);
         }
-    };
+    },[form, updateProduct, commerceId, showToast, productId, currentImage, newImage, navigate]);
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-warm p-6">

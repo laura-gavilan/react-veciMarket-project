@@ -1,14 +1,13 @@
-import { useNavigate } from "react-router-dom";
-import { useContext, useMemo } from "react";
+import { memo, useCallback, useContext, useMemo } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { api } from "../core/http/axios";
 import { ProductCard } from "./ProductCard";
 
 
-export const Category = ({ products, refreshProducts, ownerId, commerceId }) => {
+export const Category = memo(({ products, refreshProducts, ownerId, commerceId }) => {
     const { user } = useContext(AuthContext);
-    const navigate = useNavigate();
-    const isOwner = user?._id === ownerId;
+
+    const isOwner = useMemo(() => user?._id === ownerId, [user?._id, ownerId]);
 
     const categories = useMemo(() => {
         const categoriesMap = {};
@@ -20,11 +19,13 @@ export const Category = ({ products, refreshProducts, ownerId, commerceId }) => 
         return categoriesMap;
     }, [products]);
 
-    const handleDelete = async (productId) => {
+    const handleDelete = useCallback(async (productId) => {
+        console.log("Renderizado eliminar producto")
         if (!window.confirm("¿Eliminar producto?")) return;
         await api.delete(`/products/${productId}`);
-        if (refreshProducts) refreshProducts();
-    };
+        refreshProducts();
+    }, [refreshProducts]);
+    
 
     const categoryNames = useMemo(() => ({
         all: "Todas",
@@ -53,19 +54,18 @@ export const Category = ({ products, refreshProducts, ownerId, commerceId }) => 
                             product={product}
                             isOwner={isOwner}
                             commerceId={commerceId}
-                            navigate={navigate}
                             handleDelete={handleDelete} />
                     ))}
                 </div>
             </div>
         ));
-    }, [categories, categoryNames, isOwner, commerceId, navigate]);
+    }, [categories, categoryNames, isOwner, commerceId, handleDelete]);
 
     return (
         <div className="flex flex-col gap-14">
             {categorySection}
         </div >
     );
-};
+});
 
 

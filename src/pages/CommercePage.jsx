@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +41,20 @@ export const CommercePage = () => {
 
     useEffect(() => { loadAllProducts(); }, []);
 
+    const handleSearch = useCallback((value) => {
+        setSearch(value);
+    }, []);
+
+    const openProductModal = useCallback((product, commerce) => {
+        setModalProduct(product);
+        setModalCommerce(commerce);
+    }, []);
+
+    const navigateToCommerce = useCallback(
+        (id) => navigate(`/commerce/${id}`),
+        [navigate]
+    );
+
     const filteredProducts = useMemo(() => {
         if (!showProducts) return [];
 
@@ -60,39 +74,20 @@ export const CommercePage = () => {
                     key={`${product._id}-${product.commerceId}`}
                     product={product}
                     commerce={commerce}
-                    onClick={() => {
-                        setModalProduct(product);
-                        setModalCommerce(commerce);
-                    }} />
+                    onClick={() => openProductModal(product, commerce)}
+                />
             );
         })
-    }, [filteredProducts, commerces]);
+    }, [filteredProducts, commerces, openProductModal]);
 
     const memoCommercesCards = useMemo(() => {
         return commerces.map(commerce => (
             <CommerceCard
                 key={commerce._id}
                 commerce={commerce}
-                onClick={() => navigate(`/commerce/${commerce._id}`)} />
+                onClick={() => navigateToCommerce(commerce._id)} />
         ));
-    }, [commerces, navigate]);
-
-
-    // useEffect(() => {
-    //     if (!showProducts) {
-    //         setFilteredProducts([]);
-    //         return;
-    //     }
-    //     const searchLower = search.toLowerCase();
-
-    //     setFilteredProducts(
-    //         products.filter(product =>
-    //             product.name.toLowerCase().includes(searchLower) &&
-    //             (selectedCategory === "all" || product.category.includes(selectedCategory))
-    //         )
-    //     );
-
-    // }, [search, products, selectedCategory, showProducts]);
+    }, [commerces, navigateToCommerce]);
 
     return (
         <div className="min-h-screen px-6 py-12 flex flex-col items-center max-w-7xl mx-auto">
@@ -100,7 +95,7 @@ export const CommercePage = () => {
                 Explora los <span className="text-accent-primary">productos</span> y <span className="text-accent-primary">comercios</span> de tu barrio
             </h1>
 
-            <SearchBar search={search} setSearch={setSearch} />
+            <SearchBar onSearch={handleSearch} />
 
             <CategoryFilter
                 categories={categories}

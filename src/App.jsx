@@ -9,8 +9,6 @@ import { Footer } from './components/Footer';
 import { CommercePage } from './pages/CommercePage';
 import { AdminPage } from './pages/AdminPage';
 import { ContactPage } from './pages/ContactPage';
-
-// import { AdminDetailPage } from './pages/AdminDetailsPage';
 import { CreateProductPage } from './pages/CreateProductPage.jsx';
 import { EditProductPage } from './pages/EditProductPage.jsx';
 import { EditCommercePage } from './pages/EditCommercePage.jsx';
@@ -21,10 +19,30 @@ import { ScrollToTop } from './components/ScrollToTop.jsx';
 import { CreateCommercePage } from './pages/CreateCommercePage.jsx';
 import { CartPage } from './pages/CartPage';
 import { OrdersPage } from './pages/OrdersPage.jsx';
-import { CommerceDetailsAdminPage} from './pages/CommerceDetailsAdminPage.jsx';
+import { CommerceDetailsAdminPage } from './pages/CommerceDetailsAdminPage.jsx';
 import { CommerceProductPage } from './pages/CommerceProductPage.jsx';
+import { useAuth } from './core/auth/useAuth.jsx';
+import { PageSpinner } from './components/PageSpinner.jsx';
+import { AuthError } from './components/AuthError.jsx';
+import { PageError } from './components/PageError.jsx';
+import { ErrorBoundary } from './components/ErrorBoundary.jsx';
 
 export const App = () => {
+  const { isLoading, error, clearError } = useAuth();
+
+  if (isLoading) {
+    return <PageSpinner message="Cargando aplicación..." fullPage />;
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <AuthError error={error} onClear={clearError} onRetry={() => window.location.reload()} />
+      </div>
+    );
+  }
+
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -32,35 +50,46 @@ export const App = () => {
       <ScrollToTop />
 
       <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/aboutUs" element={<AboutUsPage />} />
-          <Route path="/commerce" element={<CommercePage />} />
-          <Route path="/commerce/:commerceId" element={<CommerceProductPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/favorites" element={<FavoritesPage />} />
-          <Route path="/cart" element={<CartPage />} />
+        <ErrorBoundary
+          fallback={
+            <PageError
+              tittle="Error en la navegación de la app"
+              message="Ha ocurrido un error al cargar la página, Por favor, inténtelo de nuevo."
+              onRetry={() => window.location.reload()}
+              fullpage
+            />
+          }>
 
-          <Route element={<PrivateRoute />}>
-            <Route path="/admin" element={<AdminPage />} />
-            <Route path="/admin/commerce/:commerceId" element={<CommerceDetailsAdminPage />} />
-            <Route path="/admin/commerce/:commerceId/edit" element={<EditCommercePage />} />
-            <Route path="/admin/commerce/:commerceId/create" element={<CreateProductPage />} />
-            <Route path="/admin/commerce/:commerceId/edit/:productId" element={<EditProductPage />} />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/aboutUs" element={<AboutUsPage />} />
+            <Route path="/commerce" element={<CommercePage />} />
+            <Route path="/commerce/:commerceId" element={<CommerceProductPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/favorites" element={<FavoritesPage />} />
+            <Route path="/cart" element={<CartPage />} />
 
-            <Route path="/user" element={<UserPage />} />
-            <Route path="/user/edit" element={<EditUserPage />} />
-            
+            <Route element={<PrivateRoute />}>
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/admin/commerce/:commerceId" element={<CommerceDetailsAdminPage />} />
+              <Route path="/admin/commerce/:commerceId/edit" element={<EditCommercePage />} />
+              <Route path="/admin/commerce/:commerceId/create" element={<CreateProductPage />} />
+              <Route path="/admin/commerce/:commerceId/edit/:productId" element={<EditProductPage />} />
 
-            <Route path="/commerce/new" element={<CreateCommercePage />} />
-            <Route path="/orders" element={<OrdersPage />} />
+              <Route path="/user" element={<UserPage />} />
+              <Route path="/user/edit" element={<EditUserPage />} />
 
-          </Route>
 
-          <Route path="*" element={<h2 className="text-center mt-10">Página no encontrada</h2>} />
-        </Routes>
+              <Route path="/commerce/new" element={<CreateCommercePage />} />
+              <Route path="/orders" element={<OrdersPage />} />
+
+            </Route>
+
+            <Route path="*" element={<h2 className="text-center mt-10">Página no encontrada</h2>} />
+          </Routes>
+        </ErrorBoundary>
       </main>
 
       <Footer />
