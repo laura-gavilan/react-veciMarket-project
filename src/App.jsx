@@ -53,7 +53,7 @@ export const App = () => {
         <ErrorBoundary
           fallback={
             <PageError
-              tittle="Error en la navegación de la app"
+              title="Error en la navegación de la app"
               message="Ha ocurrido un error al cargar la página, Por favor, inténtelo de nuevo."
               onRetry={() => window.location.reload()}
               fullpage

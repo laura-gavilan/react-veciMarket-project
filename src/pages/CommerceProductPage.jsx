@@ -5,6 +5,9 @@ import { CommerceCard } from "../components/CommerceCard";
 import { ProductCard } from "../components/ProductCard";
 import { useEffect, useMemo, useState } from "react";
 import { ProductModal } from "../components/ProductModal";
+import { CommerceHeader } from "../components/CommerceHeader";
+import { ErrorBoundary } from "../components/ErrorBoundary";
+import { PageError } from "../components/PageError";
 
 export const CommerceProductPage = () => {
     const { commerceId } = useParams();
@@ -48,29 +51,41 @@ export const CommerceProductPage = () => {
         return <p className="text-center mt-10 text-gray-500">Cargando comercio y productos...</p>;
     }
 
-    return (
-        <div className="container mx-auto p-6 space-y-8">
-            <CommerceCard commerce={commerce} />
 
-            <div>
-                <h2 className="text-2xl font-title font-bold text-primary-dark mb-4">
-                    Productos de {commerce.name}
-                </h2>
-                {commerceProducts.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {memoProductsCards}
-                    </div>
-                ) : (
-                    <p className="text-center text-gray-500">No hay productos disponibles.</p>
+    return (
+        <ErrorBoundary
+            fallback={
+                <PageError
+                    title="Error al cargar tus comercios"
+                    message="No se han cargado los comercios.Por favor, vuelve a reintentarlo."
+                    onRetry={() => window.location.reload()}
+                />
+
+            }
+        >
+            <div className="container mx-auto p-6 space-y-8">
+                <CommerceHeader commerce={commerce} />
+
+                <div>
+                    <h2 className="text-2xl font-title font-bold text-primary-dark mb-4">
+                        Productos de {commerce.name}
+                    </h2>
+                    {commerceProducts.length > 0 ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            {memoProductsCards}
+                        </div>
+                    ) : (
+                        <p className="text-center text-gray-500">No hay productos disponibles.</p>
+                    )}
+                </div>
+
+                {modalProduct && (
+                    <ProductModal
+                        product={modalProduct}
+                        onClose={() => setModalProduct(null)}
+                    />
                 )}
             </div>
-
-            {modalProduct && (
-                <ProductModal
-                    product={modalProduct}
-                    onClose={() => setModalProduct(null)}
-                />
-            )}
-        </div>
+        </ErrorBoundary>
     );
 };

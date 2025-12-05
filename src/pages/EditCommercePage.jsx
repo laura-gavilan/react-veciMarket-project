@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../core/http/axios";
 import { EditCommerceForm } from "../components/EditCommerceForm";
@@ -28,6 +28,7 @@ export const EditCommercePage = () => {
                 });
             } catch (error) {
                 console.error("Error al cargar el comercio:", error);
+                navigate("/");
             }
         };
         fetchCommerce();

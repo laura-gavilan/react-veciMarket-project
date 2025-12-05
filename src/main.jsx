@@ -18,7 +18,7 @@ createRoot(document.getElementById('root')).render(
   <ErrorBoundary
     fallback={
       <PageError
-        tittle="Error en la aplicación"
+        title="Error en la aplicación"
         message="Ha ocurrido un error. Por favor, recarga la página."
         onRetry={() => window.location.reload()}
         retryText="Recargar la página"

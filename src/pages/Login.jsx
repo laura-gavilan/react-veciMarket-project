@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { useAuth } from "../core/auth/useAuth";
 import { Container } from "../components/Container";
 import { Link } from "react-router-dom";
+import { AuthError } from "../components/AuthError";
 
 const INITIAL_FORM = { email: "", password: "" };
 
@@ -56,6 +57,11 @@ export const Login = () => {
                     <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-10 text-primary-dark">
                         Inicia sesión
                     </h2>
+
+                    <AuthError
+                    error={error}
+                    onRetry={() => setError(null)}
+                    onClear={() => setError(null)} />
 
                     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                         {LOGIN.map(({ input }) => (

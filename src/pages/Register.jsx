@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { useAuth } from "../core/auth/useAuth";
 import { Container } from "../components/Container";
 import { Link } from "react-router-dom";
+import { AuthError } from "../components/AuthError";
 
 const INITIAL_FORM = { firstName: "", lastName: "", name: "", email: "", password: "", bio: "", phoneNumber: "", address: "", role: "" };
 
@@ -20,6 +21,7 @@ const REGISTER_FORM = [
 export const Register = () => {
     const { register } = useAuth();
     const [form, setForm] = useState(INITIAL_FORM);
+    const [error, setError ] = useState(null);
 
     const onInputChange = useCallback((event) => {
         const { name, value } = event.target;
@@ -69,7 +71,14 @@ export const Register = () => {
                             Regístrate
                         </button>
                     </div>
+
+                    
                 </form>
+
+                <AuthError
+                        error={error}
+                        onRetry={() => setError(null)}
+                        onClear={() => setError(null)} />
 
                 <p className="text-center text-sm mt-4 text-primary-dark">
                     ¿Ya tienes cuenta?{" "}
