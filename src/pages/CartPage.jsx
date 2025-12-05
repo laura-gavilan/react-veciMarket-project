@@ -4,6 +4,8 @@ import { useAuth } from "../core/auth/useAuth.jsx";
 import { useCallback, useMemo, useState } from "react";
 import { CreditCardModal } from "../components/CreditCardModal.jsx";
 import { CartItems } from "../components/CartItems.jsx";
+import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
+import { PageError } from "../components/PageError.jsx";
 
 
 export const CartPage = () => {
@@ -80,70 +82,72 @@ export const CartPage = () => {
         return (
             <div className="p-8 text-center">
                 <h2 className="text-2xl font-semibold mb-2">🛒 Tu cesta está vacía</h2>
-                <p>Agrega productos para comenzar tu compra.</p>
+                <p><a href="/commerce" className="underline">Agrega productos para comenzar tu compra.</a> </p>
             </div>
         );
     }
 
 
-    // const handleCheckout = () => {
-    //     if (!user?._id) {
-    //         showToast("Debes iniciar sesión para finalizar la compra.");
-    //         return navigate("/login");
-    //     }
-
-    //     setShowCardModal(true);
-    // };
-
     return (
-        <div className="max-w-4xl mx-auto p-8">
-            <h2 className="text-3xl font-semibold mb-6 text-center text-primary">Mi cesta de la compra</h2>
+        <ErrorBoundary
+            fallback={
+                <PageError
+                    title="Error al cargar tu cesta."
+                    message="No se han podido cargar los productos de tu cesta. Por favor vuelve a intentarlo."
+                    onRetry={() => window.location.reload()}
+                />
 
-            {loading && <p className="text-center text-primary-dark">Cargando...</p>}
+            }
+        >
+            <div className="max-w-4xl mx-auto p-8">
+                <h2 className="text-3xl font-semibold mb-6 text-center text-primary">Mi cesta de la compra</h2>
 
-            <div className="space-y-6">
-                {cartItems.map((item, index) => (
-                    <CartItems
-                        key={`${item.productId._id}-${index}`}
-                        item={item}
-                        updateItem={updateItem}
-                        removeItem={removeItem} />
-                ))}
-            </div>
+                {loading && <p className="text-center text-primary-dark">Cargando...</p>}
 
-            <div className="mt-10 flex flex-col md:flex-row justify-between items-center border-t border-primary-light pt-6">
-                <h3 className="text-2xl font-bold text-primary-dark">
-                    Total: <span className="text-accent-primary">{total.toFixed(2)} €</span>
-                </h3>
-                <div className="flex justify-center mt-8">
-                    <button
-                        onClick={openPaymentModal}
-                        className="btn-primary elevation w-full md:w-auto"
-                    >
-                        Finalizar compra
-                    </button>
+                <div className="space-y-6">
+                    {cartItems.map((item, index) => (
+                        <CartItems
+                            key={`${item.productId._id}-${index}`}
+                            item={item}
+                            updateItem={updateItem}
+                            removeItem={removeItem} />
+                    ))}
                 </div>
-            </div>
 
-            <CreditCardModal
-                isOpen={showCardModal}
-                onClose={() => setShowCardModal(false)}
-                onConfirm={confirmPayment}
-                cardNumber={cardNumber}
-                setCardNumber={setCardNumber}
-                expiry={expiry}
-                setExpiry={setExpiry}
-                cvc={cvc}
-                setCvc={setCvc}
-            />
-
-            {toast && (
-                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50 text-sm">
-                    {toast}
+                <div className="mt-10 flex flex-col md:flex-row justify-between items-center border-t border-primary-light pt-6">
+                    <h3 className="text-2xl font-bold text-primary-dark">
+                        Total: <span className="text-accent-primary">{total.toFixed(2)} €</span>
+                    </h3>
+                    <div className="flex justify-center mt-8">
+                        <button
+                            onClick={openPaymentModal}
+                            className="btn-primary elevation w-full md:w-auto"
+                        >
+                            Finalizar compra
+                        </button>
+                    </div>
                 </div>
-            )}
 
-        </div>
+                <CreditCardModal
+                    isOpen={showCardModal}
+                    onClose={() => setShowCardModal(false)}
+                    onConfirm={confirmPayment}
+                    cardNumber={cardNumber}
+                    setCardNumber={setCardNumber}
+                    expiry={expiry}
+                    setExpiry={setExpiry}
+                    cvc={cvc}
+                    setCvc={setCvc}
+                />
+
+                {toast && (
+                    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary-dark text-white px-4 py-2 rounded shadow-lg z-50 text-sm">
+                        {toast}
+                    </div>
+                )}
+
+            </div>
+        </ErrorBoundary>
     );
 };
 

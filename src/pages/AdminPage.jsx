@@ -3,13 +3,15 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { CommerceCard } from "../components/CommerceCard";
 import { useNavigate } from 'react-router-dom';
+import { ErrorBoundary } from "../components/ErrorBoundary";
+import { PageError } from "../components/PageError";
 
 export const AdminPage = () => {
     const { commerces, loading } = useCommerce();
     const { user } = useContext(AuthContext);
     const [showScrollTop, setShowScrollTop] = useState(false);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const handleScroll = () => {
             setShowScrollTop(window.scrollY > 300);
@@ -38,43 +40,54 @@ export const AdminPage = () => {
             </div>
         );
 
-        const onClickCommerceCard = useCallback( (id) => navigate(`/admin/commerce/${id}`),[]);
+    const onClickCommerceCard = useCallback((id) => navigate(`/admin/commerce/${id}`), [navigate]);
 
     return (
-        <div className="min-h-screen bg-neutral-warm py-12 px-6 flex flex-col gap-6">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-primary-dark text-center">
-                Tus Comercios
-            </h1>
+        <ErrorBoundary
+            fallback={
+                <PageError
+                    title="Error al cargar tus comercios"
+                    message="No se han cargado los comercios.Por favor, vuelve a reintentarlo."
+                    onRetry={() => window.location.reload()}
+                />
+    
+            }
+        >
+            <div className="min-h-screen bg-neutral-warm py-12 px-6 flex flex-col gap-6">
+                <h1 className="text-4xl md:text-5xl font-extrabold text-primary-dark text-center">
+                    Tus Comercios
+                </h1>
 
-            {myCommerces.length === 0 && (
-                <p className="text-primary-dark text-center text-lg mt-6">
-                    No tienes comercios aún.
-                </p>
-            )}
+                {myCommerces.length === 0 && (
+                    <p className="text-primary-dark text-center text-lg mt-6">
+                        No tienes comercios aún.
+                    </p>
+                )}
 
-            {myCommerces.length > 0 && (
-                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {myCommerces.map((commerce) => (
-                        <li
-                            key={commerce._id}
-                            className="relative bg-white rounded-3xl p-6 shadow-xl border border-primary-light hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
-                        >
-                            <CommerceCard
-                                commerce={commerce}
-                                onClick={() => onClickCommerceCard(commerce._id)} />
-                        </li>
-                    ))}
-                </ul>
-            )}
+                {myCommerces.length > 0 && (
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {myCommerces.map((commerce) => (
+                            <li
+                                key={commerce._id}
+                                className="relative bg-white rounded-3xl p-6 shadow-xl border border-primary-light hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
+                            >
+                                <CommerceCard
+                                    commerce={commerce}
+                                    onClick={() => onClickCommerceCard(commerce._id)} />
+                            </li>
+                        ))}
+                    </ul>
+                )}
 
-            {showScrollTop && (
-                <button
-                    onClick={scrollToTop}
-                    className="fixed bottom-6 right-6 bg-accent-primary text-primary-dark p-3 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 z-50"
-                >
-                    ↑
-                </button>
-            )}
-        </div>
+                {showScrollTop && (
+                    <button
+                        onClick={scrollToTop}
+                        className="fixed bottom-6 right-6 bg-accent-primary text-primary-dark p-3 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 z-50"
+                    >
+                        ↑
+                    </button>
+                )}
+            </div>
+        </ErrorBoundary>
     );
 };

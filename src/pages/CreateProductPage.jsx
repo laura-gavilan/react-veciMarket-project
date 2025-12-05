@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../core/http/axios";
 import { CreateProductForm } from "../components/CreateProductForm";
@@ -12,7 +12,7 @@ export const CreateProductPage = () => {
     const showToast = useCallback((message, duration = 3000) => {
         setToast(message);
         setTimeout(() => setToast(null), duration);
-    },[]);
+    }, []);
 
 
     const handleSubmit = useCallback(async (form) => {
@@ -27,7 +27,7 @@ export const CreateProductPage = () => {
             };
 
             await api.post("/products", payload);
-            
+
             showToast("Producto creado correctamente");
             navigate(`/admin/commerce/${commerceId}`);
         } catch (error) {
@@ -37,9 +37,10 @@ export const CreateProductPage = () => {
                 setErrors(error.response.data.invalidFields);
             } else {
                 setErrors([{ message: "No se pudo crear el producto" }]);
+                navigate("/");
             }
         }
-    },[showToast, navigate, commerceId]);
+    }, [showToast, navigate, commerceId]);
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-warm p-6">
@@ -63,7 +64,7 @@ export const CreateProductPage = () => {
                     </div>
                 )}
 
-                <CreateProductForm onSubmit={handleSubmit}/>
+                <CreateProductForm onSubmit={handleSubmit} />
             </div>
 
             {toast && (

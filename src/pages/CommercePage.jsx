@@ -7,6 +7,8 @@ import { SearchBar } from "../components/SearchBar";
 import { CategoryFilter } from "../components/CategoryFilter";
 import { ProductCard } from "../components/ProductCard";
 import { CommerceCard } from "../components/CommerceCard";
+import { ErrorBoundary } from "../components/ErrorBoundary";
+import { PageError } from "../components/PageError";
 
 export const CommercePage = () => {
     const { commerces } = useCommerce();
@@ -90,54 +92,64 @@ export const CommercePage = () => {
     }, [commerces, navigateToCommerce]);
 
     return (
-        <div className="min-h-screen px-6 py-12 flex flex-col items-center max-w-7xl mx-auto">
-            <h1 className="text-center mb-8 text-4xl md:text-5xl font-title font-bold text-primary-dark leading-tight">
-                Explora los <span className="text-accent-primary">productos</span> y <span className="text-accent-primary">comercios</span> de tu barrio
-            </h1>
-
-            <SearchBar onSearch={handleSearch} />
-
-            <CategoryFilter
-                categories={categories}
-                categoryName={categoryNames}
-                selectedCategory={selectedCategory}
-                setSelectedCategory={setSelectedCategory}
-                setShowProducts={setShowProducts}
-                showProducts={showProducts} />
-
-
-            {showProducts && filteredProducts.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
-                    {memoProductsCards}
-                </div>
-            )}
-
-            {showProducts && filteredProducts.length === 0 && (
-                <p className="text-center text-gray-500 mt-4">
-                    No hay productos en esta categoría.
-                </p>
-            )}
-
-            <div className="w-full mt-12">
-                <h2 className="text-2xl font-title font-bold text-primary-dark mb-6">
-                    Comercios
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {commerces.length > 0 ? memoCommercesCards : (
-                        <p className="col-span-full text-center text-gray-500">
-                            No se encontraron comercios.
-                        </p>
-                    )}
-                </div>
-            </div>
-
-            {modalProduct &&
-                <ProductModal
-                    product={modalProduct}
-                    commerce={modalCommerce}
-                    onClose={() => setModalProduct(null)}
+        <ErrorBoundary
+            fallback={
+                <PageError
+                    title="Error al cargar la página."
+                    message="Algo salío mal. No se han podido mostrar los comercios y productos. Por favor, recargue la página."
+                    onRetry={() => window.location.reload()}
                 />
-            };
-        </div>
+            }>
+
+            <div className="min-h-screen px-6 py-12 flex flex-col items-center max-w-7xl mx-auto">
+                <h1 className="text-center mb-8 text-4xl md:text-5xl font-title font-bold text-primary-dark leading-tight">
+                    Explora los <span className="text-accent-primary">productos</span> y <span className="text-accent-primary">comercios</span> de tu barrio
+                </h1>
+
+                <SearchBar onSearch={handleSearch} />
+
+                <CategoryFilter
+                    categories={categories}
+                    categoryName={categoryNames}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                    setShowProducts={setShowProducts}
+                    showProducts={showProducts} />
+
+
+                {showProducts && filteredProducts.length > 0 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
+                        {memoProductsCards}
+                    </div>
+                )}
+
+                {showProducts && filteredProducts.length === 0 && (
+                    <p className="text-center text-gray-500 mt-4">
+                        No hay productos en esta categoría.
+                    </p>
+                )}
+
+                <div className="w-full mt-12">
+                    <h2 className="text-2xl font-title font-bold text-primary-dark mb-6">
+                        Comercios
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        {commerces.length > 0 ? memoCommercesCards : (
+                            <p className="col-span-full text-center text-gray-500">
+                                No se encontraron comercios.
+                            </p>
+                        )}
+                    </div>
+                </div>
+
+                {modalProduct &&
+                    <ProductModal
+                        product={modalProduct}
+                        commerce={modalCommerce}
+                        onClose={() => setModalProduct(null)}
+                    />
+                }
+            </div>
+        </ErrorBoundary>
     );
 };

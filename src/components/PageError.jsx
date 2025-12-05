@@ -31,6 +31,11 @@ export const PageError = memo(
                         {icon}
                     </div>
 
+                    <div className="flex flex-col items-center gap-4">
+                        <h2 className="text-2xl font-bold">{title}</h2>
+                        <p className="text-neutral-600">{message}</p>
+                    </div>
+
 
                     <div className="flex flex-col gap-3 w-full max-w-xs">
                         {onRetry && (
@@ -39,13 +44,13 @@ export const PageError = memo(
                             </button>
                         )}
 
-                        <button 
-                            variant="tertiary" 
-                            className="w-full" 
+                        {/* <button
+                            variant="tertiary"
+                            className="w-full underline"
                             onClick={() => (window.location.href = "/")}
                         >
                             Volver al inicio
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>
