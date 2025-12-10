@@ -1,10 +1,20 @@
 import { CartButton } from "./CartButton";
 import { useNavigate } from "react-router-dom";
+import { PageSpinner } from "./PageSpinner";
 
-export const ProductModal = ({ product, commerce, onClose }) => {
+export const ProductModal = ({ product, commerce, onClose, loading }) => {
     const navigate = useNavigate();
 
-    if (!product) return null;
+    if (loading && !product){
+        return (
+            <div className="flex items-center justify-center min-h-screen text-primary-dark">
+                <h1 className="text-2xl font-semibold animate-pulse">
+                    Cargando producto...
+                </h1>
+                <PageSpinner />
+            </div>
+        )
+    } 
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">

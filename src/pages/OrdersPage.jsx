@@ -3,6 +3,7 @@ import { useOrdersContext } from "../contexts/OrdersContext";
 import { FilteredOrders } from "../components/FilteredOrders";
 import { useAuth } from "../core/auth/useAuth";
 import { useNavigate } from "react-router-dom";
+import { PageError } from "../components/PageError";
 
 export const OrdersPage = () => {
     const { orders, loading, error, updateOrderStatus, deleteOrder, updateOrderNotes } = useOrdersContext();
@@ -116,18 +117,25 @@ export const OrdersPage = () => {
 
     if (!user?._id) {
         return (
-            <div className="p-8 text-center">
-                <h2 className="text-2xl font-semibold mb-2">🔒 Debes iniciar sesión</h2>
-                <p>Para ver tus pedidos, regístrate o inicia sesión.</p>
-                <button onClick={() => navigate("/login")} className="btn-primary mt-4">
-                    Iniciar sesión
-                </button>
-            </div>
+            <PageError
+                title="Debes iniciar sesión"
+                message="Para ver tus pedidos, regístrate o inicia sesión."
+                onRetry={() => navigate("/login")}
+            />
         );
     }
 
     if (loading) return <p className="text-center mt-10">Cargando pedidos...</p>;
-    if (error) return <p className="text-center mt-10 text-red-600">Error: {error.message}</p>;
+    
+    if (error) {
+        return (
+            <PageError
+                title="Error al cargar pedidos"
+                message={error.message || "Ha ocurrido un error al cargar los pedidos."}
+                onRetry={() => window.location.reload()}
+            />
+        );
+    }
 
     return (
         <div className="max-w-7xl mx-auto mt-12 p-6 md:p-10 bg-white rounded-3xl shadow-xl border">

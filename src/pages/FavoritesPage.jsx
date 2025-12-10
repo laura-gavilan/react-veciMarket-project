@@ -2,6 +2,8 @@ import { useFavorites } from "../core/favorites/useFavorites";
 import { FavoriteButton } from "../components/FavoriteButton.jsx";
 import { CartButton } from "../components/CartButton.jsx";
 import { useMemo } from "react";
+import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
+import { PageError } from "../components/PageError.jsx";
 
 export const FavoritesPage = () => {
     const { favorites } = useFavorites();
@@ -35,6 +37,16 @@ export const FavoritesPage = () => {
     }, [favorites]);
 
     return (
+        <ErrorBoundary
+                    fallback={
+                        <PageError
+                            title="Error al cargar tus favoritos."
+                            message="No se han cargado los favoritos. Por favor, vuelve a reintentarlo."
+                            onRetry={() => window.location.reload()}
+                        />
+            
+                    }
+                >
         <div className="max-w-6xl mx-auto px-6 py-10">
             <h1 className="text-3xl md:text-4xl font-title font-semibold mb-8 text-primary text-center">
                 Mis productos favoritos
@@ -52,6 +64,7 @@ export const FavoritesPage = () => {
                 </div>
             )}
         </div>
+        </ErrorBoundary>
     );
 };
 

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import { useProduct } from "../core/products/ProductContext";
@@ -8,6 +8,8 @@ import { CommerceHeader } from "../components/CommerceHeader";
 import { OwnerActions } from "../components/OwnerActions";
 import { ScrollToTop } from "../components/ScrollToTop";
 import { ProductCardInfo } from "../components/ProductCardInfo";
+import { ErrorBoundary } from "../components/ErrorBoundary";
+import { PageError } from "../components/PageError";
 
 export const CommerceDetailsAdminPage = () => {
     const { commerces, fetchCommerces, deleteCommerce } = useCommerce();
@@ -72,25 +74,37 @@ export const CommerceDetailsAdminPage = () => {
         );
 
     return (
-        <div className="min-h-screen bg-neutral py-12 px-6 flex flex-col gap-14">
-
-            <BackButton />
-
-            <CommerceHeader commerce={selectedCommerce} />
-
-            {isOwner && (
-                <OwnerActions
-                    commerceId={commerceId}
-                    onDelete={handleDeleteCommerce}
+        <ErrorBoundary
+            fallback={
+                <PageError
+                    title="Error al cargar tus comercios"
+                    message="No se han cargado los comercios.Por favor, vuelve a reintentarlo."
+                    onRetry={() => window.location.reload()}
                 />
-            )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                {renderedProducts}
+            }
+        >
+            <div className="min-h-screen bg-neutral items-center py-12 px-6 flex flex-col gap-14">
+                <BackButton />
 
-                {showScrollTop && <ScrollToTop />}
-            </div>
-        </div>
+                <CommerceHeader commerce={selectedCommerce} />
+
+
+                {isOwner && (
+                    <OwnerActions
+                        commerceId={commerceId}
+                        onDelete={handleDeleteCommerce}
+                    />
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    {renderedProducts}
+
+                    {showScrollTop && <ScrollToTop />}
+                </div>
+            </div >
+        </ErrorBoundary>
+
     );
 };
 

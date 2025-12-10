@@ -1,13 +1,30 @@
 import { Link } from "react-router-dom";
 import { useUser } from "../core/user/useUser";
+import { useEffect, useState } from "react";
+import { PageError } from "../components/PageError";
 
 export const UserPage = () => {
     const { user, deleteUser, loading } = useUser();
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        if (!loading && !user) {
+            setError("No se ha podido cargar el usuario.");
+        }
+    }, [loading, user]);
 
     if (loading)
         return <p className="text-center mt-8 text-primary-dark font-sans">Cargando usuario...</p>;
-    if (!user)
-        return <p className="text-center mt-8 text-primary-dark font-sans">No hay usuario logueado.</p>;
+
+
+    if (error) {
+        return (
+            <PageError
+                title="Error al cargar la página de usuario."
+                message="No se ha podido cagrar el usuario. Por favor, inténtelo de nuevo."
+                onRetry={() => window.location.reload()} />
+        )
+    }
 
     const handleDelete = async () => {
         const confirmDelete = window.confirm(
