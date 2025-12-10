@@ -13,7 +13,7 @@ export const Category = memo(({ products, refreshProducts, ownerId, commerceId }
         const categoriesMap = {};
         products.forEach(product => {
             const cat = product.category || "other";
-            if (!categoriesMap[cat]) categoriesMap[cat] = [];
+            if (!categoriesMap?.[cat]) categoriesMap[cat] = [];
             categoriesMap[cat].push(product);
         });
         return categoriesMap;
@@ -23,7 +23,7 @@ export const Category = memo(({ products, refreshProducts, ownerId, commerceId }
         console.log("Renderizado eliminar producto")
         if (!window.confirm("¿Eliminar producto?")) return;
         await api.delete(`/products/${productId}`);
-        refreshProducts();
+        refreshProducts?.();
     }, [refreshProducts]);
     
 

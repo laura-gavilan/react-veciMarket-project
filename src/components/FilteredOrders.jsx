@@ -25,22 +25,8 @@ export const FilteredOrders = memo(({
         });
     }, [filteredOrders, user, isAdmin]);
 
-    const handleNoteChangeCallback = useCallback((orderId, value) => {
+    const handleNote = (orderId, value) => 
         handleNotesChange(orderId, value)
-    }, [handleNotesChange]);
-
-    const handleSaveNotesCallBack = useCallback((orderId) => {
-        saveNotes(orderId)
-    }, [saveNotes]);
-
-    const updateOrderStatusCallback = useCallback((orderId, status) => {
-        updateOrderStatus(orderId, status)
-    }, [updateOrderStatus]);
-
-    const deleteOrderCallback = useCallback((orderId) => {
-        deleteOrder(orderId)
-    }, [deleteOrder]);
-
 
     const orders = useMemo(() => {
         return visibleOrders.map(order => {
@@ -75,14 +61,14 @@ export const FilteredOrders = memo(({
                             <>
                                 <textarea
                                     value={noteValue}
-                                    onChange={(event) => handleNoteChangeCallback(order._id, event.target.value)}
+                                    onChange={(event) => handleNote(order._id, event.target.value)}
                                     className="w-full border border-gray-300 rounded px-2 py-1 resize-none text-sm focus:outline-none focus:ring-1 focus:ring-[var(--color-mostaza)]"
                                     placeholder="Notas..."
                                     rows={2}
                                 />
                                 <div className="flex justify-center mt-2">
                                     <button
-                                        onClick={() => handleSaveNotesCallBack(order._id)}
+                                        onClick={() => handleSaveNotes(order._id)}
                                         className="px-3 py-1 text-xs rounded-full btn-primary"
                                     >
                                         Guardar
@@ -127,7 +113,7 @@ export const FilteredOrders = memo(({
                         <div className="space-y-1">
                             <select
                                 value={order.status}
-                                onChange={(event) => updateOrderStatusCallback(order._id, event.target.value)}
+                                onChange={(event) => updateOrderStatus(order._id, event.target.value)}
                                 className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--color-mostaza)]"
                             >
                                 {statusOptions.filter(statusOption => statusOption.value !== "all").map(status => {
@@ -136,7 +122,7 @@ export const FilteredOrders = memo(({
                             </select>
                             <div className="flex justify-center mt-1">
                                 <button
-                                    onClick={() => deleteOrderCallback(order._id)}
+                                    onClick={() => deleteOrder(order._id)}
                                     className="bg-red-500 text-white rounded px-2 py-1 text-xs hover:bg-red-600 transition-colors"
                                 >
                                     X
