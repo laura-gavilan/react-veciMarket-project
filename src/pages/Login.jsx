@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useAuth } from "../core/auth/useAuth";
 import { Container } from "../components/Container";
 import { Link } from "react-router-dom";
@@ -31,6 +31,7 @@ export const Login = () => {
     const { login } = useAuth();
     const [form, setForm] = useState(INITIAL_FORM);
     const [error, setError] = useState(null);
+    const emailRef = useRef(null);
 
     const handleChange = useCallback((event) => {
         const { name, value } = event.target;

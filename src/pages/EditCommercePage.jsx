@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { useState, useEffect, useRef } from "react";
-=======
 import { useState, useEffect, useCallback } from "react";
->>>>>>> feature/error-management
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../core/http/axios";
 import { EditCommerceForm } from "../components/EditCommerceForm";
@@ -50,12 +46,8 @@ export const EditCommercePage = () => {
             console.error("Error actualizando comercio:", error);
             showToast("No se pudo actualizar el comercio");
         }
-<<<<<<< HEAD
-    },[commerceId, showToast, navigate]);
-=======
         formRef.current.focusFirst();
-    };
->>>>>>> feature/useRef
+    });
 
     return (
         <div className="min-h-screen flex justify-center px-6 py-12 bg-gray-warm">
