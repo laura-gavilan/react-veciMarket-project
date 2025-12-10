@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
 import { PageError } from "../components/PageError.jsx";
 
-export const FavoritesPage = () => {
+const FavoritesPage = () => {
     const { favorites } = useFavorites();
     const hasFavorites = Array.isArray(favorites) && favorites.length > 0;
 
@@ -67,4 +67,6 @@ export const FavoritesPage = () => {
         </ErrorBoundary>
     );
 };
+
+export default FavoritesPage;
 

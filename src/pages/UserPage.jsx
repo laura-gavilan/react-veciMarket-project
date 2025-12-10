@@ -3,7 +3,7 @@ import { useUser } from "../core/user/useUser";
 import { useEffect, useState } from "react";
 import { PageError } from "../components/PageError";
 
-export const UserPage = () => {
+const UserPage = () => {
     const { user, deleteUser, loading } = useUser();
     const [error, setError] = useState(null);
 
@@ -68,6 +68,7 @@ export const UserPage = () => {
     );
 };
 
+export default UserPage;
 
 
 

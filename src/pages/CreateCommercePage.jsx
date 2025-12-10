@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { CreateCommerceForm } from '../components/CreateCommerceForm';
 
 
-export const CreateCommercePage = () => {
+const CreateCommercePage = () => {
     const { addCommerce } = useCommerce();
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -57,6 +57,7 @@ export const CreateCommercePage = () => {
     );
 };
 
+export default CreateCommercePage;
 
 
 

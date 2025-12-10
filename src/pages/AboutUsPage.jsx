@@ -1,9 +1,11 @@
 import { AboutUs } from "../components/AboutUs"
 
-export const AboutUsPage = () => {
+const AboutUsPage = () => {
     return (
         <div>
             <AboutUs />
         </div>
     )
-}
+};
+
+export default AboutUsPage;

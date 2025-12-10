@@ -5,7 +5,7 @@ import { useProduct } from "../core/products/ProductContext";
 import { EditProductForm } from "../components/EditProductForm";
 
 
-export const EditProductPage = () => {
+const EditProductPage = () => {
     const { commerceId, productId } = useParams();
     const navigate = useNavigate();
     const { updateProduct } = useProduct();
@@ -138,4 +138,6 @@ export const EditProductPage = () => {
         </div>
     );
 };
+
+export default EditProductPage;
 

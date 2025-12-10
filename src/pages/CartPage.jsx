@@ -8,7 +8,7 @@ import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
 import { PageError } from "../components/PageError.jsx";
 
 
-export const CartPage = () => {
+const CartPage = () => {
     const {
         cart,
         loading,
@@ -151,4 +151,5 @@ export const CartPage = () => {
     );
 };
 
+export default CartPage;
 

@@ -10,7 +10,7 @@ import { CommerceCard } from "../components/CommerceCard";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { PageError } from "../components/PageError";
 
-export const CommercePage = () => {
+const CommercePage = () => {
     const { commerces } = useCommerce();
     const { products, loadAllProducts } = useProduct();
     const navigate = useNavigate();
@@ -153,3 +153,5 @@ export const CommercePage = () => {
         </ErrorBoundary>
     );
 };
+
+export default CommercePage;

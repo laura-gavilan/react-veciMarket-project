@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CommerceCard } from "../components/CommerceCard";
 import { ProductCard } from "../components/ProductCard";
 
-export const Home = () => {
+const Home = () => {
     const { commerces } = useCommerce();
     const { products } = useProduct();
     const [showScrollTop, setShowScrollTop] = useState(false);
@@ -179,3 +179,5 @@ export const Home = () => {
         </div>
     );
 };
+
+export default Home;
