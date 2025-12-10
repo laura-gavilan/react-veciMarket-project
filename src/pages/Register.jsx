@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useCallback, useState } from "react";
+=======
+import { useEffect, useRef, useState } from "react";
+>>>>>>> feature/useRef
 import { useAuth } from "../core/auth/useAuth";
 import { Container } from "../components/Container";
 import { Link } from "react-router-dom";
@@ -21,13 +25,24 @@ export const Register = () => {
     const { register } = useAuth();
     const [form, setForm] = useState(INITIAL_FORM);
 
+<<<<<<< HEAD
     const onInputChange = useCallback((event) => {
+=======
+    const usernameRef = useRef(null);
+
+    useEffect(() => {
+        usernameRef.current.focus();
+    }, []);
+
+    const onInputChange = (event) => {
+>>>>>>> feature/useRef
         const { name, value } = event.target;
         setForm({ ...form, [name]: value });
     }, []);
 
     const onRegisterSubmit = useCallback(async (event) => {
         event.preventDefault();
+<<<<<<< HEAD
         try {
             await register(form);
             setForm(INITIAL_FORM);
@@ -35,6 +50,12 @@ export const Register = () => {
             console.error("Error al registrarse:", error);
         }
     }, [register, form]);
+=======
+        register(form);
+        setForm(INITIAL_FORM);
+        usernameRef.current.focus();
+    };
+>>>>>>> feature/useRef
 
     return (
         <Container className="flex items-center justify-center min-h-[140vh] px-6 py-6">
@@ -47,6 +68,7 @@ export const Register = () => {
                     {REGISTER_FORM.map(({ input, label }) => (
                         <div key={input.name} className="relative flex flex-col">
                             <input
+                                ref={input.name === "username" ? usernameRef : null}
                                 name={input.name}
                                 type={input.type}
                                 placeholder=" "

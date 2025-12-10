@@ -1,5 +1,13 @@
+import { forwardRef, useEffect, useRef } from "react";
 
-export const EditUserForm = ({ form, setForm, onSubmit}) => {
+export const EditUserForm = forwardRef(({ form, setForm, onSubmit }, ref) => {
+    const firstInputRef = useRef(null);
+
+    useEffect(() => {
+        if (firstInputRef.current) {
+            firstInputRef.current.focus();
+        }
+    }, [form]);
 
     const handleChange = (event) => {
         setForm({ ...form, [event.target.name]: event.target.value });
@@ -11,7 +19,11 @@ export const EditUserForm = ({ form, setForm, onSubmit}) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 text-primary-dark font-sans">
+        <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 text-primary-dark font-sans"
+            ref={ref}
+        >
             {[
                 { label: "Nombre de usuario", name: "username", type: "text" },
                 { label: "Nombre", name: "name", type: "text" },
@@ -20,7 +32,7 @@ export const EditUserForm = ({ form, setForm, onSubmit}) => {
                 { label: "Email", name: "email", type: "email" },
                 { label: "Teléfono", name: "phoneNumber", type: "text" },
                 { label: "Dirección", name: "address", type: "text", fullWidth: true }
-            ].map((field) => (
+            ].map((field, index) => (
                 <div key={field.name} className={field.fullWidth ? "md:col-span-2 flex flex-col" : "flex flex-col"}>
                     <label className="mb-2 font-semibold text-primary-dark">{field.label}:</label>
                     <input
@@ -29,6 +41,7 @@ export const EditUserForm = ({ form, setForm, onSubmit}) => {
                         value={form[field.name]}
                         onChange={handleChange}
                         className="border border-primary-lightrounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)] transition"
+                        ref={index === 0 ? firstInputRef : null}
                     />
                 </div>
             ))}
@@ -41,4 +54,4 @@ export const EditUserForm = ({ form, setForm, onSubmit}) => {
             </div>
         </form>
     );
-}
+});

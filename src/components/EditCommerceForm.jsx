@@ -1,6 +1,19 @@
+import { forwardRef, useImperativeHandle, useRef } from "react";
 
-export const EditCommerceForm = ({ form, setForm, onSubmit }) => {
-    
+export const EditCommerceForm = forwardRef(({ form, setForm, onSubmit }, ref) => {
+    const firstInputRef = useRef(null);
+
+    useImperativeHandle(ref, () => ({
+        reset: () => {
+            setForm({
+                name: "",
+                category: "all",
+                description: "",
+                address: { street: "", city: "", phone: "", email: "", schedule: "" }
+            });
+        },
+        focusFirst: () => firstInputRef.current.focus()
+    }));
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -147,4 +160,4 @@ export const EditCommerceForm = ({ form, setForm, onSubmit }) => {
             </button>
         </form>
     );
-}
+});

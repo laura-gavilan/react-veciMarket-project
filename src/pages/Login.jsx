@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useCallback, useState } from "react";
+=======
+import { useCallback, useEffect, useRef, useState } from "react";
+>>>>>>> feature/useRef
 import { useAuth } from "../core/auth/useAuth";
 import { Container } from "../components/Container";
 import { Link } from "react-router-dom";
@@ -31,10 +35,23 @@ export const Login = () => {
     const [form, setForm] = useState(INITIAL_FORM);
     const [error, setError] = useState(null);
 
+<<<<<<< HEAD
     const handleChange = useCallback((event) => {
         const { name, value } = event.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     },[]);
+=======
+    const emailRef = useRef(null);
+
+    useEffect(() => {
+        emailRef.current.focus();
+    }, []);
+
+    const handleChange = useCallback((event) => {
+        const { name, value } = event.target;
+        setForm((prev) => ({ ...prev, [name]: value }));
+    }, []);
+>>>>>>> feature/useRef
 
     const handleSubmit = useCallback(async (event) => {
         event.preventDefault();
@@ -46,8 +63,13 @@ export const Login = () => {
         } catch (error) {
             console.error("Error al iniciar sesión", error);
             setError(error.response?.data?.message || "Correo o contraseña incorrectos");
+            emailRef.current.focus();
         }
+<<<<<<< HEAD
     },[login,form]);
+=======
+    }, [login, form]);
+>>>>>>> feature/useRef
 
     return (
         <Container className="flex items-center justify-center min-h-[70vh]">
@@ -64,6 +86,7 @@ export const Login = () => {
                                     {input.label}
                                 </label>
                                 <input
+                                    ref={input.name === "email" ? emailRef : null}
                                     type={input.type}
                                     name={input.name}
                                     placeholder={input.placeholder}
