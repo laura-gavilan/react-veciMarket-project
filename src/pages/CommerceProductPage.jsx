@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
-import { CommerceCard } from "../components/CommerceCard";
 import { ProductCard } from "../components/ProductCard";
 import { useEffect, useMemo, useState } from "react";
 import { ProductModal } from "../components/ProductModal";
@@ -9,7 +8,7 @@ import { CommerceHeader } from "../components/CommerceHeader";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { PageError } from "../components/PageError";
 
-export const CommerceProductPage = () => {
+const CommerceProductPage = () => {
     const { commerceId } = useParams();
     const { commerces, fetchCommerces } = useCommerce();
     const { products, loadAllProducts } = useProduct();
@@ -89,3 +88,5 @@ export const CommerceProductPage = () => {
         </ErrorBoundary>
     );
 };
+
+export default CommerceProductPage;

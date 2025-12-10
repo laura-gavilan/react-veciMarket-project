@@ -3,7 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../core/http/axios";
 import { EditCommerceForm } from "../components/EditCommerceForm";
 
-export const EditCommercePage = () => {
+
+const EditCommercePage = () => {
     const { commerceId } = useParams();
     const navigate = useNavigate();
     const [form, setForm] = useState(null);
@@ -86,3 +87,5 @@ export const EditCommercePage = () => {
         </div>
     );
 };
+
+export default EditCommercePage;

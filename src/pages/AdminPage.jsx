@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { PageError } from "../components/PageError";
 
-export const AdminPage = () => {
+const AdminPage = () => {
     const { commerces, loading } = useCommerce();
     const { user } = useContext(AuthContext);
     const [showScrollTop, setShowScrollTop] = useState(false);
@@ -91,3 +91,5 @@ export const AdminPage = () => {
         </ErrorBoundary>
     );
 };
+
+export default AdminPage;

@@ -11,7 +11,8 @@ import { ProductCardInfo } from "../components/ProductCardInfo";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { PageError } from "../components/PageError";
 
-export const CommerceDetailsAdminPage = () => {
+
+const CommerceDetailsAdminPage = () => {
     const { commerces, fetchCommerces, deleteCommerce } = useCommerce();
     const { user } = useContext(AuthContext);
     const { products, loadProductsByCommerce, deleteProduct } = useProduct();
@@ -107,6 +108,8 @@ export const CommerceDetailsAdminPage = () => {
 
     );
 };
+
+export default CommerceDetailsAdminPage;
 
 
 

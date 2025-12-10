@@ -1,31 +1,41 @@
 import { Route, Routes } from 'react-router-dom';
 import { Header } from './components/Header';
-import { Home } from './pages/Home';
-import { AboutUsPage } from './pages/AboutUsPage';
-import { Register } from './pages/Register';
-import { Login } from './pages/Login';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Footer } from './components/Footer';
-import { CommercePage } from './pages/CommercePage';
-import { AdminPage } from './pages/AdminPage';
-import { ContactPage } from './pages/ContactPage';
-import { CreateProductPage } from './pages/CreateProductPage.jsx';
-import { EditProductPage } from './pages/EditProductPage.jsx';
-import { EditCommercePage } from './pages/EditCommercePage.jsx';
-import { UserPage } from './pages/UserPage.jsx';
-import { EditUserPage } from './pages/EditUserPage.jsx';
-import { FavoritesPage } from './pages/FavoritesPage.jsx';
 import { ScrollToTop } from './components/ScrollToTop.jsx';
-import { CreateCommercePage } from './pages/CreateCommercePage.jsx';
-import { CartPage } from './pages/CartPage';
-import { OrdersPage } from './pages/OrdersPage.jsx';
-import { CommerceDetailsAdminPage } from './pages/CommerceDetailsAdminPage.jsx';
-import { CommerceProductPage } from './pages/CommerceProductPage.jsx';
 import { useAuth } from './core/auth/useAuth.jsx';
 import { PageSpinner } from './components/PageSpinner.jsx';
 import { AuthError } from './components/AuthError.jsx';
 import { PageError } from './components/PageError.jsx';
 import { ErrorBoundary } from './components/ErrorBoundary.jsx';
+import { lazy, Suspense } from 'react';
+
+
+
+const Home = lazy(() => import("./pages/Home"));
+const AboutUsPage = lazy(() => import("./pages/AboutUsPage"));
+const CommercePage = lazy(() => import("./pages/CommercePage"));
+const CommerceProductPage = lazy(() => import("./pages/CommerceProductPage.jsx"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
+const Register = lazy(() => import("./pages/Register"));
+const Login = lazy(() => import("./pages/Login"));
+const FavoritesPage = lazy(() => import("./pages/FavoritesPage.jsx"));
+const CartPage = lazy(() => import("./pages/CartPage"));
+
+
+const AdminPage = lazy(() => import("./pages/AdminPage"));
+const CommerceDetailsAdminPage = lazy(() => import("./pages/CommerceDetailsAdminPage.jsx"));
+const EditCommercePage = lazy(() => import("./pages/EditCommercePage.jsx"));
+const CreateProductPage = lazy(() => import("./pages/CreateProductPage.jsx"));
+const EditProductPage = lazy(() => import("./pages/EditProductPage.jsx"));
+
+
+const UserPage = lazy(() => import("./pages/UserPage.jsx"));
+const EditUserPage = lazy(() => import("./pages/EditUserPage.jsx"));
+const CreateCommercePage = lazy(() => import("./pages/CreateCommercePage.jsx"));
+const OrdersPage = lazy(() => import("./pages/OrdersPage.jsx"));
+
+
 
 export const App = () => {
   const { isLoading, error, clearError } = useAuth();
@@ -59,36 +69,42 @@ export const App = () => {
               fullpage
             />
           }>
+          <Suspense
+            fallback={<PageSpinner
+              message="Cargando página..."
+              fullPage
+            />
+            }>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/aboutUs" element={<AboutUsPage />} />
+              <Route path="/commerce" element={<CommercePage />} />
+              <Route path="/commerce/:commerceId" element={<CommerceProductPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/favorites" element={<FavoritesPage />} />
+              <Route path="/cart" element={<CartPage />} />
 
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/aboutUs" element={<AboutUsPage />} />
-            <Route path="/commerce" element={<CommercePage />} />
-            <Route path="/commerce/:commerceId" element={<CommerceProductPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/favorites" element={<FavoritesPage />} />
-            <Route path="/cart" element={<CartPage />} />
+              <Route element={<PrivateRoute />}>
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="/admin/commerce/:commerceId" element={<CommerceDetailsAdminPage />} />
+                <Route path="/admin/commerce/:commerceId/edit" element={<EditCommercePage />} />
+                <Route path="/admin/commerce/:commerceId/create" element={<CreateProductPage />} />
+                <Route path="/admin/commerce/:commerceId/edit/:productId" element={<EditProductPage />} />
 
-            <Route element={<PrivateRoute />}>
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/admin/commerce/:commerceId" element={<CommerceDetailsAdminPage />} />
-              <Route path="/admin/commerce/:commerceId/edit" element={<EditCommercePage />} />
-              <Route path="/admin/commerce/:commerceId/create" element={<CreateProductPage />} />
-              <Route path="/admin/commerce/:commerceId/edit/:productId" element={<EditProductPage />} />
-
-              <Route path="/user" element={<UserPage />} />
-              <Route path="/user/edit" element={<EditUserPage />} />
+                <Route path="/user" element={<UserPage />} />
+                <Route path="/user/edit" element={<EditUserPage />} />
 
 
-              <Route path="/commerce/new" element={<CreateCommercePage />} />
-              <Route path="/orders" element={<OrdersPage />} />
+                <Route path="/commerce/new" element={<CreateCommercePage />} />
+                <Route path="/orders" element={<OrdersPage />} />
 
-            </Route>
+              </Route>
 
-            <Route path="*" element={<h2 className="text-center mt-10">Página no encontrada</h2>} />
-          </Routes>
+              <Route path="*" element={<h2 className="text-center mt-10">Página no encontrada</h2>} />
+            </Routes>
+          </Suspense>
         </ErrorBoundary>
       </main>
 

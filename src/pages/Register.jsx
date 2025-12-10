@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "../core/auth/useAuth";
 import { Container } from "../components/Container";
 import { Link } from "react-router-dom";
@@ -18,7 +18,7 @@ const REGISTER_FORM = [
     { input: { name: "role", type: "text", placeholder: "user", required: true }, label: { text: "Rol (admin/user)" } },
 ];
 
-export const Register = () => {
+const Register = () => {
     const { register } = useAuth();
     const [form, setForm] = useState(INITIAL_FORM);
     const [error, setError ] = useState(null);
@@ -95,3 +95,4 @@ export const Register = () => {
     );
 };
 
+export default Register;

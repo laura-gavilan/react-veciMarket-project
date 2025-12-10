@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../core/http/axios";
 import { CreateProductForm } from "../components/CreateProductForm";
 
-export const CreateProductPage = () => {
+const CreateProductPage = () => {
     const { commerceId } = useParams();
     const navigate = useNavigate();
     const [toast, setToast] = useState(null);
@@ -75,3 +75,5 @@ export const CreateProductPage = () => {
         </div >
     );
 };
+
+export default CreateProductPage;

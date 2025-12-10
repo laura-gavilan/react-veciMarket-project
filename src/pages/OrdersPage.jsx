@@ -5,7 +5,8 @@ import { useAuth } from "../core/auth/useAuth";
 import { useNavigate } from "react-router-dom";
 import { PageError } from "../components/PageError";
 
-export const OrdersPage = () => {
+
+const OrdersPage = () => {
     const { orders, loading, error, updateOrderStatus, deleteOrder, updateOrderNotes } = useOrdersContext();
     const [filter, setFilter] = useState("all");
     const [searchTerm, setSearchTerm] = useState("");
@@ -190,4 +191,5 @@ export const OrdersPage = () => {
     );
 };
 
+export default OrdersPage;
 

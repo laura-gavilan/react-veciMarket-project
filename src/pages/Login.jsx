@@ -27,7 +27,7 @@ const LOGIN = [
     },
 ];
 
-export const Login = () => {
+const Login = () => {
     const { login } = useAuth();
     const [form, setForm] = useState(INITIAL_FORM);
     const [error, setError] = useState(null);
@@ -105,3 +105,5 @@ export const Login = () => {
         </Container>
     );
 };
+
+export default Login;

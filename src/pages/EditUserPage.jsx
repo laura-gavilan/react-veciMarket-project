@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from './../core/user/useUser';
 import { EditUserForm } from "../components/EditUserForm";
 
-export const EditUserPage = () => {
+const EditUserPage = () => {
     const { user, updateUserData, loading } = useUser();
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -68,6 +68,8 @@ export const EditUserPage = () => {
         </div>
     );
 };
+
+export default EditUserPage;
 
 
 
