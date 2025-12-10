@@ -1,13 +1,15 @@
 import { useCommerce } from "../core/commerce/CommerceContext";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { CommerceCard } from "../components/CommerceCard";
+import { useNavigate } from 'react-router-dom';
 
 export const AdminPage = () => {
     const { commerces, loading } = useCommerce();
     const { user } = useContext(AuthContext);
     const [showScrollTop, setShowScrollTop] = useState(false);
-
+    const navigate = useNavigate();
+    
     useEffect(() => {
         const handleScroll = () => {
             setShowScrollTop(window.scrollY > 300);
@@ -20,6 +22,12 @@ export const AdminPage = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
+    const myCommerces = useMemo(() => {
+        return commerces.filter(
+            commerce => commerce.ownerUserId?._id === user._id
+        );
+    }, [commerces, user?._id]);
+
 
     if (loading)
         return (
@@ -30,9 +38,7 @@ export const AdminPage = () => {
             </div>
         );
 
-    const myCommerces = commerces.filter(
-        commerce => commerce.ownerUserId?._id === user._id
-    );
+        const onClickCommerceCard = useCallback( (id) => navigate(`/admin/commerce/${id}`),[]);
 
     return (
         <div className="min-h-screen bg-neutral-warm py-12 px-6 flex flex-col gap-6">
@@ -53,32 +59,9 @@ export const AdminPage = () => {
                             key={commerce._id}
                             className="relative bg-white rounded-3xl p-6 shadow-xl border border-primary-light hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
                         >
-                            <Link to={`/admin/commerce/${commerce._id}`} className="block h-full">
-                                {(commerce.image || commerce.images?.[0]) && (
-                                    <img
-                                        src={
-                                            (commerce.image || commerce.images?.[0]).startsWith("http")
-                                                ? (commerce.image || commerce.images?.[0])
-                                                : commerce.image?.startsWith("/images/")
-                                                    ? commerce.image
-                                                    : `/commerces/${commerce.images?.[0] || commerce.image}`
-                                        }
-                                        alt={commerce.name}
-                                        className="w-full h-48 object-cover rounded-2xl mb-4 shadow-md hover:shadow-lg transition-transform duration-300"
-                                    />
-                                )}
-                                <h2 className="font-extrabold text-2xl text-primary-dark mb-3">
-                                    {commerce.name}
-                                </h2>
-                                <p className="text-primary-dark mb-4 line-clamp-3">
-                                    {commerce.description}
-                                </p>
-                                <small className="text-primary-dark ">
-                                    Propietario: {commerce.ownerUserId?.name}
-                                </small>
-                                <div className="absolute -top-2 -right-2 w-12 h-12 bg-gradient-to-br from-violet-400 to-violet-600 
-                                                rounded-full opacity-30 blur-xl pointer-events-none"></div>
-                            </Link>
+                            <CommerceCard
+                                commerce={commerce}
+                                onClick={() => onClickCommerceCard(commerce._id)} />
                         </li>
                     ))}
                 </ul>

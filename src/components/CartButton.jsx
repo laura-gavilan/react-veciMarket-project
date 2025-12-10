@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { memo, useCallback, useState } from "react";
 import { useCart } from "../core/cart/useCart";
 
-export const CartButton = ({ product }) => {
+export const CartButton = memo(({ product }) => {
     const { addItem, loading } = useCart();
     const [toast, setToast] = useState(null);
 
-    const showToast = (message, duration = 2000) => {
+    const showToast = useCallback((message, duration = 2000) => {
         setToast(message);
         setTimeout(() => setToast(null), duration);
-    };
+    }, []);
 
 
-    const handleAddToCart = async () => {
+    const handleAddToCart = useCallback(async () => {
         if (!product?._id) {
             console.error("Producto no tiene ID válido");
             showToast("Producto inválido");
@@ -25,20 +25,22 @@ export const CartButton = ({ product }) => {
             console.error(error);
             showToast("⚠️ No se pudo añadir al carro");
         }
-    };
+    }, [product, addItem, showToast]);
+
+    const handleClick = useCallback((event) => {
+        event.stopPropagation();
+        handleAddToCart();
+    }, [handleAddToCart]);
 
     return (
         <>
             <button
                 type="button"
-                onClick={(event) => {
-                    event.stopPropagation();
-                    handleAddToCart();
-                }}
+                onClick={handleClick}
                 disabled={loading}
                 className={`px-2 py-1 text-sm rounded transition-colors duration-300 font-medium mt-1 ${loading
-                        ? "bg-gray-400 cursor-not-allowed text-gray-600"
-                        : "btn-primary"
+                    ? "bg-gray-400 cursor-not-allowed text-gray-600"
+                    : "btn-primary"
                     }`}
             >
                 {loading ? "Añadiendo..." : "Añadir"}
@@ -51,4 +53,4 @@ export const CartButton = ({ product }) => {
             )}
         </>
     );
-};
+});

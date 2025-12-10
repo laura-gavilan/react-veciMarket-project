@@ -24,10 +24,10 @@ export const EditUserPage = () => {
 
 
 
-    const handleSubmit = async () => {
+    const handleSubmit = useCallback(async () => {
         await updateUserData(form);
         navigate("/user");
-    };
+    },[]);
 
     return (
         <div className="max-w-3xl mx-auto mt-12 p-8 bg-white rounded-3xl shadow-xl border border-primary-light">

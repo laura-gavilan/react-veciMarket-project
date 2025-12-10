@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useOrdersContext } from "../contexts/OrdersContext";
 import { FilteredOrders } from "../components/FilteredOrders";
 import { useAuth } from "../core/auth/useAuth";
@@ -13,20 +13,20 @@ export const OrdersPage = () => {
     const navigate = useNavigate();
     const isAdmin = user?.role === "admin";
 
-    const statusOptions = [
+    const statusOptions = useMemo(() => ([
         { label: "Todos", value: "all", color: "bg-gray-300 text-gray-700" },
         { label: "Pendientes", value: "pending", color: "bg-yellow-200 text-yellow-800" },
         { label: "En preparación", value: "preparing", color: "bg-blue-300 text-blue-800" },
         { label: "Entregados", value: "delivered", color: "bg-green-300 text-green-800" },
         { label: "Cancelados", value: "cancelled", color: "bg-red-300 text-red-800" },
-    ];
+    ]), []);
 
-    const statusLabels = {
+    const statusLabels = useMemo(() => ({
         pending: "Pendiente",
         preparing: "En preparación",
         delivered: "Entregado",
         cancelled: "Cancelado",
-    };
+    }), []);
 
     const getStatusColor = (status) => {
         const option = statusOptions.find(s => s.value === status);
@@ -34,18 +34,21 @@ export const OrdersPage = () => {
     };
 
     // Filtrar órdenes según usuario o admin
-    const visibleOrders = orders.filter(order => {
-        if (!user?._id) return false;
-        if (isAdmin) return true;
-        return order.userId === user._id;
-    });
+    const visibleOrders = useMemo(() => {
+        if (!user?._id) return [];
+        return orders.filter(order => isAdmin || order.userId === user._id);
+    }, [orders, user, isAdmin]);
 
-    const filteredOrders = visibleOrders.filter(order => {
-        const matchesStatus = filter === "all" || order.status === filter;
-        const matchesSearch =
-            (order._id || "").includes(searchTerm) || (order.userId || "").includes(searchTerm);
-        return matchesStatus && matchesSearch;
-    });
+
+    const filteredOrders = useMemo(() => {
+        return visibleOrders.filter(order => {
+            const matchesStatus = filter === "all" || order.status === filter;
+            const matchesSearch =
+                (order._id || "").includes(searchTerm) || (order.userId || "").includes(searchTerm);
+            return matchesStatus && matchesSearch;
+        });
+    }, [visibleOrders, filter, searchTerm]);
+
 
     const getTotals = (order) => {
         const items = Array.isArray(order.items) ? order.items : [];
@@ -55,13 +58,15 @@ export const OrdersPage = () => {
         return { subtotal, tax, total };
     };
 
-    const globalTotals = filteredOrders.reduce((acc, order) => {
-        const { subtotal, tax, total } = getTotals(order);
-        acc.subtotal += subtotal;
-        acc.tax += tax;
-        acc.total += total;
-        return acc;
-    }, { subtotal: 0, tax: 0, total: 0 });
+    const globalTotals = useMemo(() => {
+        return filteredOrders.reduce((acc, order) => {
+            const { subtotal, tax, total } = getTotals(order);
+            acc.subtotal += subtotal;
+            acc.tax += tax;
+            acc.total += total;
+            return acc;
+        }, { subtotal: 0, tax: 0, total: 0 });
+    }, [filteredOrders]);
 
     useEffect(() => {
         const storedNotes = JSON.parse(localStorage.getItem("orderNotes") || "{}");
@@ -72,9 +77,9 @@ export const OrdersPage = () => {
         setNotesState(updatedNotes);
     }, [orders, user]);
 
-    const handleNotesChange = (orderId, value) => {
+    const handleNotesChange = useCallback((orderId, value) => {
         setNotesState(prev => ({ ...prev, [orderId]: value }));
-    };
+    }, []);
 
     const saveNotes = (orderId) => {
         const noteText = notesState[orderId]?.trim();
@@ -84,6 +89,30 @@ export const OrdersPage = () => {
         savedNotes[orderId] = noteText;
         localStorage.setItem('orderNotes', JSON.stringify(savedNotes));
     };
+
+    const handleSearchChange = useCallback((event) => {
+        setSearchTerm(event.target.value);
+    }, []);
+
+    const statusButtons = useMemo(() => {
+        return statusOptions.map(status => {
+            const count = status.value === "all"
+                ? visibleOrders.length
+                : visibleOrders.filter(order => order.status === status.value).length;
+            return (
+                <button
+                    key={status.value}
+                    onClick={() => setFilter(status.value)}
+                    className={`px-3 py-1.5 rounded-full text-sm font-semibold shadow-sm transition ${filter === status.value
+                        ? "bg-primary text-white"
+                        : `${status.color} hover:bg-accent-primary hover:text-primary-dark`
+                        }`}
+                >
+                    {status.label} ({count})
+                </button>
+            );
+        });
+    }, [statusOptions, visibleOrders, filter]);
 
     if (!user?._id) {
         return (
@@ -108,23 +137,7 @@ export const OrdersPage = () => {
 
             <div className="sticky top-0 z-10 bg-white py-4 mb-6 flex flex-col gap-4 border-b">
                 <div className="flex flex-wrap justify-center md:justify-start gap-2">
-                    {statusOptions.map(status => {
-                        const count = status.value === "all"
-                            ? visibleOrders.length
-                            : visibleOrders.filter(order => order.status === status.value).length;
-                        return (
-                            <button
-                                key={status.value}
-                                onClick={() => setFilter(status.value)}
-                                className={`px-3 py-1.5 rounded-full text-sm font-semibold shadow-sm transition ${filter === status.value
-                                    ? "bg-primary text-white"
-                                    : `${status.color} hover:bg-accent-primary hover:text-primary-dark`
-                                    }`}
-                            >
-                                {status.label} ({count})
-                            </button>
-                        );
-                    })}
+                    {statusButtons}
                 </div>
 
                 <div className="flex w-full md:w-1/2 gap-2">
@@ -132,7 +145,7 @@ export const OrdersPage = () => {
                         type="text"
                         placeholder="Buscar por ID de orden o usuario..."
                         value={searchTerm}
-                        onChange={event => setSearchTerm(event.target.value)}
+                        onChange={handleSearchChange}
                         className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-mostaza)]"
                     />
                 </div>
@@ -155,7 +168,7 @@ export const OrdersPage = () => {
                     updateOrderStatus={isAdmin ? updateOrderStatus : undefined}
                     deleteOrder={isAdmin ? deleteOrder : undefined}
                     canEdit={isAdmin}
-                    user={user} 
+                    user={user}
                 />
             )}
 

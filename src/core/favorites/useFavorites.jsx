@@ -1,22 +1,21 @@
-import { useContext } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { FavoritesContext } from "../../contexts/FavoritesContext";
 
 export const useFavorites = () => {
     const context = useContext(FavoritesContext);
 
     if (!context) {
-        throw new Error("Error");
+        throw new Error("useFavorites debe usarse dentro de FavoritesProvider");
     }
 
     const { favorites, addFavorite, deleteFavorite } = context;
 
-    const isFavorite = (productId) => {
-        if (!productId) return false;
+    const isFavorite = useCallback((productId) => {
+        favorites.some((favorite) => favorite._id === productId);
+    }, [favorites]);
 
-        if (productId) return favorites.some((favorite) => favorite._id === productId);
-    };
-
-    const toggleFavorite = async (product) => {
+    
+    const toggleFavorite = useCallback(async (product) => {
         if (!product?._id) {
             console.error("Producto inválido", product);
             return;
@@ -31,9 +30,9 @@ export const useFavorites = () => {
         } catch (error) {
             console.error("Error al alternar favorito", error);
         }
-    };
+    }, [isFavorite, addFavorite, deleteFavorite]);
 
-    const totalFavorites = favorites.length;
+    const totalFavorites = useMemo(() => favorites.length, [favorites]);
 
     return { favorites, addFavorite, deleteFavorite, isFavorite, toggleFavorite, totalFavorites };
 };

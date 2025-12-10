@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
     getOrdersApi,
     addOrderApi,
@@ -12,7 +12,6 @@ import {
     patchOrderStatusInLocalStorage,
     deleteOrderFromLocalStorage,
 } from "../core/orders/orders.service";
-import { useActionData } from "react-router-dom";
 import { useAuth } from "../core/auth/useAuth";
 
 const OrdersContext = createContext();
@@ -63,7 +62,7 @@ export const OrdersProvider = ({ children }) => {
     }, [user]);
 
     // Nueva orden
-    const addOrder = async (order) => {
+    const addOrder = useCallback(async (order) => {
         try {
             const newOrder = await addOrderApi(order);
             setOrders((prev) => [newOrder, ...prev]);
@@ -74,10 +73,10 @@ export const OrdersProvider = ({ children }) => {
             setError(error);
             return null;
         }
-    };
+    }, []);
 
     // Actualizar estado
-    const updateOrderStatus = async (id, newStatus) => {
+    const updateOrderStatus = useCallback(async (id, newStatus) => {
         try {
             const updatedOrder = await updateOrderStatusApi(id, newStatus);
             setOrders((prev) =>
@@ -88,10 +87,10 @@ export const OrdersProvider = ({ children }) => {
             console.error("Error actualizando estado:", error);
             setError(error);
         }
-    };
+    }, []);
 
     // Eliminar orden
-    const deleteOrder = async (id) => {
+    const deleteOrder = useCallback(async (id) => {
         try {
             await deleteOrderApi(id);
             setOrders((prev) => prev.filter((order) => order._id !== id));
@@ -100,9 +99,9 @@ export const OrdersProvider = ({ children }) => {
             console.error("Error eliminando orden:", error);
             setError(error);
         }
-    };
+    }, []);
 
-    const updateOrderNotes = (orderId, noteText) => {
+    const updateOrderNotes = useCallback((orderId, noteText) => {
         // Actualizar localStorage
         const storedOrders = JSON.parse(localStorage.getItem("orders")) || [];
         const updatedOrders = storedOrders.map((order) =>
@@ -110,20 +109,16 @@ export const OrdersProvider = ({ children }) => {
         );
         localStorage.setItem("orders", JSON.stringify(updatedOrders));
         setOrders(updatedOrders);
-    };
+    }, []);
+
+    const contextValue = useMemo(() => (
+        { orders, loading, error, addOrder, updateOrderStatus, deleteOrder, updateOrderNotes }),
+        [orders, loading, error, addOrder, updateOrderStatus, deleteOrder, updateOrderNotes]);
 
 
     return (
         <OrdersContext.Provider
-            value={{
-                orders,
-                loading,
-                error,
-                addOrder,
-                updateOrderStatus,
-                deleteOrder, updateOrderNotes
-
-            }}
+            value={contextValue}
         >
             {children}
         </OrdersContext.Provider>

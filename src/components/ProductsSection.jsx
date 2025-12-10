@@ -1,7 +1,13 @@
+import { memo, useMemo } from "react";
 import { Category } from "./Category";
 
-export const ProductsSection = ({ products, selectedCommerce, refreshProducts }) => {
+export const ProductsSection = memo(({ products, selectedCommerce, refreshProducts }) => {
     if (!selectedCommerce) return null;
+
+    const filteredProducts = useMemo(() =>
+        products.filter(product => product.commerceId === selectedCommerce._id),
+        [products, selectedCommerce._id]
+    );
 
     return (
         <div className="bg-white rounded-3xl shadow-lg p-10 border border-primary-light">
@@ -12,11 +18,11 @@ export const ProductsSection = ({ products, selectedCommerce, refreshProducts })
             </div>
 
             <Category
-                products={products.filter(product => product.commerceId === selectedCommerce._id)}
+                products={filteredProducts}
                 ownerId={selectedCommerce.ownerUserId?._id || null}
                 refreshProducts={refreshProducts}
                 commerceId={selectedCommerce._id}
             />
         </div>
     );
-};
+});

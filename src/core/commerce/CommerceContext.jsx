@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { getAllCommercesApi, addCommerceApi, updateCommerceApi, deleteCommerceApi } from "./commerce.api.js";
 
 import { getCommercesFromLocalStorage, saveCommercesInLocalStorage, addCommerceToLocalStorage, updateCommerceInLocalStorage, deleteCommerceFromLocalStorage } from "./commerce.service.js";
@@ -12,13 +12,13 @@ export const CommerceProvider = ({ children }) => {
     const [search, setSearch] = useState("");
     const [toast, setToast] = useState(null);
 
-    const showToast = (message, duration = 3000) => {
+    const showToast = useCallback((message, duration = 3000) => {
         setToast(message);
         setTimeout(() => setToast(null), duration);
-    };
+    }, []);
 
 
-    const fetchCommerces = async () => {
+    const fetchCommerces = useCallback(async () => {
         setLoading(true);
         try {
             const data = await getAllCommercesApi();
@@ -32,9 +32,9 @@ export const CommerceProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const addCommerce = async (commerce) => {
+    const addCommerce = useCallback(async (commerce) => {
         try {
             const newCommerce = await addCommerceApi(commerce);
             setCommerces(prev => [...prev, newCommerce]);
@@ -42,9 +42,9 @@ export const CommerceProvider = ({ children }) => {
         } catch (error) {
             console.error("Error creando comercio:", error);
         }
-    };
+    }, []);
 
-    const updateCommerce = async (updatedCommerce) => {
+    const updateCommerce = useCallback(async (updatedCommerce) => {
         try {
             const { _id, name, slug, image, description, address, isActive } = updatedCommerce;
             const editableData = { name, slug, image, description, address, isActive };
@@ -55,9 +55,9 @@ export const CommerceProvider = ({ children }) => {
         } catch (error) {
             console.error("Error actualizando comercio:", error);
         }
-    };
+    }, []);
 
-    const deleteCommerce = async (commerceId) => {
+    const deleteCommerce = useCallback(async (commerceId) => {
         try {
             await deleteCommerceApi(commerceId);
             setCommerces(prev => prev.filter(commerce => commerce._id !== commerceId));
@@ -66,15 +66,19 @@ export const CommerceProvider = ({ children }) => {
             console.error("Error eliminando comercio:", error);
             showToast("No se pudo eliminar el comercio.");
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchCommerces();
-    }, []);
+    }, [fetchCommerces]);
+
+    const contextValue = useMemo(() => ({
+        commerces, loading, search, setSearch, fetchCommerces, addCommerce, updateCommerce, deleteCommerce
+    }), [commerces, loading, search, setSearch, fetchCommerces, addCommerce, updateCommerce, deleteCommerce]);
 
     return (
         <CommerceContext.Provider
-            value={{ commerces, loading, search, setSearch, fetchCommerces, addCommerce, updateCommerce, deleteCommerce }}
+            value={contextValue}
         >
             {children}
             {toast && (

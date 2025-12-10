@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useCommerce } from "../core/commerce/CommerceContext";
 import { useProduct } from "../core/products/ProductContext";
 import { useNavigate } from "react-router-dom";
@@ -16,18 +16,16 @@ export const CommercePage = () => {
     const [search, setSearch] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("all");
     const [showProducts, setShowProducts] = useState(true);
-    const [filteredProducts, setFilteredProducts] = useState([]);
-
 
     const [modalProduct, setModalProduct] = useState(null);
     const [modalCommerce, setModalCommerce] = useState(null);
 
-    const categories = [
+    const categories = useMemo(() => [
         "all", "food", "books-paper", "health-beauty", "sports",
         "pets", "home", "clothing", "footwear", "other"
-    ];
+    ], []);
 
-    const categoryNames = {
+    const categoryNames = useMemo(() => ({
         all: "Todas",
         food: "Alimentación",
         "books-paper": "Libros & Papelería",
@@ -37,27 +35,59 @@ export const CommercePage = () => {
         home: "Hogar",
         clothing: "Ropa",
         footwear: "Calzado",
-        other: "Otras",
-    };
+        other: "Otras"
+    }), []);
 
 
     useEffect(() => { loadAllProducts(); }, []);
 
-    useEffect(() => {
-        if (!showProducts) {
-            setFilteredProducts([]);
-            return;
-        }
+    const handleSearch = useCallback((value) => {
+        setSearch(value);
+    }, []);
+
+    const openProductModal = useCallback((product, commerce) => {
+        setModalProduct(product);
+        setModalCommerce(commerce);
+    }, []);
+
+    const navigateToCommerce = useCallback(
+        (id) => navigate(`/commerce/${id}`),
+        [navigate]
+    );
+
+    const filteredProducts = useMemo(() => {
+        if (!showProducts) return [];
+
         const searchLower = search.toLowerCase();
-
-        setFilteredProducts(
-            products.filter(product =>
-                product.name.toLowerCase().includes(searchLower) &&
-                (selectedCategory === "all" || product.category.includes(selectedCategory))
-            )
+        return products.filter(product =>
+            product.name.toLowerCase().includes(searchLower) &&
+            (selectedCategory === "all" || product.category.includes(selectedCategory))
         );
+    }, [products, search, selectedCategory, showProducts]);
 
-    }, [search, products, selectedCategory, showProducts]);
+
+    const memoProductsCards = useMemo(() => {
+        return filteredProducts.map(product => {
+            const commerce = commerces.find(commerce => commerce._id === product.commerceId);
+            return (
+                <ProductCard
+                    key={`${product._id}-${product.commerceId}`}
+                    product={product}
+                    commerce={commerce}
+                    onClick={() => openProductModal(product, commerce)}
+                />
+            );
+        })
+    }, [filteredProducts, commerces, openProductModal]);
+
+    const memoCommercesCards = useMemo(() => {
+        return commerces.map(commerce => (
+            <CommerceCard
+                key={commerce._id}
+                commerce={commerce}
+                onClick={() => navigateToCommerce(commerce._id)} />
+        ));
+    }, [commerces, navigateToCommerce]);
 
     return (
         <div className="min-h-screen px-6 py-12 flex flex-col items-center max-w-7xl mx-auto">
@@ -65,7 +95,7 @@ export const CommercePage = () => {
                 Explora los <span className="text-accent-primary">productos</span> y <span className="text-accent-primary">comercios</span> de tu barrio
             </h1>
 
-            <SearchBar search={search} setSearch={setSearch} />
+            <SearchBar onSearch={handleSearch} />
 
             <CategoryFilter
                 categories={categories}
@@ -78,19 +108,7 @@ export const CommercePage = () => {
 
             {showProducts && filteredProducts.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
-                    {filteredProducts.map(product => {
-                        const commerce = commerces.find(commerce => commerce._id === product.commerceId);
-                        return (
-                            <ProductCard
-                                key={`${product._id}-${product.commerceId}`}
-                                product={product}
-                                commerce={commerce}
-                                onClick={() => {
-                                    setModalProduct(product);
-                                    setModalCommerce(commerce);
-                                }} />
-                        );
-                    })}
+                    {memoProductsCards}
                 </div>
             )}
 
@@ -105,15 +123,7 @@ export const CommercePage = () => {
                     Comercios
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {commerces.length > 0 && commerces.map(commerce => (
-                        <CommerceCard
-                            key={commerce._id}
-                            commerce={commerce}
-                            onClick={() => navigate(`/commerce/${commerce._id}`)} />
-
-                    ))}
-
-                    {commerces.length === 0 && (
+                    {commerces.length > 0 ? memoCommercesCards : (
                         <p className="col-span-full text-center text-gray-500">
                             No se encontraron comercios.
                         </p>
@@ -121,7 +131,7 @@ export const CommercePage = () => {
                 </div>
             </div>
 
-            {modalProduct && 
+            {modalProduct &&
                 <ProductModal
                     product={modalProduct}
                     commerce={modalCommerce}

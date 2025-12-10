@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import {
     getAllProductsApi,
     getProductsByCommerceApi,
@@ -30,7 +30,7 @@ export const ProductProvider = ({ children }) => {
     const [categories, setCategories] = useState(getCategoriesFromLocalStorage());
 
 
-    const loadAllProducts = async () => {
+    const loadAllProducts = useCallback(async () => {
         try {
             const data = await getAllProductsApi();
             setProducts(data);
@@ -38,10 +38,10 @@ export const ProductProvider = ({ children }) => {
         } catch (error) {
             console.error("Error cargando todos los produtos", error);
         }
-    };
+    }, []);
 
 
-    const loadProductsByCommerce = async (commerceId) => {
+    const loadProductsByCommerce = useCallback(async (commerceId) => {
         try {
             const data = await getProductsByCommerceApi(commerceId);
             setProducts(data);
@@ -49,10 +49,10 @@ export const ProductProvider = ({ children }) => {
         } catch (error) {
             console.error("Error cargando products por comercio", error);
         }
+    }, []);
 
-    };
 
-    const addProduct = async (product) => {
+    const addProduct = useCallback(async (product) => {
         try {
             const data = await addProductApi(product);
             setProducts((prev) => [...prev, data]);
@@ -60,10 +60,10 @@ export const ProductProvider = ({ children }) => {
         } catch (error) {
             console.error("Error agregando producto", error);
         }
+    }, [])
+        ;
 
-    };
-
-    const updateProduct = async (productId, updatedProduct) => {
+    const updateProduct = useCallback(async (productId, updatedProduct) => {
         try {
             const data = await updateProductApi(productId, updatedProduct);
             setProducts((prev) => prev.map((product) => (product._id === data._id ? data : product)));
@@ -71,10 +71,9 @@ export const ProductProvider = ({ children }) => {
         } catch (error) {
             console.error("Error actualizando producto", error);
         }
+    }, []);
 
-    };
-
-    const updateProductImages = async (productId, images) => {
+    const updateProductImages = useCallback(async (productId, images) => {
         try {
             const data = await patchProductImagesApi(productId, images);
             setProducts((prev) => prev.map((product) => (product._id === data._id ? data : product)));
@@ -83,9 +82,9 @@ export const ProductProvider = ({ children }) => {
             console.error("Error actualizando imágenes del producto", error);
         }
 
-    };
+    }, []);
 
-    const deleteProduct = async (productId) => {
+    const deleteProduct = useCallback(async (productId) => {
         try {
             await deleteProductApi(productId);
             let newProducts;
@@ -99,10 +98,10 @@ export const ProductProvider = ({ children }) => {
             console.log("Error borrando producto en deleteProduct")
             console.error(error)
         }
-    };
+    }, []);
 
 
-    const loadCategories = async () => {
+    const loadCategories = useCallback(async () => {
         try {
             const data = await getCategoriesApi();
             setCategories(data);
@@ -110,10 +109,10 @@ export const ProductProvider = ({ children }) => {
         } catch (error) {
             console.error("Error cargando categorías", error);
         }
+    }, []);
 
-    };
 
-    const addCategory = async (category) => {
+    const addCategory = useCallback(async (category) => {
         try {
             const data = await addCategoryApi(category);
             setCategories((prev) => [...prev, data]);
@@ -121,10 +120,10 @@ export const ProductProvider = ({ children }) => {
         } catch (error) {
             console.error("Error agregando categoría", error);
         }
+    }, [categories]);
 
-    };
 
-    const updateCategory = async (categoryId, updatedCategory) => {
+    const updateCategory = useCallback(async (categoryId, updatedCategory) => {
         try {
             await updateCategoryApi(categoryId, updatedCategory);
             const newCategories = categories.map((category) => (category._id === data._id ? data : category));
@@ -133,9 +132,10 @@ export const ProductProvider = ({ children }) => {
         } catch (error) {
             console.error("Error actualizando categoría", error);
         }
-    };
+    }, [categories]);
 
-    const deleteCategory = async (categoryId) => {
+
+    const deleteCategory = useCallback(async (categoryId) => {
         try {
             await deleteCategoryApi(categoryId);
             const newCategories = categories.filter((category) => category._id !== categoryId);
@@ -144,12 +144,14 @@ export const ProductProvider = ({ children }) => {
         } catch (error) {
             console.error("Error eliminando categoría");
         }
+    }, [categories]);
 
-    };
+    const contextValue = useMemo(() => ({
+        products, categories, loadAllProducts, loadProductsByCommerce, addProduct, updateProduct, updateProductImages, deleteProduct, loadCategories, addCategory, updateCategory, deleteCategory
+    }), [products, categories, loadAllProducts, loadProductsByCommerce, addProduct, updateProduct, updateProductImages, deleteProduct, loadCategories, addCategory, updateCategory, deleteCategory]);
 
     return (
-        <ProductContext.Provider
-            value={{ products, categories, loadAllProducts, loadProductsByCommerce, addProduct, updateProduct, updateProductImages, deleteProduct, loadCategories, addCategory, updateCategory, deleteCategory }} >
+        <ProductContext.Provider value={contextValue} >
             {children}
         </ProductContext.Provider>
     );

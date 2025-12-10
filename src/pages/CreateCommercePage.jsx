@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../core/auth/useAuth';
-
 import { useCommerce } from './../core/commerce/CommerceContext';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { CreateCommerceForm } from '../components/CreateCommerceForm';
 
 
@@ -11,13 +10,14 @@ export const CreateCommercePage = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [toast, setToast] = useState(null);
+    const [form, setForm] = useState({ name: "", category: "", description: "" });
 
-    const showToast = (message, duration = 3000) => {
+    const showToast = useCallback((message, duration = 3000) => {
         setToast(message);
         setTimeout(() => setToast(null), duration);
-    };
+    }, []);
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = useCallback(async (event) => {
         event.preventDefault();
 
         try {
@@ -32,7 +32,7 @@ export const CreateCommercePage = () => {
             console.error("Error al crear comercio:", error);
             showToast("No se pudo crear el comercio. Revisa los datos.");
         }
-    };
+    }, [form, user, addCommerce, navigate, showToast]);
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-warm p-6">
@@ -41,7 +41,11 @@ export const CreateCommercePage = () => {
                     Crear Comercio
                 </h1>
 
-                <CreateCommerceForm onSubmit={handleSubmit}/>
+                <CreateCommerceForm
+                    onSubmit={handleSubmit}
+                    form={form}
+                    setForm={setForm}
+                />
             </div>
 
             {toast && (
