@@ -1,0 +1,216 @@
+{
+    "pages": {
+        "home": {
+            "categories": {
+                "food": "Food",
+                "books": "Books",
+                "home": "Home",
+                "sports": "Sports",
+                "beauty": "Beauty"
+            },
+            "title": "Discover the best products and local stores in your neighborhood.",
+            "subtitle": "Support local businesses and find exclusive deals in your area. Everything you need, close to you!",
+            "explore": "Learn more",
+            "register": "Sign up",
+            "featured_categories": "Featured Categories",
+            "view_all_categories": "View all categories",
+            "featured_commerces": "Featured Stores",
+            "view_all_commerces": "View all stores",
+            "featured_products": "Featured Products",
+            "view_products": "View more products",
+            "location": {
+                "map_label": "Store location"
+            },
+            "contact": {
+                "contact_app": "Contact us",
+                "questions": "Do you have any questions or suggestions? Write to us and we will respond as soon as possible.",
+                "email": "Send email",
+                "page": "Go to contact page"
+            }
+        },
+        "about": {
+            "title": "About Us",
+            "subtitle": "VeciMarket is your trusted local commerce platform. Our mission is to connect neighbors, support local businesses, and foster a closer, supportive community. Discover unique products near you and become part of our network.",
+            "mission": {
+                "title": "Mission",
+                "text": "Support local commerce and strengthen the neighborhood community through an intuitive and reliable platform."
+            },
+            "vision": {
+                "title": "Vision",
+                "text": "To be the reference platform for local commerce, fostering lasting relationships between neighbors and businesses."
+            },
+            "values": {
+                "title": "Values",
+                "text": "Community, trust, closeness, and support for local businesses are the pillars that guide our daily work."
+            },
+            "community": "Join our community and discover everything VeciMarket has to offer.",
+            "register": "Sign up now"
+        },
+        "commerce_page": {
+            "title": {
+                "title_part1": "Explore the",
+                "title_highlight1": "products",
+                "title_part2": "and",
+                "title_highlight2": "stores",
+                "title_part3": "in your neighborhood"
+            },
+            "no_products_filter": "No products found in this category.",
+            "commerces": "Stores",
+            "no_commerces_filter": "No stores found.",
+            "categories": {
+                "all": "All",
+                "food": "Food",
+                "books-paper": "Books & Stationery",
+                "health-beauty": "Health & Beauty",
+                "sports": "Sports",
+                "pets": "Pets",
+                "home": "Home",
+                "clothing": "Clothing",
+                "footwear": "Footwear",
+                "other": "Other"
+            }
+        },
+        "contact": {
+            "title": "Contact Us",
+            "questions": "Do you have any questions or suggestions? Write to us and we will get back to you as soon as possible.",
+            "form": {
+                "name": "Name",
+                "placeholder_name": "Your name",
+                "email": "Email",
+                "placeholder_email": "email@example.com",
+                "message": "Message",
+                "placeholder_message": "Write your message...",
+                "send": "Send"
+            },
+            "contact": {
+                "phone": "Phone",
+                "email": "Email",
+                "location": "Address"
+            }
+        },
+        "register": {
+            "title": "Create your account",
+            "form": {
+                "username": {
+                    "label": "Username",
+                    "placeholder": "testuser"
+                },
+                "name": {
+                    "label": "Name",
+                    "placeholder": "Maria"
+                },
+                "firstName": {
+                    "label": "First Last Name",
+                    "placeholder": "Lopez"
+                },
+                "lastName": {
+                    "label": "Second Last Name",
+                    "placeholder": "Saez"
+                },
+                "email": {
+                    "label": "Email",
+                    "placeholder": "maria@example.com"
+                },
+                "password": {
+                    "label": "Password",
+                    "placeholder": "Must be at least 6 characters"
+                },
+                "phoneNumber": {
+                    "label": "Phone Number",
+                    "placeholder": "+34 600000000"
+                },
+                "address": {
+                    "label": "Address",
+                    "placeholder": "Address"
+                },
+                "role": {
+                    "label": "Role (admin/user)",
+                    "placeholder": "user"
+                }
+            },
+            "button_register": "Sign Up",
+            "questions_login": "Already have an account?",
+            "login": "Log in"
+        },
+        "login": {
+            "title": "Log in",
+            "form": {
+                "email": {
+                    "label": "Email",
+                    "placeholder": "example@example.com"
+                },
+                "password": {
+                    "label": "Password",
+                    "placeholder": "******"
+                }
+            },
+            "enter": "Enter",
+            "question_register": "Don't have an account?",
+            "register": "Sign up"
+        }
+    },
+    "navbar": {
+        "about": "About Us",
+        "commerces_and_products": "Stores & Products",
+        "contact": "Contact",
+        "register": "Register",
+        "profile": "Profile",
+        "my_commerces": "My Stores",
+        "create_commerce": "Create Store",
+        "orders": "Orders",
+        "logout": "Log out"
+    },
+    "footer": {
+        "title": "Support local businesses and discover unique products in your community.",
+        "links": {
+            "title": "Links",
+            "home": "Home",
+            "commerces": "Stores",
+            "register": "Register",
+            "contact": "Contact"
+        },
+        "contact_networks": {
+            "title": "Contact & Networks",
+            "email": "Email:"
+        },
+        "reserved_rights": "All rights reserved."
+    },
+    "user": {
+        "loading": "Loading user...",
+        "profile_user": "Profile of {{name}}",
+        "username": "Username",
+        "name": "Name",
+        "firstName": "First Last Name",
+        "lastName": "Second Last Name",
+        "email": "Email",
+        "phoneNumber": "Phone",
+        "address": "Address",
+        "edit_profile": "Edit profile",
+        "delete_profile": "Delete profile"
+    },
+    "admin": {
+        "loading": "Loading stores...",
+        "your_commerces": "Your Stores",
+        "no_commerces": "You don't have any stores yet."
+    },
+    "commerce_details": {
+        "no_commerce": "Commerce not found",
+        "commerce_header": {
+            "commerce_name": "{{commerce}}",
+            "commerce_description": "{{description}}",
+            "location": {
+                "street": "Street",
+                "city": "City",
+                "phone": "Phone",
+                "email": "Email",
+                "schedule": "Schedule"
+            }
+        },
+        "owner": {
+            "edit_commerce": "✏️ Edit Store",
+            "create_product": " ➕ Create Product",
+            "delete_commerce": " 🗑️ Delete Store"
+        }
+    },
+    "back_button": "← Back"
+}

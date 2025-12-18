@@ -12,7 +12,7 @@ import { CartProvider } from './contexts/CartContext';
 import { OrdersProvider } from './contexts/OrdersContext.jsx';
 import { ErrorBoundary } from './components/ErrorBoundary.jsx';
 import { PageError } from './components/PageError.jsx';
-
+import "./translations/i18n.js";
 
 createRoot(document.getElementById('root')).render(
   <ErrorBoundary

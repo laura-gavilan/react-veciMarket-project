@@ -9,6 +9,7 @@ import { ProductCard } from "../components/ProductCard";
 import { CommerceCard } from "../components/CommerceCard";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { PageError } from "../components/PageError";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 const CommercePage = () => {
     const { commerces } = useCommerce();
@@ -22,23 +23,27 @@ const CommercePage = () => {
     const [modalProduct, setModalProduct] = useState(null);
     const [modalCommerce, setModalCommerce] = useState(null);
 
+    const { t } = useTranslate();
+
     const categories = useMemo(() => [
         "all", "food", "books-paper", "health-beauty", "sports",
         "pets", "home", "clothing", "footwear", "other"
     ], []);
 
-    const categoryNames = useMemo(() => ({
-        all: "Todas",
-        food: "Alimentación",
-        "books-paper": "Libros & Papelería",
-        "health-beauty": "Salud & Belleza",
-        sports: "Deportes",
-        pets: "Animales",
-        home: "Hogar",
-        clothing: "Ropa",
-        footwear: "Calzado",
-        other: "Otras"
-    }), []);
+    const categoryNames = useMemo(() => {
+        return {
+            all: t("pages.commerce_page.categories.all"),
+            food: t("pages.commerce_page.categories.food"),
+            "books-paper": t("pages.commerce_page.categories.books-paper"),
+            "health-beauty": t("pages.commerce_page.categories.health-beauty"),
+            sports: t("pages.commerce_page.categories.sports"),
+            pets: t("pages.commerce_page.categories.pets"),
+            home: t("pages.commerce_page.categories.home"),
+            clothing: t("pages.commerce_page.categories.clothing"),
+            footwear: t("pages.commerce_page.categories.footwear"),
+            other: t("pages.commerce_page.categories.other"),
+        };
+    }, [t]);
 
 
     useEffect(() => { loadAllProducts(); }, []);
@@ -103,7 +108,11 @@ const CommercePage = () => {
 
             <div className="min-h-screen px-6 py-12 flex flex-col items-center max-w-7xl mx-auto">
                 <h1 className="text-center mb-8 text-4xl md:text-5xl font-title font-bold text-primary-dark leading-tight">
-                    Explora los <span className="text-accent-primary">productos</span> y <span className="text-accent-primary">comercios</span> de tu barrio
+                    {t("pages.commerce_page.title.title_part1")} 
+                    <span className="text-accent-primary">{t("pages.commerce_page.title.title_highlight1")}</span>
+                    {t("pages.commerce_page.title.title_part2")} 
+                    <span className="text-accent-primary">{t("pages.commerce_page.title.title_highlight2")}</span>
+                    {t("pages.commerce_page.title.title_part3")}
                 </h1>
 
                 <SearchBar onSearch={handleSearch} />
@@ -125,18 +134,18 @@ const CommercePage = () => {
 
                 {showProducts && filteredProducts.length === 0 && (
                     <p className="text-center text-gray-500 mt-4">
-                        No hay productos en esta categoría.
+                        {t("pages.commerce_page.no_products_filter")}
                     </p>
                 )}
 
                 <div className="w-full mt-12">
                     <h2 className="text-2xl font-title font-bold text-primary-dark mb-6">
-                        Comercios
+                        {t("pages.commerce_page.commerces")}
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {commerces.length > 0 ? memoCommercesCards : (
                             <p className="col-span-full text-center text-gray-500">
-                                No se encontraron comercios.
+                                {t("pages.commerce_page.no_commerces_filter")}
                             </p>
                         )}
                     </div>

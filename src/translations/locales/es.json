@@ -1,0 +1,216 @@
+{
+    "pages": {
+        "home": {
+            "categories": {
+                "food": "Alimentación",
+                "books": "Libros",
+                "home": "Hogar",
+                "sports": "Deportes",
+                "beauty": "Belleza"
+            },
+            "title": "Descubre los mejores productos y locales de tu barrio.",
+            "subtitle": " Apoya el comercio local y encuentra ofertas exclusivas en tu zona. ¡Todo lo que necesitas, cerca de ti!",
+            "explore": "Conoce más",
+            "register": "Regístrate",
+            "featured_categories": "Categorías destacadas",
+            "view_all_categories": "Ver todas las categorías",
+            "featured_commerces": "Comercios destacados",
+            "view_all_commerces": "Ver todas las comercios",
+            "featured_products": "Productos destacados",
+            "view_products": "Ver más productos",
+            "location": {
+                "map_label": "Ubicación de los comercios"
+            },
+            "contact": {
+                "contact_app": "Contáctanos",
+                "questions": " ¿Tienes preguntas o sugerencias? Escríbenos y te responderemos lo antes posible.",
+                "email": "Enviar correo",
+                "page": "Ir a la página de contacto"
+            }
+        },
+        "about": {
+            "title": "Quienes somos",
+            "subtitle": "VeciMarket es tu plataforma de comercio local de confianza. Nuestra misión es conectar a los vecinos, apoyar a los comercios locales y fomentar una comunidad más cercana y solidaria. Descubre productos únicos cerca de ti y forma parte de nuestra red.",
+            "mission": {
+                "title": "Misión",
+                "text": "Apoyar el comercio local y fortalecer la comunidad vecinal mediante una plataforma intuitiva y confiable."
+            },
+            "vision": {
+                "title": "Visión",
+                "text": "Ser la plataforma de referencia para el comercio local, fomentando relaciones duraderas entre vecinos y comercios."
+            },
+            "values": {
+                "title": "Valores",
+                "text": "Comunidad, confianza, cercanía y apoyo al comercio local son los pilares que guían nuestra labor diaria."
+            },
+            "community": " Únete a nuestra comunidad y descubre todo lo que VeciMarket tiene para ofrecer.",
+            "register": "Regístrate ahora"
+        },
+        "commerce_page": {
+            "title": {
+                "title_part1": "Explora los",
+                "title_highlight1": "productos",
+                "title_part2": "y",
+                "title_highlight2": "comercios",
+                "title_part3": "de tu barrio"
+            },
+            "no_products_filter": "No hay productos en esta categoría.",
+            "commerces": "Comercios",
+            "no_commerces_filter": "No se encontraron comercios.",
+            "categories": {
+                "all": "Todas",
+                "food": "Alimentación",
+                "books-paper": "Libros & Papelería",
+                "health-beauty": "Salud & Belleza",
+                "sports": "Deportes",
+                "pets": "Animales",
+                "home": "Hogar",
+                "clothing": "Ropa",
+                "footwear": "Calzado",
+                "other": "Otras"
+            }
+        },
+        "contact": {
+            "title": "Contáctanos",
+            "questions": "¿Tienes alguna duda o sugerencia? Escríbenos y nos pondremos en contacto contigo lo antes posible.",
+            "form": {
+                "name": "Nombre",
+                "placeholder_name": "Tu nombre",
+                "email": "Email",
+                "placeholder_email": "email@email.com",
+                "message": "Mensaje",
+                "placeholder_message": "Escribe tu mensaje...",
+                "send": "Enviar"
+            },
+            "contact": {
+                "phone": "Teléfono",
+                "email": "Email",
+                "location": "Dirección"
+            }
+        },
+        "register": {
+            "title": "Crea tu cuenta",
+            "form": {
+                "username": {
+                    "label": "Nombre de usuario",
+                    "placeholder": "testuser"
+                },
+                "name": {
+                    "label": "Nombre",
+                    "placeholder": "María"
+                },
+                "firstName": {
+                    "label": "Primer apellido",
+                    "placeholder": "López"
+                },
+                "lastName": {
+                    "label": "Segundo apellido",
+                    "placeholder": "Sáez"
+                },
+                "email": {
+                    "label": "Correo electrónico",
+                    "placeholder": "maria@example.com"
+                },
+                "password": {
+                    "label": "Contraseña",
+                    "placeholder": "Debe contener al menos 6 caracteres"
+                },
+                "phoneNumber": {
+                    "label": "Número de teléfono",
+                    "placeholder": "+34 600000000"
+                },
+                "address": {
+                    "label": "Dirección",
+                    "placeholder": "Dirección"
+                },
+                "role": {
+                    "label": "Rol (admin/user)",
+                    "placeholder": "user"
+                }
+            },
+            "button_register": "Regístrate",
+            "questions_login": "¿Ya tienes cuenta?",
+            "login": "Inicia sesión"
+        },
+        "login": {
+            "title": "Inicia sesión",
+            "form": {
+                "email": {
+                    "label": "Correo electrónico",
+                    "placeholder": "example@example.com"
+                },
+                "password": {
+                    "label": "Contraseña",
+                    "placeholder": "******"
+                }
+            },
+            "enter": "Entrar",
+            "question_register": "¿No tienes cuenta?",
+            "register": "Regístrate"
+        }
+    },
+    "navbar": {
+        "about": "Sobre nosotros",
+        "commerces_and_products": "Comercios & Productos",
+        "contact": "Contacto",
+        "register": "Registro",
+        "profile": "Perfil",
+        "my_commerces": "Mis comercios",
+        "create_commerce": "Crear comercio",
+        "orders": "Pedidos",
+        "logout": "Cerrar sesión"
+    },
+    "footer": {
+        "title": "Apoya a los comercios locales y descubre productos únicos en tu comunidad.",
+        "links": {
+            "title": "Enlaces",
+            "home": "Inicio",
+            "commerces": "Comercios",
+            "register": "Registro",
+            "contact": "Contacto"
+        },
+        "contact_networks": {
+            "title": "Contacto & Redes",
+            "email": "Correo:"
+        },
+        "reserved_rights": "Todos los derechos reservados."
+    },
+    "user": {
+        "loading": "Cargando ususario...",
+        "profile_user": "Perfil de {{name}}",
+        "username": "Nombre de usuario",
+        "name": "Nombre",
+        "firstName": "Primer Apellido",
+        "lastName": "Segundo Apellido",
+        "email": "Email",
+        "phoneNumber": "Teléfono",
+        "address": "Dirección",
+        "edit_profile": "Editar perfil",
+        "delete_profile": "Eliminar perfil"
+    },
+    "admin": {
+        "loading": "Cargando comercios...",
+        "your_commerces": "Tus comercios",
+        "no_commerces": "No tienes comercios aún. "
+    },
+    "commerce_details": {
+        "no_commerce": "No se encuentra el comercio",
+        "commerce_header": {
+            "commerce_name": "{{commerce}}",
+            "commerce_description": "{{description}}",
+            "location": {
+                "street": "Calle",
+                "city": "Ciudad",
+                "phone": "Teléfono",
+                "email": "Email",
+                "schedule": "Horario"
+            }
+        },
+        "owner": {
+            "edit_commerce": "✏️ Editar Comercio",
+            "create_product": " ➕ Crear Producto",
+            "delete_commerce": " 🗑️ Eliminar Comercio"
+        }
+    },
+    "back_button": "← Volver"
+}

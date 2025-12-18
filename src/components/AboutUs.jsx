@@ -1,21 +1,25 @@
+import { useTranslate } from "../translations/locales/useTranslate";
+
 export const AboutUs = () => {
+    const { t } = useTranslate();
+
     return (
         <div className="min-h-[calc(100vh-80px)] text-primary-dark flex flex-col items-center px-6 py-20">
 
             <h1 className="text-xl md:text-5xl font-title font-semibold mb-6 text-center">
-                Quiénes somos
+                {t("pages.about.title")}
     
             </h1>
 
             <p className="text-base md:text-lg max-w-3xl text-center mb-16">
-                VeciMarket es tu plataforma de comercio local de confianza. Nuestra misión es conectar a los vecinos, apoyar a los comercios locales y fomentar una comunidad más cercana y solidaria. Descubre productos únicos cerca de ti y forma parte de nuestra red.
+                {t("pages.about.subtitle")}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16 w-full max-w-6xl">
                 {[
-                    { title: "Misión", text: "Apoyar el comercio local y fortalecer la comunidad vecinal mediante una plataforma intuitiva y confiable." },
-                    { title: "Visión", text: "Ser la plataforma de referencia para el comercio local, fomentando relaciones duraderas entre vecinos y comercios." },
-                    { title: "Valores", text: "Comunidad, confianza, cercanía y apoyo al comercio local son los pilares que guían nuestra labor diaria." }
+                    { title: t("pages.about.mission.title"), text: t("pages.about.mission.text")},
+                    { title: t("pages.about.vision.title"), text: t("pages.about.vision.text")  },
+                    { title: t("pages.about.values.title"), text:t("pages.about.values.text") }
                 ].map((item, index) => (
                     <div
                         key={index}
@@ -35,13 +39,13 @@ export const AboutUs = () => {
 
             <div className="text-center">
                 <p className="text-primary-dark mb-6 text-base md:text-lg">
-                    Únete a nuestra comunidad y descubre todo lo que VeciMarket tiene para ofrecer.
+                    {t("pages.about.community")}
                 </p>
                 <a
                     href="/register"
                     className="btn-primary"
                 >
-                    Regístrate ahora
+                    {t("pages.about.register")}
                 </a>
             </div>
         </div>

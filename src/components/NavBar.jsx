@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import { useAuth } from "../core/auth/useAuth";
 import { useCart } from "../core/cart/useCart";
+import { LanguageSelector } from "../translations/locales/LanguageSelector";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 
 export const NavBar = memo(() => {
@@ -12,6 +14,7 @@ export const NavBar = memo(() => {
     const [userMenu, setUserMenu] = useState(false);
     const { getTotalItems } = useCart();
     const [animate, setAnimate] = useState(false);
+    const {t} = useTranslate();
 
     const totalItems = useMemo(() => {
         return getTotalItems();
@@ -29,30 +32,28 @@ export const NavBar = memo(() => {
     const links = useMemo(() => {
         if (!user) {
             return [
-                { to: "/", label: "Inicio" },
-                { to: "/aboutUs", label: "Sobre nosotros" },
-                { to: "/commerce", label: "Comercios & Productos" },
-                { to: "/contact", label: "Contacto" },
-                { to: "/register", label: "Registro" },
+                { to: "/aboutUs", label: t("navbar.about") },
+                { to: "/commerce", label:  t("navbar.commerces_and_products") },
+                { to: "/contact", label: t("navbar.contact") },
+                { to: "/register", label:  t("navbar.register") },
             ];
         } else if (user.role === "admin") {
             return [
-                { to: "/commerce", label: "Comercios & Productos" },
-                { to: "/user", label: "Perfil" },
-                { to: "/admin", label: "Mis comercios" },
-                { to: "/commerce/new", label: "Crear comercio" },
-                { to: "/orders", label: "Pedidos" },
+                { to: "/commerce", label:  t("navbar.commerces_and_products")},
+                { to: "/user", label: t("navbar.profile")  },
+                { to: "/admin", label: t("navbar.my_commerces" )},
+                { to: "/commerce/new", label: t("navbar.create_commerce") },
+                { to: "/orders", label: t("navbar.orders") },
             ];
         } else {
             return [
-                { to: "/", label: "Inicio" },
-                { to: "/aboutUs", label: "Sobre nosotros" },
-                { to: "/commerce", label: "Comercios & Productos" },
-                { to: "/user", label: "Perfil" },
-                { to: "/orders", label: "Pedidos" },
+                { to: "/aboutUs", label: t("navbar.about")  },
+                { to: "/commerce", label: t("navbar.commerces_and_products")},
+                { to: "/user", label: t("navbar.profile") },
+                { to: "/orders", label: t("navbar.orders") },
             ];
         }
-    }, [user]);
+    }, [user, t]);
 
 
     const handleLogout = useCallback(() => {
@@ -124,6 +125,8 @@ export const NavBar = memo(() => {
                                             className="w-full h-full object-contain"
                                         />
                                     </Link>
+
+                                    <LanguageSelector />
                                 </>
                             )}
 
@@ -168,10 +171,12 @@ export const NavBar = memo(() => {
                                                 onClick={handleLogout}
                                                 className="w-full text-left px-4 py-2 hover:bg-gray-100"
                                             >
-                                                Cerrar sesión
+                                                {t("navbar.logout")}
                                             </button>
                                         </div>
                                     )}
+
+                                    <LanguageSelector />
                                 </>
                             )}
                         </div>
@@ -226,7 +231,7 @@ export const NavBar = memo(() => {
                                                 onClick={handleLogout}
                                                 className="w-full text-left px-4 py-2 hover:bg-gray-100"
                                             >
-                                                Cerrar sesión
+                                                {t("navbar.logout")}
                                             </button>
                                         </div>
                                     )}
@@ -257,7 +262,7 @@ export const NavBar = memo(() => {
                                 onClick={handleLogout}
                                 className="btn-secondary w-full"
                             >
-                                Cerrar sesión
+                                {t("navbar.logout")}
                             </button>
                         )}
                     </div>
