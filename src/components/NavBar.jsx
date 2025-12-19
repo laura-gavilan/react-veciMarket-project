@@ -32,25 +32,25 @@ export const NavBar = memo(() => {
     const links = useMemo(() => {
         if (!user) {
             return [
-                { to: "/aboutUs", label: t("navbar.about") },
-                { to: "/commerce", label:  t("navbar.commerces_and_products") },
-                { to: "/contact", label: t("navbar.contact") },
-                { to: "/register", label:  t("navbar.register") },
+                { to: "/aboutUs", label: t("navigation.about") },
+                { to: "/commerce", label:  t("navigation.commerces_and_products") },
+                { to: "/contact", label: t("navigation.contact") },
+                { to: "/register", label:  t("navigation.register") },
             ];
         } else if (user.role === "admin") {
             return [
-                { to: "/commerce", label:  t("navbar.commerces_and_products")},
-                { to: "/user", label: t("navbar.profile")  },
-                { to: "/admin", label: t("navbar.my_commerces" )},
-                { to: "/commerce/new", label: t("navbar.create_commerce") },
-                { to: "/orders", label: t("navbar.orders") },
+                { to: "/commerce", label:  t("navigation.commerces_and_products")},
+                { to: "/user", label: t("navigation.profile")  },
+                { to: "/admin", label: t("navigation.my_commerces" )},
+                { to: "/commerce/new", label: t("navigation.create_commerce") },
+                { to: "/orders", label: t("navigation.orders") },
             ];
         } else {
             return [
-                { to: "/aboutUs", label: t("navbar.about")  },
-                { to: "/commerce", label: t("navbar.commerces_and_products")},
-                { to: "/user", label: t("navbar.profile") },
-                { to: "/orders", label: t("navbar.orders") },
+                { to: "/aboutUs", label: t("navigation.about")  },
+                { to: "/commerce", label: t("navigation.commerces_and_products")},
+                { to: "/user", label: t("navigation.profile") },
+                { to: "/orders", label: t("navigation.orders") },
             ];
         }
     }, [user, t]);
@@ -171,7 +171,7 @@ export const NavBar = memo(() => {
                                                 onClick={handleLogout}
                                                 className="w-full text-left px-4 py-2 hover:bg-gray-100"
                                             >
-                                                {t("navbar.logout")}
+                                                {t("navigation.logout")}
                                             </button>
                                         </div>
                                     )}
@@ -231,7 +231,7 @@ export const NavBar = memo(() => {
                                                 onClick={handleLogout}
                                                 className="w-full text-left px-4 py-2 hover:bg-gray-100"
                                             >
-                                                {t("navbar.logout")}
+                                                {t("navigation.logout")}
                                             </button>
                                         </div>
                                     )}
@@ -262,7 +262,7 @@ export const NavBar = memo(() => {
                                 onClick={handleLogout}
                                 className="btn-secondary w-full"
                             >
-                                {t("navbar.logout")}
+                                {t("navigation.logout")}
                             </button>
                         )}
                     </div>

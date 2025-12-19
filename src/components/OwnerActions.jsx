@@ -16,21 +16,21 @@ export const OwnerActions = memo(({ commerceId, onDelete }) => {
                     onClick={() => onClickEditCommerce(commerceId)}
                     className="px-5 py-2 rounded-full font-semibold bg-primary-dark text-accent-primary-light hover:bg-primary-light hover:scale-105 transition-all shadow-md"
                 >
-                    {t("commerce_details.owner.edit_commerce")}
+                    {t("commerces.edit_commerce")}
                 </button>
 
                 <button
                     onClick={() => onClickCreateProduct(commerceId)}
                     className="px-5 py-2 rounded-full font-semibold bg-accent-primary-light text-primary-dark hover:bg-accent-primary hover:scale-105 transition-all shadow-md"
                 >
-                    {t("commerce_details.owner.create_product")}
+                    {t("commerces.create_product")}
                 </button>
 
                 <button
                     onClick={onDelete}
                     className="px-5 py-2 rounded-full font-semibold bg-primary-light text-white hover:bg-primary-dark hover:scale-105 transition-all shadow-md"
                 >
-                    {t("commerce_details.owner.delete_commerce")}
+                    {t("commerces.delete_commerce")}
                 </button>
             </div>
         )

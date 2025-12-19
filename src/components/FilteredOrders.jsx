@@ -1,4 +1,5 @@
 import { memo, useCallback, useMemo } from "react";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 export const FilteredOrders = memo(({
     filteredOrders,
@@ -16,6 +17,7 @@ export const FilteredOrders = memo(({
 }) => {
 
     const isAdmin = user?.role === "admin";
+    const { t } = useTranslate();
 
     const visibleOrders = useMemo(() => {
         return filteredOrders.filter(order => {
@@ -48,8 +50,8 @@ export const FilteredOrders = memo(({
 
                     <div className="text-[11px] mb-3 space-y-1 text-primary-dark">
                         <p><strong>ID:</strong> {order._id}</p>
-                        <p><strong>Usuario:</strong> {order.userId}</p>
-                        <p><strong>Estado:</strong>
+                        <p><strong>{t("user.user")}:</strong> {order.userId}</p>
+                        <p><strong>{t("components.state")}:</strong>
                             <span className={`ml-1 px-2 py-1 rounded text-[10px] font-semibold ${getStatusColor(order.status)} ${statusOptions.find(s => s.value === order.status)?.color.split(' ')[1]}`}>
                                 {statusLabels[order.status] || order.status}
                             </span>
@@ -71,7 +73,7 @@ export const FilteredOrders = memo(({
                                         onClick={() => handleSaveNotes(order._id)}
                                         className="px-3 py-1 text-xs rounded-full btn-primary"
                                     >
-                                        Guardar
+                                        {t("components.save")}
                                     </button>
                                 </div>
                             </>
@@ -104,9 +106,9 @@ export const FilteredOrders = memo(({
                     </div>
 
                     <div className="bg-yellow-100 p-2 rounded mb-2 text-sm font-sans space-y-1">
-                        <p><strong>Subtotal:</strong> €{subtotal.toFixed(2)}</p>
-                        <p><strong>Impuestos (10%):</strong> €{tax.toFixed(2)}</p>
-                        <p><strong>Total:</strong> €{total.toFixed(2)}</p>
+                        <p><strong>{t("cart.subtotal")}:</strong> €{subtotal.toFixed(2)}</p>
+                        <p><strong>{t("orders.taxes")}: (10%):</strong> €{tax.toFixed(2)}</p>
+                        <p><strong>{t("cart.total")}:</strong> €{total.toFixed(2)}</p>
                     </div>
 
                     {canEdit && isAdmin && (

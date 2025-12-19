@@ -4,6 +4,7 @@ import { FilteredOrders } from "../components/FilteredOrders";
 import { useAuth } from "../core/auth/useAuth";
 import { useNavigate } from "react-router-dom";
 import { PageError } from "../components/PageError";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 
 const OrdersPage = () => {
@@ -14,21 +15,22 @@ const OrdersPage = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const isAdmin = user?.role === "admin";
+    const { t } = useTranslate();
 
     const statusOptions = useMemo(() => ([
-        { label: "Todos", value: "all", color: "bg-gray-300 text-gray-700" },
-        { label: "Pendientes", value: "pending", color: "bg-yellow-200 text-yellow-800" },
-        { label: "En preparación", value: "preparing", color: "bg-blue-300 text-blue-800" },
-        { label: "Entregados", value: "delivered", color: "bg-green-300 text-green-800" },
-        { label: "Cancelados", value: "cancelled", color: "bg-red-300 text-red-800" },
-    ]), []);
+        { label: t("orders.status.all"), value: "all", color: "bg-gray-300 text-gray-700" },
+        { label: t("orders.status.pending"), value: "pending", color: "bg-yellow-200 text-yellow-800" },
+        { label: t("orders.status.preparing"), value: "preparing", color: "bg-blue-300 text-blue-800" },
+        { label: t("orders.status.delivered"), value: "delivered", color: "bg-green-300 text-green-800" },
+        { label: t("orders.status.cancelled"), value: "cancelled", color: "bg-red-300 text-red-800" },
+    ]), [t]);
 
     const statusLabels = useMemo(() => ({
-        pending: "Pendiente",
-        preparing: "En preparación",
-        delivered: "Entregado",
-        cancelled: "Cancelado",
-    }), []);
+        pending: (t("orders.status.pending")),
+        preparing: (t("orders.status.preparing")),
+        delivered: (t("orders.status.delivered")),
+        cancelled: (t("orders.status.cancelled")),
+    }), [t]);
 
     const getStatusColor = (status) => {
         const option = statusOptions.find(s => s.value === status);
@@ -126,7 +128,7 @@ const OrdersPage = () => {
         );
     }
 
-    if (loading) return <p className="text-center mt-10">Cargando pedidos...</p>;
+    if (loading) return <p className="text-center mt-10">{t("components.loading")}</p>;
     
     if (error) {
         return (
@@ -141,7 +143,7 @@ const OrdersPage = () => {
     return (
         <div className="max-w-7xl mx-auto mt-12 p-6 md:p-10 bg-white rounded-3xl shadow-xl border">
             <h1 className="text-3xl md:text-4xl font-title font-semibold mb-8 text-center">
-                Gestión de pedidos
+                {t("orders.title")}
             </h1>
 
             <div className="sticky top-0 z-10 bg-white py-4 mb-6 flex flex-col gap-4 border-b">
@@ -161,7 +163,7 @@ const OrdersPage = () => {
             </div>
 
             {filteredOrders.length === 0 && (
-                <p className="text-gray-500 italic text-center">No hay órdenes en este estado.</p>
+                <p className="text-gray-500 italic text-center">{t("orders.no_orders")}.</p>
             )}
 
             {filteredOrders.length > 0 && (
@@ -182,10 +184,10 @@ const OrdersPage = () => {
             )}
 
             <div className="mt-8 p-4 flex flex-col justify-end text-right rounded-xl shadow-inner">
-                <h2 className="text-lg font-semibold mb-2">Total global:</h2>
-                <p><strong>Subtotal:</strong> €{globalTotals.subtotal.toFixed(2)}</p>
-                <p><strong>Impuestos (10%):</strong> €{globalTotals.tax.toFixed(2)}</p>
-                <p><strong>Total:</strong> €{globalTotals.total.toFixed(2)}</p>
+                <h2 className="text-lg font-semibold mb-2">{t("cart.total")}:</h2>
+                <p><strong>{t("cart.subtotal")}:</strong> €{globalTotals.subtotal.toFixed(2)}</p>
+                <p><strong>{t("orders.taxes")} (10%):</strong> €{globalTotals.tax.toFixed(2)}</p>
+                <p><strong>{t("cart.total")}</strong> €{globalTotals.total.toFixed(2)}</p>
             </div>
         </div>
     );

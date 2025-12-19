@@ -24,18 +24,18 @@ export const CommerceHeader = memo(({ commerce }) => {
                 />
             )}
             <h1 className="text-4xl md:text-5xl font-extrabold text-primary-dark mb-4">
-                {t("commerce_details.commerce_header.commerce_name", { commerce: commerce.name })}
+                {t("commerces.name", { commerce: commerce.name })}
             </h1>
 
             <p className="text-primary-dark text-lg leading-relaxed mb-4">
-                {t("commerce_details.commerce_header.commerce_description", { description: commerce.description })}
+                {t("commerces.description", { description: commerce.description })}
             </p>
             <div>
-                {street && <p className="text-primary-dark mb-1"><strong>{t("commerce_details.commerce_header.location.street")}:</strong> {street}</p>}
-                {city && <p className="text-primary-dark mb-1"><strong>{t("commerce_details.commerce_header.location.city")}:</strong> {city}</p>}
-                {phone && <p className="text-primary-dark mb-1"><strong>{t("commerce_details.commerce_header.location.phone")}:</strong> {phone}</p>}
-                {email && <p className="text-primary-dark mb-1"><strong>{t("commerce_details.commerce_header.location.email")}:</strong> {email}</p>}
-                {schedule && <p className="text-primary-dark mb-1"><strong>{t("commerce_details.commerce_header.location.schedule")}:</strong> {schedule}</p>}
+                {street && <p className="text-primary-dark mb-1"><strong>{t("commerces.location.street")}:</strong> {street}</p>}
+                {city && <p className="text-primary-dark mb-1"><strong>{t("commerces.location.city")}:</strong> {city}</p>}
+                {phone && <p className="text-primary-dark mb-1"><strong>{t("commerces.location.phone")}:</strong> {phone}</p>}
+                {email && <p className="text-primary-dark mb-1"><strong>{t("commerces.location.email")}:</strong> {email}</p>}
+                {schedule && <p className="text-primary-dark mb-1"><strong>{t("commerces.location.schedule")}:</strong> {schedule}</p>}
             </div>
         </div>
     );

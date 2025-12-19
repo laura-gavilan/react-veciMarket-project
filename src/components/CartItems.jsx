@@ -1,6 +1,8 @@
 import { memo, useCallback } from "react";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 export const CartItems = memo(({ item, updateItem, removeItem }) => {
+    const { t } = useTranslate();
 
     const decrease = useCallback(() => {
         if (item.productId?._id) {
@@ -37,7 +39,7 @@ export const CartItems = memo(({ item, updateItem, removeItem }) => {
                         {item.productId?.description || "Sin descripción"}
                     </p>
                     <p className="font-bold mt-1 text-primary-dark">
-                        Precio: {(item.priceSnapshot ?? item.productId?.price ?? 0).toFixed(2)} €
+                        {t("products.price")} : {(item.priceSnapshot ?? item.productId?.price ?? 0).toFixed(2)} €
                     </p>
                 </div>
             </div>
@@ -66,7 +68,7 @@ export const CartItems = memo(({ item, updateItem, removeItem }) => {
                     onClick={handleRemove}
                     disabled={!item.productId?._id}
                 >
-                    Eliminar
+                    {t("cart.delete")}
                 </button>
             </div>
         </div>

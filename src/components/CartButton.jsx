@@ -1,9 +1,11 @@
 import { memo, useCallback, useState } from "react";
 import { useCart } from "../core/cart/useCart";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 export const CartButton = memo(({ product }) => {
     const { addItem, loading } = useCart();
     const [toast, setToast] = useState(null);
+    const {t} = useTranslate();
 
     const showToast = useCallback((message, duration = 2000) => {
         setToast(message);
@@ -23,7 +25,7 @@ export const CartButton = memo(({ product }) => {
             showToast(`✅ ${product.name} añadido al carro`);
         } catch (error) {
             console.error(error);
-            showToast("⚠️ No se pudo añadir al carro");
+            showToast(t("toast.error_no_product_cart"));
         }
     }, [product, addItem, showToast]);
 
@@ -43,7 +45,7 @@ export const CartButton = memo(({ product }) => {
                     : "btn-primary"
                     }`}
             >
-                {loading ? "Añadiendo..." : "Añadir"}
+                {loading ? (t("cart.adding")) : (t("cart.add"))}
             </button>
 
             {toast && (

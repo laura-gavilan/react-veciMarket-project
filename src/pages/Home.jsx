@@ -28,11 +28,11 @@ const Home = () => {
 
     const categoryLinks = useMemo(() =>
         [
-            t("pages.home.categories.food"),
-            t("pages.home.categories.books"),
-            t("pages.home.categories.home"),
-            t("pages.home.categories.sports"),
-            t("pages.home.categories.beauty"),
+            t("categories.food"),
+            t("categories.books"),
+            t("categories.home"),
+            t("categories.sports"),
+            t("categories.beauty"),
         ].map(category => (
             <Link
                 key={category}

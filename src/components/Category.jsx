@@ -2,12 +2,13 @@ import { memo, useCallback, useContext, useMemo } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { api } from "../core/http/axios";
 import { ProductCard } from "./ProductCard";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 
 export const Category = memo(({ products, refreshProducts, ownerId, commerceId }) => {
     const { user } = useContext(AuthContext);
-
     const isOwner = useMemo(() => user?._id === ownerId, [user?._id, ownerId]);
+    const { t } = useTranslate();
 
     const categories = useMemo(() => {
         const categoriesMap = {};
@@ -28,17 +29,17 @@ export const Category = memo(({ products, refreshProducts, ownerId, commerceId }
     
 
     const categoryNames = useMemo(() => ({
-        all: "Todas",
-        food: "Alimentación",
-        "books-paper": "Libros & Papelería",
-        "health-beauty": "Salud & Belleza",
-        sports: "Deportes",
-        pets: "Animales",
-        home: "Hogar",
-        clothing: "Ropa",
-        footwear: "Calzado",
-        other: "Otras",
-    }), []);
+        all: t("categories.all"),
+        food: t("categories.food"),
+        "books-paper": t("categories.books-paper"),
+        "health-beauty": t("categories.health-beauty"),
+        sports: t("categories.sports"),
+        pets: t("categories.pets"),
+        home: t("categories.home"),
+        clothing: t("categories.clothing"),
+        footwear: t("categories.footwear"),
+        other: t("categories.other"),
+    }), [t]);
 
     const categorySection = useMemo(() => {
         return Object.keys(categories).map(category => (

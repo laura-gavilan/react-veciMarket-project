@@ -7,6 +7,7 @@ import { ProductModal } from "../components/ProductModal";
 import { CommerceHeader } from "../components/CommerceHeader";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { PageError } from "../components/PageError";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 const CommerceProductPage = () => {
     const { commerceId } = useParams();
@@ -14,6 +15,7 @@ const CommerceProductPage = () => {
     const { products, loadAllProducts } = useProduct();
     const [loading, setLoading] = useState(true);
     const [modalProduct, setModalProduct] = useState(null);
+    const { t } = useTranslate();
 
 
     useEffect(() => {
@@ -47,7 +49,7 @@ const CommerceProductPage = () => {
     }, [commerceProducts, commerce, setModalProduct]);
 
     if (loading) {
-        return <p className="text-center mt-10 text-gray-500">Cargando comercio y productos...</p>;
+        return <p className="text-center mt-10 text-gray-500">{t("products.loading")}</p>;
     }
 
 
@@ -74,7 +76,7 @@ const CommerceProductPage = () => {
                             {memoProductsCards}
                         </div>
                     ) : (
-                        <p className="text-center text-gray-500">No hay productos disponibles.</p>
+                        <p className="text-center text-gray-500">{t("products.no_products")}</p>
                     )}
                 </div>
 

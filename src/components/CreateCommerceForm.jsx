@@ -1,6 +1,8 @@
-import { useState } from "react"
+import { useState} from "react"
+import { useTranslate } from "../translations/locales/useTranslate";
 
 export const CreateCommerceForm = ({ onSubmit }) => {
+    const { t } = useTranslate();
     const [form, setForm] = useState({
         name: "",
         description: "",
@@ -38,7 +40,7 @@ export const CreateCommerceForm = ({ onSubmit }) => {
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
             <div className="flex flex-col">
-                <label className="font-semibold text-primary mb-2">Nombre</label>
+                <label className="font-semibold text-primary mb-2">{t("components.name")}</label>
                 <input
                     type="text"
                     name="name"
@@ -50,7 +52,7 @@ export const CreateCommerceForm = ({ onSubmit }) => {
             </div>
 
             <div>
-                <label className="font-semibold text-primary-dark mb-2">Descripción</label>
+                <label className="font-semibold text-primary-dark mb-2">{t("components.description")}</label>
                 <textarea
                     name="description"
                     value={form.description}
@@ -61,7 +63,7 @@ export const CreateCommerceForm = ({ onSubmit }) => {
             </div>
 
             <div>
-                <label className="font-semibold text-primary-dark mb-2">URL de Imagen</label>
+                <label className="font-semibold text-primary-dark mb-2">{t("components.url")}</label>
                 <input
                     type="text"
                     name="image"
@@ -73,13 +75,13 @@ export const CreateCommerceForm = ({ onSubmit }) => {
             </div>
 
             <fieldset className="border p-3 rounded">
-                <legend className="font-semibold">Dirección</legend>
+                <legend className="font-semibold">{t("pages.contact.location.address")}</legend>
 
                 <div className="grid grid-cols-2 gap-3">
                     <input
                         type="text"
                         name="address.street"
-                        placeholder="Calle"
+                        placeholder={t("form.placeholder_street")}
                         value={form.address.street}
                         onChange={handleChange}
                         className="border rounded p-2"
@@ -87,7 +89,7 @@ export const CreateCommerceForm = ({ onSubmit }) => {
                     <input
                         type="text"
                         name="address.city"
-                        placeholder="Ciudad"
+                        placeholder={t("form.placeholder_city")}
                         value={form.address.city}
                         onChange={handleChange}
                         className="border rounded p-2"
@@ -95,7 +97,7 @@ export const CreateCommerceForm = ({ onSubmit }) => {
                     <input
                         type="text"
                         name="address.phone"
-                        placeholder="Teléfono"
+                        placeholder={t("form.placeholder_phone")}
                         value={form.address.phone}
                         onChange={handleChange}
                         className="border rounded p-2"
@@ -103,7 +105,7 @@ export const CreateCommerceForm = ({ onSubmit }) => {
                     <input
                         type="email"
                         name="address.email"
-                        placeholder="Email"
+                        placeholder={t("form.placeholder_email")}
                         value={form.address.email}
                         onChange={handleChange}
                         className="border rounded p-2"
@@ -111,7 +113,7 @@ export const CreateCommerceForm = ({ onSubmit }) => {
                     <input
                         type="text"
                         name="address.schedule"
-                        placeholder="Horario"
+                        placeholder={t("form.placeholder_schedule")}
                         value={form.address.schedule}
                         onChange={handleChange}
                         className="col-span-2 border rounded p-2"
@@ -123,7 +125,7 @@ export const CreateCommerceForm = ({ onSubmit }) => {
                 type="submit"
                 className="px-4 py-2 bg-accent-primary text-primary-dark rounded-2xl font-semibold shadow-md hover:bg-primary-light hover:text-accent transition-all"
             >
-                Crear Comercio
+                {t("commerces.create_commerce")}
             </button>
         </form>
     );

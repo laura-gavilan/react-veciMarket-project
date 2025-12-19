@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../core/http/axios";
 import { EditCommerceForm } from "../components/EditCommerceForm";
+import { useRef } from "react";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 
 const EditCommercePage = () => {
@@ -10,6 +12,7 @@ const EditCommercePage = () => {
     const [form, setForm] = useState(null);
     const [toast, setToast] = useState(null);
     const formRef = useRef(null);
+    const { t } = useTranslate();
 
 
     const showToast = useCallback((message, duration = 3000) => {
@@ -41,11 +44,11 @@ const EditCommercePage = () => {
     const handleSubmit = useCallback(async (form) => {
         try {
             await api.patch(`/commerces/${commerceId}`, form);
-            showToast("Comercio actualizado correctamente");
+            showToast(t("toast.update_commerce"));
             navigate(`/admin/commerce/${commerceId}`);
         } catch (error) {
             console.error("Error actualizando comercio:", error);
-            showToast("No se pudo actualizar el comercio");
+            showToast(t("toast.error_update_commerce"));
         }
         formRef.current.focusFirst();
     });
@@ -57,11 +60,11 @@ const EditCommercePage = () => {
                     onClick={() => navigate(-1)}
                     className="self-start px-6 py-2 bg-primary-dark text-accent rounded-full shadow-md hover:bg-primary-light hover:scale-105 transition-all font-semibold"
                 >
-                    ← Volver
+                    {t("components.back_button")}
                 </button>
 
                 <h1 className="text-3xl md:text-4xl font-bold text-primary text-center">
-                    Editar Comercio
+                    {t("commerces.edit_commerce")}
                 </h1>
 
                 {form && (
@@ -74,7 +77,7 @@ const EditCommercePage = () => {
                 )}
 
                 {!form && (
-                    <p className="text-center text-gray-500">Cargando comercio...</p>
+                    <p className="text-center text-gray-500">{t("commerces.loading")}.</p>
                 )}
 
             </div>

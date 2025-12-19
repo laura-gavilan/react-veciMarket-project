@@ -1,3 +1,4 @@
+import { useTranslate } from "../translations/locales/useTranslate";
 
 export const EditProductForm = ({ form, setForm, currentImage, preview, handleFileChange, onSubmit, onCancel }) => {
 
@@ -10,6 +11,8 @@ export const EditProductForm = ({ form, setForm, currentImage, preview, handleFi
         e.preventDefault();
         onSubmit(form);
     };
+
+    const { t} = useTranslate();
 
 
     return (
@@ -25,7 +28,7 @@ export const EditProductForm = ({ form, setForm, currentImage, preview, handleFi
             )}
 
             <div className="flex flex-col">
-                <label className="font-semibold text-primary-dark mb-2">Subir nueva imagen</label>
+                <label className="font-semibold text-primary-dark mb-2">{t("components.new_image")}</label>
                 <input
                     type="file"
                     accept="image/*"
@@ -35,48 +38,48 @@ export const EditProductForm = ({ form, setForm, currentImage, preview, handleFi
             </div>
 
             <div className="flex flex-col">
-                <label className="font-semibold text-primary-dark mb-2">Nombre del producto</label>
+                <label className="font-semibold text-primary-dark mb-2">{t("products.title")}</label>
                 <input
                     type="text"
                     name="name"
                     value={form.name}
                     onChange={handleChange}
-                    placeholder="Ej. Pan integral"
+                    placeholder={t("form.product.placeholder_product")}
                     className="px-4 py-2 border border-primary-light rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
                     required
                 />
             </div>
 
             <div className="flex flex-col">
-                <label className="font-semibold text-primary-dark mb-2">Categoría</label>
-                <select
-                    name="category"
-                    value={form.category || "all"}
-                    onChange={handleChange}
-                    className="px-4 py-2 border border-primary-light rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
-                    required
-                >
-                    <option value="all">Todas</option>
-                    <option value="food">Alimentación</option>
-                    <option value="books-paper">Libros & Papelería</option>
-                    <option value="health-beauty">Salud & Belleza</option>
-                    <option value="sports">Deportes</option>
-                    <option value="pets">Animales</option>
-                    <option value="home">Hogar</option>
-                    <option value="clothing">Ropa</option>
-                    <option value="footwear">Calzado</option>
-                    <option value="other">Otras</option>
-                </select>
+                <label className="font-semibold text-primary-dark mb-2">{t("categories.title")}</label>
+                    <select
+                        name="category"
+                        value={form.category || "all"}
+                        onChange={handleChange}
+                        className="px-4 py-2 border border-primary-light rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
+                        required
+                    >
+                        <option value="all">{t("categories.all")}</option>
+                        <option value="food">{t("categories.food")}</option>
+                        <option value="books-paper">{t("categories.books-paper")}</option>
+                        <option value="health-beauty">{t("categories.health-beauty")}</option>
+                        <option value="sports">{t("categories.sports")}</option>
+                        <option value="pets">{t("categories.pets")}</option>
+                        <option value="home">{t("categories.home")}</option>
+                        <option value="clothing">{t("categories.clothing")}</option>
+                        <option value="footwear">{t("categories.footwear")}</option>
+                        <option value="other">{t("categories.other")}</option>
+                    </select>
             </div>
 
             <div className="flex flex-col">
-                <label className="font-semibold text-primary-dark  mb-2">Precio (€)</label>
+                <label className="font-semibold text-primary-dark  mb-2">{t("products.price")} (€)</label>
                 <input
                     type="number"
                     name="price"
                     value={form.price}
                     onChange={handleChange}
-                    placeholder="Ej. 2.50"
+                    placeholder={t("form.placeholder_price")}
                     min={0}
                     step={0.01}
                     className="px-4 py-2 text-primary-dark  rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)] transition"
@@ -88,7 +91,7 @@ export const EditProductForm = ({ form, setForm, currentImage, preview, handleFi
                 <button type="submit"
                     className="flex-1 bg-accent-primary text-accent py-3 rounded-2xl font-semibold shadow-md hover:bg-primary-light hover:scale-105 transition-all"
                 >
-                    Guardar Cambios
+                    {t("components.save")}
                 </button>
 
                 <button
@@ -96,7 +99,7 @@ export const EditProductForm = ({ form, setForm, currentImage, preview, handleFi
                     onClick={onCancel}
                     className="flex-1 bg-primary-light text-primary-dark py-3  rounded-2xl font-semibold shadow-md hover:bg-primary hover:text-accent transition-all"
                 >
-                    Cancelar
+                    {t("components.cancel")}
                 </button>
             </div>
         </form>

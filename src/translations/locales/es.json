@@ -1,13 +1,6 @@
 {
     "pages": {
         "home": {
-            "categories": {
-                "food": "Alimentación",
-                "books": "Libros",
-                "home": "Hogar",
-                "sports": "Deportes",
-                "beauty": "Belleza"
-            },
             "title": "Descubre los mejores productos y locales de tu barrio.",
             "subtitle": " Apoya el comercio local y encuentra ofertas exclusivas en tu zona. ¡Todo lo que necesitas, cerca de ti!",
             "explore": "Conoce más",
@@ -46,30 +39,6 @@
             "community": " Únete a nuestra comunidad y descubre todo lo que VeciMarket tiene para ofrecer.",
             "register": "Regístrate ahora"
         },
-        "commerce_page": {
-            "title": {
-                "title_part1": "Explora los",
-                "title_highlight1": "productos",
-                "title_part2": "y",
-                "title_highlight2": "comercios",
-                "title_part3": "de tu barrio"
-            },
-            "no_products_filter": "No hay productos en esta categoría.",
-            "commerces": "Comercios",
-            "no_commerces_filter": "No se encontraron comercios.",
-            "categories": {
-                "all": "Todas",
-                "food": "Alimentación",
-                "books-paper": "Libros & Papelería",
-                "health-beauty": "Salud & Belleza",
-                "sports": "Deportes",
-                "pets": "Animales",
-                "home": "Hogar",
-                "clothing": "Ropa",
-                "footwear": "Calzado",
-                "other": "Otras"
-            }
-        },
         "contact": {
             "title": "Contáctanos",
             "questions": "¿Tienes alguna duda o sugerencia? Escríbenos y nos pondremos en contacto contigo lo antes posible.",
@@ -82,10 +51,10 @@
                 "placeholder_message": "Escribe tu mensaje...",
                 "send": "Enviar"
             },
-            "contact": {
+            "location": {
                 "phone": "Teléfono",
                 "email": "Email",
-                "location": "Dirección"
+                "address": "Dirección"
             }
         },
         "register": {
@@ -149,7 +118,7 @@
             "register": "Regístrate"
         }
     },
-    "navbar": {
+    "navigation": {
         "about": "Sobre nosotros",
         "commerces_and_products": "Comercios & Productos",
         "contact": "Contacto",
@@ -176,8 +145,10 @@
         "reserved_rights": "Todos los derechos reservados."
     },
     "user": {
-        "loading": "Cargando ususario...",
+        "user": "Usuario",
+        "loading": "Cargando usuario...",
         "profile_user": "Perfil de {{name}}",
+        "edit_profile_user": "Editar perfil de {{name}}",
         "username": "Nombre de usuario",
         "name": "Nombre",
         "firstName": "Primer Apellido",
@@ -186,31 +157,144 @@
         "phoneNumber": "Teléfono",
         "address": "Dirección",
         "edit_profile": "Editar perfil",
-        "delete_profile": "Eliminar perfil"
+        "delete_profile": "Eliminar perfil",
+        "no_update_profile": "No se pudo actualizar el perfil. Inténtelo nuevamente."
     },
-    "admin": {
-        "loading": "Cargando comercios...",
-        "your_commerces": "Tus comercios",
-        "no_commerces": "No tienes comercios aún. "
-    },
-    "commerce_details": {
-        "no_commerce": "No se encuentra el comercio",
-        "commerce_header": {
-            "commerce_name": "{{commerce}}",
-            "commerce_description": "{{description}}",
-            "location": {
-                "street": "Calle",
-                "city": "Ciudad",
-                "phone": "Teléfono",
-                "email": "Email",
-                "schedule": "Horario"
-            }
+    "commerces": {
+        "title": {
+            "title_part1": "Explora los",
+            "title_highlight1": "productos",
+            "title_part2": "y",
+            "title_highlight2": "comercios",
+            "title_part3": "de tu barrio"
         },
-        "owner": {
-            "edit_commerce": "✏️ Editar Comercio",
-            "create_product": " ➕ Crear Producto",
-            "delete_commerce": " 🗑️ Eliminar Comercio"
+        "no_products_filter": "No hay productos en esta categoría.",
+        "commerces": "Comercios",
+        "featured_commerces": "Comercios destacados",
+        "no_commerces": "No se encontraron comercios.",
+        "your_commerces": "Tus comercios",
+        "name": " {{commerce}}",
+        "loading": "Cargando comercios...",
+        "description": "{{description}}",
+        "edit_commerce": "✏️ Editar Comercio",
+        "create_product": " ➕ Crear Producto",
+        "delete_commerce": " 🗑️ Eliminar Comercio",
+        "create_commerce": "Crear Comercio",
+        "go_commerce": "Ir al comercio",
+        "location": {
+            "street": "Calle",
+            "city": "Ciudad",
+            "phone": "Teléfono",
+            "email": "Email",
+            "schedule": "Horario"
         }
     },
-    "back_button": "← Volver"
+    "form": {
+        "placeholder_street": "Calle",
+        "placeholder_city": "Ciudad",
+        "placeholder_phone": "Teléfono",
+        "placeholder_email": "Email",
+        "placeholder_schedule": "Horario",
+        "placeholder_price": "Ej. 2.50€",
+        "date": "Fecha de lanzamiento",
+        "product": {
+            "placeholder_product": "Ej. Pan integral",
+            "placeholder_description": "Describe el producto..."
+        },
+        "user": {
+            "username": "Nombre de usuario",
+            "name": "Nombre",
+            "firstName": "Primer Apellido",
+            "lastName": "Segundo Apellido",
+            "email": "Email",
+            "phoneNumber": "Teléfono",
+            "address": "Dirección"
+        }
+    },
+    "categories": {
+        "title": "Categoría",
+        "food": "Alimentación",
+        "books": "Libros",
+        "books-paper": "Libros & Papelería",
+        "home": "Hogar",
+        "sports": "Deportes",
+        "beauty": "Belleza",
+        "all": "Todas",
+        "health-beauty": "Salud & Belleza",
+        "pets": "Animales",
+        "clothing": "Ropa",
+        "footwear": "Calzado",
+        "other": "Otras"
+    },
+    "products": {
+        "title": "Nombre del producto",
+        "loading": "Cargando comercio y productos...",
+        "loading_modal": "Cargando producto...",
+        "no_products": "No hay productos disponibles.",
+        "products_commerce": "Productos del comercio",
+        "name": "",
+        "description": "",
+        "price": "Precio",
+        "create_product": "Crear producto"
+    },
+    "favorites": {
+        "my_favorites": "Mis productos favoritos",
+        "no_favorites": "No tienes productos favoritos."
+    },
+    "cart": {
+        "no_cart": "🛒 Tu cesta está vacía",
+        "add_products_cart": "Agrega productos para comenzar tu compra.",
+        "title": "Mi cesta de la compra",
+        "total": "Total",
+        "subtotal": "Subtotal",
+        "finish_cart": "Finalizar compra",
+        "adding": "Añadiendo",
+        "add": "Añadir",
+        "delete": "Eliminar",
+        "card_intro": "Introduce tu tarjeta",
+        "card_number": "Número de tarjeta",
+        "card_date": "Fecha de caducidad",
+        "pay": "Pagar"
+    },
+    "orders": {
+        "title": "Gestión de pedidos",
+        "status": {
+            "all": "Todos",
+            "pending": "Pendientes",
+            "preparing": "En preparación",
+            "delivered": "Entregados",
+            "cancelled": "Cancelados"
+        },
+        "no_orders": "No hay órdenes en este estado.",
+        "taxes": "Impuestos"
+    },
+    "components": {
+        "back_button": "← Volver",
+        "search": "Buscar producto",
+        "loading": "Cargando...",
+        "delete": "Eliminar",
+        "state": "Estado",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "name": "Nombre",
+        "edit": "Editar",
+        "description": "Descripción",
+        "url": "URL de imagen",
+        "new_image": "Subir nueva imagen"
+    },
+    "error": {
+        "section": "Ha ocurrido un error en esta sección.",
+        "title": "Error al cargar los datos",
+        "retry": "Reintentar"
+    },
+    "toast": {
+        "cart": "Debes iniciar sesión para finalizar la compra y ver tu pedido.",
+        "confirm_cart": "Introduce todos los datos de la tarjeta correctamente.",
+        "new_order": "✅ Compra realizada correctamente",
+        "error_new_order": "Ocurrió un error al finalizar la compra.",
+        "error_pay": "Error al procesar el pago.",
+        "error_no_product_cart": "⚠️ No se pudo añadir al carro",
+        "update_commerce": "Comercio actualizado correctamente",
+        "error_update_commerce": "No se pudo actualizar el comercio"
+    }
 }

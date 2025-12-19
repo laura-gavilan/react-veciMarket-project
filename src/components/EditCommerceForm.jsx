@@ -1,7 +1,9 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 export const EditCommerceForm = forwardRef(({ form, setForm, onSubmit }, ref) => {
     const firstInputRef = useRef(null);
+    const { t } = useTranslate();
 
     useImperativeHandle(ref, () => ({
         reset: () => {
@@ -32,7 +34,7 @@ export const EditCommerceForm = forwardRef(({ form, setForm, onSubmit }, ref) =>
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <div className="flex flex-col">
-                <label className="font-semibold text-primary-dark mb-1">Categoría</label>
+                <label className="font-semibold text-primary-dark mb-1">{t("categories.title")}</label>
                 <select
                     name="category"
                     value={form.category}
@@ -40,21 +42,21 @@ export const EditCommerceForm = forwardRef(({ form, setForm, onSubmit }, ref) =>
                     className="px-4 py-2  border border-primary-light rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-burdeos-dark)]"
                     required
                 >
-                    <option value="all">Todas</option>
-                    <option value="food">Alimentación</option>
-                    <option value="books-paper">Libros & Papelería</option>
-                    <option value="health-beauty">Salud & Belleza</option>
-                    <option value="sports">Deportes</option>
-                    <option value="pets">Animales</option>
-                    <option value="home">Hogar</option>
-                    <option value="clothing">Ropa</option>
-                    <option value="footwear">Calzado</option>
-                    <option value="other">Otras</option>
+                    <option value="all">{t("categories.all")}</option>
+                    <option value="food">{t("categories.food")}</option>
+                    <option value="books-paper">{t("categories.books-paper")}</option>
+                    <option value="health-beauty">{t("categories.health-beauty")}</option>
+                    <option value="sports">{t("categories.sports")}</option>
+                    <option value="pets">{t("categories.pets")}</option>
+                    <option value="home">{t("categories.home")}</option>
+                    <option value="clothing">{t("categories.clothing")}</option>
+                    <option value="footwear">{t("categories.footwear")}</option>
+                    <option value="other">{t("categories.other")}</option>
                 </select>
             </div>
 
             <div className="flex flex-col">
-                <label className="font-semibold text-primary-dark mb-1">Nombre</label>
+                <label className="font-semibold text-primary-dark mb-1">Nombre{t("components.name")}</label>
                 <input
                     type="text"
                     name="name"
@@ -67,7 +69,7 @@ export const EditCommerceForm = forwardRef(({ form, setForm, onSubmit }, ref) =>
             </div>
 
             <div className="flex flex-col">
-                <label className="font-semibold text-primary-dark mb-1">Descripción</label>
+                <label className="font-semibold text-primary-dark mb-1">{t("components.description")}</label>
                 <textarea
                     name="description"
                     value={form.description}
@@ -80,7 +82,7 @@ export const EditCommerceForm = forwardRef(({ form, setForm, onSubmit }, ref) =>
             </div>
 
             <div>
-                <label className="font-semibold text-primary-dark mb-2">URL de Imagen</label>
+                <label className="font-semibold text-primary-dark mb-2">{t("components.url")}</label>
                 <input
                     type="text"
                     name="image"
@@ -93,7 +95,7 @@ export const EditCommerceForm = forwardRef(({ form, setForm, onSubmit }, ref) =>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="flex flex-col">
-                    <label className="font-semibold text-primary-dark mb-1">Calle</label>
+                    <label className="font-semibold text-primary-dark mb-1">{t("commerces.location.street")}</label>
                     <input
                         type="text"
                         name="street"
@@ -104,7 +106,7 @@ export const EditCommerceForm = forwardRef(({ form, setForm, onSubmit }, ref) =>
                     />
                 </div>
                 <div className="flex flex-col">
-                    <label className="font-semibold text-primary-dark mb-1">Ciudad</label>
+                    <label className="font-semibold text-primary-dark mb-1">{t("commerces.location.city")}</label>
                     <input
                         type="text"
                         name="city"
@@ -117,7 +119,7 @@ export const EditCommerceForm = forwardRef(({ form, setForm, onSubmit }, ref) =>
             </div>
 
             <div className="flex flex-col">
-                <label className="font-semibold text-primary-dark mb-1">Teléfono</label>
+                <label className="font-semibold text-primary-dark mb-1">{t("commerces.location.phone")}</label>
                 <input
                     type="text"
                     name="phone"
@@ -129,7 +131,7 @@ export const EditCommerceForm = forwardRef(({ form, setForm, onSubmit }, ref) =>
             </div>
 
             <div className="flex flex-col">
-                <label className="font-semibold text-primary-dark mb-1">Email</label>
+                <label className="font-semibold text-primary-dark mb-1">{t("commerces.location.email")}</label>
                 <input
                     type="email"
                     name="email"
@@ -141,7 +143,7 @@ export const EditCommerceForm = forwardRef(({ form, setForm, onSubmit }, ref) =>
             </div>
 
             <div className="flex flex-col">
-                <label className="font-semibold text-primary-dark mb-1">Horario</label>
+                <label className="font-semibold text-primary-dark mb-1">{t("commerces.location.schedule")}</label>
                 <input
                     type="text"
                     name="schedule"
@@ -156,7 +158,7 @@ export const EditCommerceForm = forwardRef(({ form, setForm, onSubmit }, ref) =>
                 type="submit"
                 className="mt-4 w-full bg-primary-dark text-accent py-3 rounded-2xl font-semibold shadow-md hover:bg-primary-light hover:scale-105 transition-all"
             >
-                Guardar cambios
+                {t("components.save")}
             </button>
         </form>
     );

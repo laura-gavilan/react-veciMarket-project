@@ -19,13 +19,13 @@ export const ProductCardInfo = memo(({ product, isOwner, commerceId, navigate, h
                     onClick={() => navigate(`/admin/commerce/${commerceId}/edit/${product._id}`)}
                     className="px-3 py-1 text-sm rounded-lg btn-primary hover:scale-105 transition-transform"
                 >
-                    Editar
+                    {t("components.edit")}
                 </button>
                 <button
                     onClick={() => handleDelete(product._id)}
                     className="text-sm text-red-600 hover:underline"
                 >
-                    Eliminar
+                    {t("components.delete")}
                 </button>
             </div>
         );
