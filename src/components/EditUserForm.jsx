@@ -25,13 +25,13 @@ export const EditUserForm = forwardRef(({ form, setForm, onSubmit }, ref) => {
             ref={ref}
         >
             {[
-                { label: "Nombre de usuario", name: "username", type: "text" },
-                { label: "Nombre", name: "name", type: "text" },
-                { label: "Primer Apellido", name: "firstName", type: "text" },
-                { label: "Segundo Apellido", name: "lastName", type: "text" },
-                { label: "Email", name: "email", type: "email" },
-                { label: "Teléfono", name: "phoneNumber", type: "text" },
-                { label: "Dirección", name: "address", type: "text", fullWidth: true }
+                { label: t("form.user.username"), name: "username", type: "text" },
+                { label: t("form.user.name"), name: "name", type: "text" },
+                { label: t("form.user.firstName"), name: "firstName", type: "text" },
+                { label: t("form.user.lastName"), name: "lastName", type: "text" },
+                { label: t("form.user.email"), name: "email", type: "email" },
+                { label: t("form.user.phoneNumber"), name: "phoneNumber", type: "text" },
+                { label: t("form.user.address"), name: "address", type: "text", fullWidth: true }
             ].map((field, index) => (
                 <div key={field.name} className={field.fullWidth ? "md:col-span-2 flex flex-col" : "flex flex-col"}>
                     <label className="mb-2 font-semibold text-primary-dark">{field.label}:</label>
@@ -48,8 +48,8 @@ export const EditUserForm = forwardRef(({ form, setForm, onSubmit }, ref) => {
 
             <div className="md:col-span-2 flex flex-col sm:flex-row gap-4 mt-6 justify-center">
                 <button type="submit"
-                    className="px-6 py-2 text-sm rounded-full btn-primary mt-8"
-                >Guardar Cambios
+                    className="px-6 py-2 text-sm rounded-full btn-primary mt-8">
+                        {t("components.save")}
                 </button>
             </div>
         </form>

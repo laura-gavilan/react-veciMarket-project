@@ -1,0 +1,300 @@
+{
+    "pages": {
+        "home": {
+            "title": "Discover the best products and shops in your neighborhood.",
+            "subtitle": "Support local businesses and find exclusive deals in your area. Everything you need, close to you!",
+            "explore": "Learn more",
+            "register": "Sign up",
+            "featured_categories": "Featured categories",
+            "view_all_categories": "View all categories",
+            "featured_commerces": "Featured shops",
+            "view_all_commerces": "View all shops",
+            "featured_products": "Featured products",
+            "view_products": "View more products",
+            "location": {
+                "map_label": "Shop locations"
+            },
+            "contact": {
+                "contact_app": "Contact us",
+                "questions": "Do you have questions or suggestions? Write to us and we will reply as soon as possible.",
+                "email": "Send email",
+                "page": "Go to contact page"
+            }
+        },
+        "about": {
+            "title": "About us",
+            "subtitle": "VeciMarket is your trusted local commerce platform. Our mission is to connect neighbors, support local businesses, and foster a closer and more supportive community. Discover unique products near you and become part of our network.",
+            "mission": {
+                "title": "Mission",
+                "text": "Support local commerce and strengthen the neighborhood community through an intuitive and reliable platform."
+            },
+            "vision": {
+                "title": "Vision",
+                "text": "To be the reference platform for local commerce, fostering lasting relationships between neighbors and businesses."
+            },
+            "values": {
+                "title": "Values",
+                "text": "Community, trust, closeness, and support for local commerce are the pillars that guide our daily work."
+            },
+            "community": "Join our community and discover everything VeciMarket has to offer.",
+            "register": "Sign up now"
+        },
+        "contact": {
+            "title": "Contact us",
+            "questions": "Do you have any questions or suggestions? Write to us and we will get back to you as soon as possible.",
+            "form": {
+                "name": "Name",
+                "placeholder_name": "Your name",
+                "email": "Email",
+                "placeholder_email": "email@email.com",
+                "message": "Message",
+                "placeholder_message": "Write your message...",
+                "send": "Send"
+            },
+            "location": {
+                "phone": "Phone",
+                "email": "Email",
+                "address": "Address"
+            }
+        },
+        "register": {
+            "title": "Create your account",
+            "form": {
+                "username": {
+                    "label": "Username",
+                    "placeholder": "testuser"
+                },
+                "name": {
+                    "label": "Name",
+                    "placeholder": "Maria"
+                },
+                "firstName": {
+                    "label": "First surname",
+                    "placeholder": "Lopez"
+                },
+                "lastName": {
+                    "label": "Second surname",
+                    "placeholder": "Saez"
+                },
+                "email": {
+                    "label": "Email address",
+                    "placeholder": "maria@example.com"
+                },
+                "password": {
+                    "label": "Password",
+                    "placeholder": "Must contain at least 6 characters"
+                },
+                "phoneNumber": {
+                    "label": "Phone number",
+                    "placeholder": "+34 600000000"
+                },
+                "address": {
+                    "label": "Address",
+                    "placeholder": "Address"
+                },
+                "role": {
+                    "label": "Role (admin/user)",
+                    "placeholder": "user"
+                }
+            },
+            "button_register": "Sign up",
+            "questions_login": "Already have an account?",
+            "login": "Log in"
+        },
+        "login": {
+            "title": "Log in",
+            "form": {
+                "email": {
+                    "label": "Email address",
+                    "placeholder": "example@example.com"
+                },
+                "password": {
+                    "label": "Password",
+                    "placeholder": "******"
+                }
+            },
+            "enter": "Enter",
+            "question_register": "Don't have an account?",
+            "register": "Sign up"
+        }
+    },
+    "navigation": {
+        "about": "About us",
+        "commerces_and_products": "Shops & Products",
+        "contact": "Contact",
+        "register": "Register",
+        "profile": "Profile",
+        "my_commerces": "My shops",
+        "create_commerce": "Create shop",
+        "orders": "Orders",
+        "logout": "Log out"
+    },
+    "footer": {
+        "title": "Support local businesses and discover unique products in your community.",
+        "links": {
+            "title": "Links",
+            "home": "Home",
+            "commerces": "Shops",
+            "register": "Register",
+            "contact": "Contact"
+        },
+        "contact_networks": {
+            "title": "Contact & Networks",
+            "email": "Email:"
+        },
+        "reserved_rights": "All rights reserved."
+    },
+    "user": {
+        "user": "User",
+        "loading": "Loading user...",
+        "profile_user": "{{name}}'s profile",
+        "edit_profile_user": "Edit {{name}}'s profile",
+        "username": "Username",
+        "name": "Name",
+        "firstName": "First surname",
+        "lastName": "Second surname",
+        "email": "Email",
+        "phoneNumber": "Phone",
+        "address": "Address",
+        "edit_profile": "Edit profile",
+        "delete_profile": "Delete profile",
+        "no_update_profile": "The profile could not be updated. Please try again."
+    },
+    "commerces": {
+        "title": {
+            "title_part1": "Explore the",
+            "title_highlight1": "products",
+            "title_part2": "and",
+            "title_highlight2": "shops",
+            "title_part3": "in your neighborhood"
+        },
+        "no_products_filter": "There are no products in this category.",
+        "commerces": "Shops",
+        "featured_commerces": "Featured shops",
+        "no_commerces": "No shops found.",
+        "your_commerces": "Your shops",
+        "name": "{{commerce}}",
+        "loading": "Loading shops...",
+        "description": "{{description}}",
+        "edit_commerce": "✏️ Edit shop",
+        "create_product": "➕ Create product",
+        "delete_commerce": "🗑️ Delete shop",
+        "create_commerce": "Create shop",
+        "go_commerce": "Go to shop",
+        "location": {
+            "street": "Street",
+            "city": "City",
+            "phone": "Phone",
+            "email": "Email",
+            "schedule": "Schedule"
+        }
+    },
+    "form": {
+        "placeholder_street": "Street",
+        "placeholder_city": "City",
+        "placeholder_phone": "Phone",
+        "placeholder_email": "Email",
+        "placeholder_schedule": "Schedule",
+        "placeholder_price": "e.g. €2.50",
+        "date": "Release date",
+        "product": {
+            "placeholder_product": "e.g. Whole wheat bread",
+            "placeholder_description": "Describe the product..."
+        },
+        "user": {
+            "username": "Username",
+            "name": "Name",
+            "firstName": "First surname",
+            "lastName": "Second surname",
+            "email": "Email",
+            "phoneNumber": "Phone",
+            "address": "Address"
+        }
+    },
+    "categories": {
+        "title": "Category",
+        "food": "Food",
+        "books": "Books",
+        "books-paper": "Books & Stationery",
+        "home": "Home",
+        "sports": "Sports",
+        "beauty": "Beauty",
+        "all": "All",
+        "health-beauty": "Health & Beauty",
+        "pets": "Pets",
+        "clothing": "Clothing",
+        "footwear": "Footwear",
+        "other": "Other"
+    },
+    "products": {
+        "title": "Product name",
+        "loading": "Loading shop and products...",
+        "loading_modal": "Loading product...",
+        "no_products": "No products available.",
+        "products_commerce": "Shop products",
+        "name": "",
+        "description": "",
+        "price": "Price",
+        "create_product": "Create product"
+    },
+    "favorites": {
+        "my_favorites": "My favorite products",
+        "no_favorites": "You have no favorite products."
+    },
+    "cart": {
+        "no_cart": "🛒 Your cart is empty",
+        "add_products_cart": "Add products to start your purchase.",
+        "title": "My shopping cart",
+        "total": "Total",
+        "subtotal": "Subtotal",
+        "finish_cart": "Complete purchase",
+        "adding": "Adding",
+        "add": "Add",
+        "delete": "Remove",
+        "card_intro": "Enter your card",
+        "card_number": "Number card",
+        "card_date": "Expiration date",
+        "pay": "Pay"
+    },
+    "orders": {
+        "title": "Order management",
+        "status": {
+            "all": "All",
+            "pending": "Pending",
+            "preparing": "Preparing",
+            "delivered": "Delivered",
+            "cancelled": "Cancelled"
+        },
+        "no_orders": "There are no orders in this status.",
+        "taxes": "Taxes"
+    },
+    "components": {
+        "back_button": "← Back",
+        "search": "Search product",
+        "loading": "Loading...",
+        "delete": "Delete",
+        "state": "Status",
+        "save": "Save",
+        "cancel": "Cancel",
+        "name": "Name",
+        "edit": "Edit",
+        "description": "Description",
+        "url": "Image URL",
+        "new_image": "Upload new image"
+    },
+    "error": {
+        "section": "An error occurred in this section.",
+        "title": "Error loading data",
+        "retry": "Retry"
+    },
+    "toast": {
+        "cart": "You must log in to complete the purchase and view your order.",
+        "confirm_cart": "Enter all card details correctly.",
+        "new_order": "✅ Purchase completed successfully",
+        "error_new_order": "An error occurred while completing the purchase.",
+        "error_pay": "Error processing the payment.",
+        "error_no_product_cart": "⚠️ Could not add to cart",
+        "update_commerce": "Shop updated successfully",
+        "error_update_commerce": "Could not update the shop"
+    }
+}

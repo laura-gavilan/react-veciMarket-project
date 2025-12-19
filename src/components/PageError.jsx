@@ -1,12 +1,13 @@
 import { memo, useMemo } from "react";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 export const PageError = memo(
     ({
-        title = "Error al cargar los datos",
+        title = t("error.title"),
         message,
         icon = "⚠️",
         onRetry,
-        retryText = "Reintentar",
+        retryText = t("error.retry"),
         className = "",
         containerClassName = "",
         fullPage = false,
@@ -17,6 +18,7 @@ export const PageError = memo(
                 ? `${baseContainerClasses} min-h-screen px-6 ${containerClassName}`
                 : `${baseContainerClasses} py-16 px-6 ${containerClassName}`;
         }, [fullPage, containerClassName]);
+        const { t } = useTranslate();
 
         return (
             <div className={containerClasses}>
@@ -44,7 +46,7 @@ export const PageError = memo(
                             </button>
                         )}
 
-                        
+
                     </div>
                 </div>
             </div>

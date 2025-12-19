@@ -1,0 +1,300 @@
+{
+    "pages": {
+        "home": {
+            "title": "Descubre los mejores productos y locales de tu barrio.",
+            "subtitle": " Apoya el comercio local y encuentra ofertas exclusivas en tu zona. ¡Todo lo que necesitas, cerca de ti!",
+            "explore": "Conoce más",
+            "register": "Regístrate",
+            "featured_categories": "Categorías destacadas",
+            "view_all_categories": "Ver todas las categorías",
+            "featured_commerces": "Comercios destacados",
+            "view_all_commerces": "Ver todas las comercios",
+            "featured_products": "Productos destacados",
+            "view_products": "Ver más productos",
+            "location": {
+                "map_label": "Ubicación de los comercios"
+            },
+            "contact": {
+                "contact_app": "Contáctanos",
+                "questions": " ¿Tienes preguntas o sugerencias? Escríbenos y te responderemos lo antes posible.",
+                "email": "Enviar correo",
+                "page": "Ir a la página de contacto"
+            }
+        },
+        "about": {
+            "title": "Quienes somos",
+            "subtitle": "VeciMarket es tu plataforma de comercio local de confianza. Nuestra misión es conectar a los vecinos, apoyar a los comercios locales y fomentar una comunidad más cercana y solidaria. Descubre productos únicos cerca de ti y forma parte de nuestra red.",
+            "mission": {
+                "title": "Misión",
+                "text": "Apoyar el comercio local y fortalecer la comunidad vecinal mediante una plataforma intuitiva y confiable."
+            },
+            "vision": {
+                "title": "Visión",
+                "text": "Ser la plataforma de referencia para el comercio local, fomentando relaciones duraderas entre vecinos y comercios."
+            },
+            "values": {
+                "title": "Valores",
+                "text": "Comunidad, confianza, cercanía y apoyo al comercio local son los pilares que guían nuestra labor diaria."
+            },
+            "community": " Únete a nuestra comunidad y descubre todo lo que VeciMarket tiene para ofrecer.",
+            "register": "Regístrate ahora"
+        },
+        "contact": {
+            "title": "Contáctanos",
+            "questions": "¿Tienes alguna duda o sugerencia? Escríbenos y nos pondremos en contacto contigo lo antes posible.",
+            "form": {
+                "name": "Nombre",
+                "placeholder_name": "Tu nombre",
+                "email": "Email",
+                "placeholder_email": "email@email.com",
+                "message": "Mensaje",
+                "placeholder_message": "Escribe tu mensaje...",
+                "send": "Enviar"
+            },
+            "location": {
+                "phone": "Teléfono",
+                "email": "Email",
+                "address": "Dirección"
+            }
+        },
+        "register": {
+            "title": "Crea tu cuenta",
+            "form": {
+                "username": {
+                    "label": "Nombre de usuario",
+                    "placeholder": "testuser"
+                },
+                "name": {
+                    "label": "Nombre",
+                    "placeholder": "María"
+                },
+                "firstName": {
+                    "label": "Primer apellido",
+                    "placeholder": "López"
+                },
+                "lastName": {
+                    "label": "Segundo apellido",
+                    "placeholder": "Sáez"
+                },
+                "email": {
+                    "label": "Correo electrónico",
+                    "placeholder": "maria@example.com"
+                },
+                "password": {
+                    "label": "Contraseña",
+                    "placeholder": "Debe contener al menos 6 caracteres"
+                },
+                "phoneNumber": {
+                    "label": "Número de teléfono",
+                    "placeholder": "+34 600000000"
+                },
+                "address": {
+                    "label": "Dirección",
+                    "placeholder": "Dirección"
+                },
+                "role": {
+                    "label": "Rol (admin/user)",
+                    "placeholder": "user"
+                }
+            },
+            "button_register": "Regístrate",
+            "questions_login": "¿Ya tienes cuenta?",
+            "login": "Inicia sesión"
+        },
+        "login": {
+            "title": "Inicia sesión",
+            "form": {
+                "email": {
+                    "label": "Correo electrónico",
+                    "placeholder": "example@example.com"
+                },
+                "password": {
+                    "label": "Contraseña",
+                    "placeholder": "******"
+                }
+            },
+            "enter": "Entrar",
+            "question_register": "¿No tienes cuenta?",
+            "register": "Regístrate"
+        }
+    },
+    "navigation": {
+        "about": "Sobre nosotros",
+        "commerces_and_products": "Comercios & Productos",
+        "contact": "Contacto",
+        "register": "Registro",
+        "profile": "Perfil",
+        "my_commerces": "Mis comercios",
+        "create_commerce": "Crear comercio",
+        "orders": "Pedidos",
+        "logout": "Cerrar sesión"
+    },
+    "footer": {
+        "title": "Apoya a los comercios locales y descubre productos únicos en tu comunidad.",
+        "links": {
+            "title": "Enlaces",
+            "home": "Inicio",
+            "commerces": "Comercios",
+            "register": "Registro",
+            "contact": "Contacto"
+        },
+        "contact_networks": {
+            "title": "Contacto & Redes",
+            "email": "Correo:"
+        },
+        "reserved_rights": "Todos los derechos reservados."
+    },
+    "user": {
+        "user": "Usuario",
+        "loading": "Cargando usuario...",
+        "profile_user": "Perfil de {{name}}",
+        "edit_profile_user": "Editar perfil de {{name}}",
+        "username": "Nombre de usuario",
+        "name": "Nombre",
+        "firstName": "Primer Apellido",
+        "lastName": "Segundo Apellido",
+        "email": "Email",
+        "phoneNumber": "Teléfono",
+        "address": "Dirección",
+        "edit_profile": "Editar perfil",
+        "delete_profile": "Eliminar perfil",
+        "no_update_profile": "No se pudo actualizar el perfil. Inténtelo nuevamente."
+    },
+    "commerces": {
+        "title": {
+            "title_part1": "Explora los",
+            "title_highlight1": "productos",
+            "title_part2": "y",
+            "title_highlight2": "comercios",
+            "title_part3": "de tu barrio"
+        },
+        "no_products_filter": "No hay productos en esta categoría.",
+        "commerces": "Comercios",
+        "featured_commerces": "Comercios destacados",
+        "no_commerces": "No se encontraron comercios.",
+        "your_commerces": "Tus comercios",
+        "name": " {{commerce}}",
+        "loading": "Cargando comercios...",
+        "description": "{{description}}",
+        "edit_commerce": "✏️ Editar Comercio",
+        "create_product": " ➕ Crear Producto",
+        "delete_commerce": " 🗑️ Eliminar Comercio",
+        "create_commerce": "Crear Comercio",
+        "go_commerce": "Ir al comercio",
+        "location": {
+            "street": "Calle",
+            "city": "Ciudad",
+            "phone": "Teléfono",
+            "email": "Email",
+            "schedule": "Horario"
+        }
+    },
+    "form": {
+        "placeholder_street": "Calle",
+        "placeholder_city": "Ciudad",
+        "placeholder_phone": "Teléfono",
+        "placeholder_email": "Email",
+        "placeholder_schedule": "Horario",
+        "placeholder_price": "Ej. 2.50€",
+        "date": "Fecha de lanzamiento",
+        "product": {
+            "placeholder_product": "Ej. Pan integral",
+            "placeholder_description": "Describe el producto..."
+        },
+        "user": {
+            "username": "Nombre de usuario",
+            "name": "Nombre",
+            "firstName": "Primer Apellido",
+            "lastName": "Segundo Apellido",
+            "email": "Email",
+            "phoneNumber": "Teléfono",
+            "address": "Dirección"
+        }
+    },
+    "categories": {
+        "title": "Categoría",
+        "food": "Alimentación",
+        "books": "Libros",
+        "books-paper": "Libros & Papelería",
+        "home": "Hogar",
+        "sports": "Deportes",
+        "beauty": "Belleza",
+        "all": "Todas",
+        "health-beauty": "Salud & Belleza",
+        "pets": "Animales",
+        "clothing": "Ropa",
+        "footwear": "Calzado",
+        "other": "Otras"
+    },
+    "products": {
+        "title": "Nombre del producto",
+        "loading": "Cargando comercio y productos...",
+        "loading_modal": "Cargando producto...",
+        "no_products": "No hay productos disponibles.",
+        "products_commerce": "Productos del comercio",
+        "name": "",
+        "description": "",
+        "price": "Precio",
+        "create_product": "Crear producto"
+    },
+    "favorites": {
+        "my_favorites": "Mis productos favoritos",
+        "no_favorites": "No tienes productos favoritos."
+    },
+    "cart": {
+        "no_cart": "🛒 Tu cesta está vacía",
+        "add_products_cart": "Agrega productos para comenzar tu compra.",
+        "title": "Mi cesta de la compra",
+        "total": "Total",
+        "subtotal": "Subtotal",
+        "finish_cart": "Finalizar compra",
+        "adding": "Añadiendo",
+        "add": "Añadir",
+        "delete": "Eliminar",
+        "card_intro": "Introduce tu tarjeta",
+        "card_number": "Número de tarjeta",
+        "card_date": "Fecha de caducidad",
+        "pay": "Pagar"
+    },
+    "orders": {
+        "title": "Gestión de pedidos",
+        "status": {
+            "all": "Todos",
+            "pending": "Pendientes",
+            "preparing": "En preparación",
+            "delivered": "Entregados",
+            "cancelled": "Cancelados"
+        },
+        "no_orders": "No hay órdenes en este estado.",
+        "taxes": "Impuestos"
+    },
+    "components": {
+        "back_button": "← Volver",
+        "search": "Buscar producto",
+        "loading": "Cargando...",
+        "delete": "Eliminar",
+        "state": "Estado",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "name": "Nombre",
+        "edit": "Editar",
+        "description": "Descripción",
+        "url": "URL de imagen",
+        "new_image": "Subir nueva imagen"
+    },
+    "error": {
+        "section": "Ha ocurrido un error en esta sección.",
+        "title": "Error al cargar los datos",
+        "retry": "Reintentar"
+    },
+    "toast": {
+        "cart": "Debes iniciar sesión para finalizar la compra y ver tu pedido.",
+        "confirm_cart": "Introduce todos los datos de la tarjeta correctamente.",
+        "new_order": "✅ Compra realizada correctamente",
+        "error_new_order": "Ocurrió un error al finalizar la compra.",
+        "error_pay": "Error al procesar el pago.",
+        "error_no_product_cart": "⚠️ No se pudo añadir al carro",
+        "update_commerce": "Comercio actualizado correctamente",
+        "error_update_commerce": "No se pudo actualizar el comercio"
+    }
+}

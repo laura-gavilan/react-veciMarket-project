@@ -1,0 +1,300 @@
+{
+    "pages": {
+        "home": {
+            "title": "अपने पड़ोस के सर्वश्रेष्ठ उत्पाद और व्यवसाय खोजें।",
+            "subtitle": "स्थानीय व्यापार का समर्थन करें और अपने क्षेत्र में विशेष ऑफ़र खोजें। आपको जो चाहिए वह आपके पास ही है!",
+            "explore": "और जानें",
+            "register": "रजिस्टर करें",
+            "featured_categories": "विशेष श्रेणियाँ",
+            "view_all_categories": "सभी श्रेणियाँ देखें",
+            "featured_commerces": "विशेष व्यवसाय",
+            "view_all_commerces": "सभी व्यवसाय देखें",
+            "featured_products": "विशेष उत्पाद",
+            "view_products": "अधिक उत्पाद देखें",
+            "location": {
+                "map_label": "व्यवसाय का स्थान"
+            },
+            "contact": {
+                "contact_app": "संपर्क करें",
+                "questions": "क्या आपके पास कोई प्रश्न या सुझाव हैं? हमें लिखें और हम जल्द ही उत्तर देंगे।",
+                "email": "ईमेल भेजें",
+                "page": "संपर्क पृष्ठ पर जाएँ"
+            }
+        },
+        "about": {
+            "title": "हम कौन हैं",
+            "subtitle": "VeciMarket आपका भरोसेमंद स्थानीय व्यापार प्लेटफ़ॉर्म है। हमारा मिशन पड़ोसियों को जोड़ना, स्थानीय व्यवसायों का समर्थन करना और एक करीबी और सहयोगी समुदाय को बढ़ावा देना है। अपने पास अद्वितीय उत्पाद खोजें और हमारे नेटवर्क का हिस्सा बनें।",
+            "mission": {
+                "title": "मिशन",
+                "text": "एक सहज और विश्वसनीय प्लेटफ़ॉर्म के माध्यम से स्थानीय व्यापार का समर्थन करना और पड़ोसी समुदाय को मजबूत करना।"
+            },
+            "vision": {
+                "title": "दृष्टि",
+                "text": "स्थानीय व्यापार के लिए एक प्रमुख प्लेटफ़ॉर्म बनना, पड़ोसियों और व्यवसायों के बीच स्थायी संबंधों को बढ़ावा देना।"
+            },
+            "values": {
+                "title": "मूल्य",
+                "text": "समुदाय, विश्वास, निकटता और स्थानीय व्यापार का समर्थन हमारे दैनिक कार्यों के मार्गदर्शक स्तंभ हैं।"
+            },
+            "community": "हमारे समुदाय में शामिल हों और VeciMarket की सभी सुविधाओं को खोजें।",
+            "register": "अभी रजिस्टर करें"
+        },
+        "contact": {
+            "title": "संपर्क करें",
+            "questions": "क्या आपके पास कोई प्रश्न या सुझाव है? हमें लिखें और हम जल्द ही संपर्क करेंगे।",
+            "form": {
+                "name": "नाम",
+                "placeholder_name": "आपका नाम",
+                "email": "ईमेल",
+                "placeholder_email": "email@email.com",
+                "message": "संदेश",
+                "placeholder_message": "अपना संदेश लिखें...",
+                "send": "भेजें"
+            },
+            "location": {
+                "phone": "फोन",
+                "email": "ईमेल",
+                "address": "पता"
+            }
+        },
+        "register": {
+            "title": "अपना खाता बनाएं",
+            "form": {
+                "username": {
+                    "label": "उपयोगकर्ता नाम",
+                    "placeholder": "testuser"
+                },
+                "name": {
+                    "label": "नाम",
+                    "placeholder": "मारिया"
+                },
+                "firstName": {
+                    "label": "पहला उपनाम",
+                    "placeholder": "लोपेज़"
+                },
+                "lastName": {
+                    "label": "दूसरा उपनाम",
+                    "placeholder": "साएज़"
+                },
+                "email": {
+                    "label": "ईमेल",
+                    "placeholder": "maria@example.com"
+                },
+                "password": {
+                    "label": "पासवर्ड",
+                    "placeholder": "कम से कम 6 वर्ण होने चाहिए"
+                },
+                "phoneNumber": {
+                    "label": "फ़ोन नंबर",
+                    "placeholder": "+34 600000000"
+                },
+                "address": {
+                    "label": "पता",
+                    "placeholder": "पता"
+                },
+                "role": {
+                    "label": "भूमिका (admin/user)",
+                    "placeholder": "user"
+                }
+            },
+            "button_register": "रजिस्टर करें",
+            "questions_login": "क्या आपके पास पहले से खाता है?",
+            "login": "लॉगिन करें"
+        },
+        "login": {
+            "title": "लॉगिन करें",
+            "form": {
+                "email": {
+                    "label": "ईमेल",
+                    "placeholder": "example@example.com"
+                },
+                "password": {
+                    "label": "पासवर्ड",
+                    "placeholder": "******"
+                }
+            },
+            "enter": "प्रवेश करें",
+            "question_register": "क्या आपका खाता नहीं है?",
+            "register": "रजिस्टर करें"
+        }
+    },
+    "navigation": {
+        "about": "हमारे बारे में",
+        "commerces_and_products": "व्यवसाय और उत्पाद",
+        "contact": "संपर्क",
+        "register": "रजिस्टर",
+        "profile": "प्रोफ़ाइल",
+        "my_commerces": "मेरे व्यवसाय",
+        "create_commerce": "व्यवसाय बनाएँ",
+        "orders": "ऑर्डर",
+        "logout": "लॉग आउट"
+    },
+    "footer": {
+        "title": "स्थानीय व्यवसायों का समर्थन करें और अपने समुदाय में अद्वितीय उत्पाद खोजें।",
+        "links": {
+            "title": "लिंक",
+            "home": "मुखपृष्ठ",
+            "commerces": "व्यवसाय",
+            "register": "रजिस्टर",
+            "contact": "संपर्क"
+        },
+        "contact_networks": {
+            "title": "संपर्क और नेटवर्क",
+            "email": "ईमेल:"
+        },
+        "reserved_rights": "सर्वाधिकार सुरक्षित।"
+    },
+    "user": {
+        "user": "उपयोगकर्ता",
+        "loading": "उपयोगकर्ता लोड हो रहा है...",
+        "profile_user": "{{name}} की प्रोफ़ाइल",
+        "edit_profile_user": "{{name}} की प्रोफ़ाइल संपादित करें",
+        "username": "उपयोगकर्ता नाम",
+        "name": "नाम",
+        "firstName": "पहला उपनाम",
+        "lastName": "दूसरा उपनाम",
+        "email": "ईमेल",
+        "phoneNumber": "फ़ोन नंबर",
+        "address": "पता",
+        "edit_profile": "प्रोफ़ाइल संपादित करें",
+        "delete_profile": "प्रोफ़ाइल हटाएँ",
+        "no_update_profile": "प्रोफ़ाइल अपडेट नहीं हो सकी। कृपया पुनः प्रयास करें।"
+    },
+    "commerces": {
+        "title": {
+            "title_part1": "खोजें",
+            "title_highlight1": "उत्पाद",
+            "title_part2": "और",
+            "title_highlight2": "व्यवसाय",
+            "title_part3": "अपने पड़ोस में"
+        },
+        "no_products_filter": "इस श्रेणी में कोई उत्पाद नहीं है।",
+        "commerces": "व्यवसाय",
+        "featured_commerces": "विशेष व्यवसाय",
+        "no_commerces": "कोई व्यवसाय नहीं मिला।",
+        "your_commerces": "आपके व्यवसाय",
+        "name": "{{commerce}}",
+        "loading": "व्यवसाय लोड हो रहे हैं...",
+        "description": "{{description}}",
+        "edit_commerce": "✏️ व्यवसाय संपादित करें",
+        "create_product": "➕ उत्पाद बनाएँ",
+        "delete_commerce": "🗑️ व्यवसाय हटाएँ",
+        "create_commerce": "व्यवसाय बनाएँ",
+        "go_commerce": "व्यवसाय पर जाएँ",
+        "location": {
+            "street": "सड़क",
+            "city": "शहर",
+            "phone": "फ़ोन",
+            "email": "ईमेल",
+            "schedule": "समय"
+        }
+    },
+    "form": {
+        "placeholder_street": "सड़क",
+        "placeholder_city": "शहर",
+        "placeholder_phone": "फ़ोन",
+        "placeholder_email": "ईमेल",
+        "placeholder_schedule": "समय",
+        "placeholder_price": "उदा. 2.50€",
+        "date": "रिलीज़ की तारीख",
+        "product": {
+            "placeholder_product": "उदा. होल व्हीट ब्रेड",
+            "placeholder_description": "उत्पाद का विवरण लिखें..."
+        },
+        "user": {
+            "username": "उपयोगकर्ता नाम",
+            "name": "नाम",
+            "firstName": "पहला उपनाम",
+            "lastName": "दूसरा उपनाम",
+            "email": "ईमेल",
+            "phoneNumber": "फ़ोन नंबर",
+            "address": "पता"
+        }
+    },
+    "categories": {
+        "title": "श्रेणी",
+        "food": "खाद्य",
+        "books": "पुस्तकें",
+        "books-paper": "पुस्तकें और स्टेशनरी",
+        "home": "घर",
+        "sports": "खेल",
+        "beauty": "सौंदर्य",
+        "all": "सभी",
+        "health-beauty": "स्वास्थ्य और सौंदर्य",
+        "pets": "पालतू जानवर",
+        "clothing": "कपड़े",
+        "footwear": "जूते",
+        "other": "अन्य"
+    },
+    "products": {
+        "title": "उत्पाद का नाम",
+        "loading": "व्यवसाय और उत्पाद लोड हो रहे हैं...",
+        "loading_modal": "उत्पाद लोड हो रहा है...",
+        "no_products": "कोई उत्पाद उपलब्ध नहीं है।",
+        "products_commerce": "व्यवसाय के उत्पाद",
+        "name": "",
+        "description": "",
+        "price": "कीमत",
+        "create_product": "उत्पाद बनाएँ"
+    },
+    "favorites": {
+        "my_favorites": "मेरे पसंदीदा उत्पाद",
+        "no_favorites": "आपके पास कोई पसंदीदा उत्पाद नहीं है।"
+    },
+    "cart": {
+        "no_cart": "🛒 आपकी टोकरी खाली है",
+        "add_products_cart": "अपनी खरीदारी शुरू करने के लिए उत्पाद जोड़ें।",
+        "title": "मेरी खरीदारी टोकरी",
+        "total": "कुल",
+        "subtotal": "उप-कुल",
+        "finish_cart": "खरीदारी पूरी करें",
+        "adding": "जोड़ा जा रहा है",
+        "add": "जोड़ें",
+        "delete": "हटाएँ",
+        "card_intro": "अपना कार्ड दर्ज करें",
+        "card_number": "कार्ड नंबर",
+        "card_date": "समाप्ति तिथि",
+        "pay": "भुगतान करें"
+    },
+    "orders": {
+        "title": "ऑर्डर प्रबंधन",
+        "status": {
+            "all": "सभी",
+            "pending": "लंबित",
+            "preparing": "तैयार किया जा रहा है",
+            "delivered": "भेजा गया",
+            "cancelled": "रद्द किया गया"
+        },
+        "no_orders": "इस स्थिति में कोई आदेश नहीं हैं।",
+        "taxes": "कर"
+    },
+    "components": {
+        "back_button": "← वापस",
+        "search": "उत्पाद खोजें",
+        "loading": "लोड हो रहा है...",
+        "delete": "हटाएँ",
+        "state": "स्थिति",
+        "save": "सहेजें",
+        "cancel": "रद्द करें",
+        "name": "नाम",
+        "edit": "संपादित करें",
+        "description": "विवरण",
+        "url": "छवि URL",
+        "new_image": "नई छवि अपलोड करें"
+    },
+    "error": {
+        "section": "इस अनुभाग में त्रुटि हुई।",
+        "title": "डेटा लोड करने में त्रुटि",
+        "retry": "पुनः प्रयास करें"
+    },
+    "toast": {
+        "cart": "खरीदारी पूरी करने और ऑर्डर देखने के लिए आपको लॉगिन करना होगा।",
+        "confirm_cart": "कृपया कार्ड का सभी विवरण सही दर्ज करें।",
+        "new_order": "✅ खरीदारी सफलतापूर्वक पूरी हुई",
+        "error_new_order": "खरीदारी पूरी करने में त्रुटि हुई।",
+        "error_pay": "भुगतान प्रक्रिया में त्रुटि।",
+        "error_no_product_cart": "⚠️ टोकरी में जोड़ने में असफल",
+        "update_commerce": "व्यवसाय सफलतापूर्वक अपडेट किया गया",
+        "error_update_commerce": "व्यवसाय अपडेट नहीं हो सका"
+    }
+}

@@ -3,27 +3,30 @@ import { useAuth } from "../core/auth/useAuth";
 import { Container } from "../components/Container";
 import { Link } from "react-router-dom";
 import { AuthError } from "../components/AuthError";
+import { useTranslate } from "../translations/locales/useTranslate";
+
 
 const INITIAL_FORM = { firstName: "", lastName: "", name: "", email: "", password: "", bio: "", phoneNumber: "", address: "", role: "" };
 
-const REGISTER_FORM = [
-    { input: { name: "username", type: "text", placeholder: "testuser", required: true }, label: { text: "Nombre de usuario" } },
-    { input: { name: "name", type: "text", placeholder: "María", required: true }, label: { text: "Nombre" } },
-    { input: { name: "firstName", type: "text", placeholder: "López", required: true }, label: { text: "Primer apellido" } },
-    { input: { name: "lastName", type: "text", placeholder: "Sáez", required: true }, label: { text: "Segundo apellido" } },
-    { input: { name: "email", type: "email", placeholder: "maria@example.com", required: true }, label: { text: "Correo electrónico" } },
-    { input: { name: "password", type: "password", placeholder: "Debe contener al menos 6 caracteres", required: true }, label: { text: "Contraseña" } },
-    { input: { name: "phoneNumber", type: "tel", placeholder: "+34 600000000", required: true }, label: { text: "Número de teléfono" } },
-    { input: { name: "address", type: "text", placeholder: "Dirección", required: true }, label: { text: "Dirección" } },
-    { input: { name: "role", type: "text", placeholder: "user", required: true }, label: { text: "Rol (admin/user)" } },
-];
 
 const Register = () => {
     const { register } = useAuth();
     const [form, setForm] = useState(INITIAL_FORM);
-    const [error, setError ] = useState(null);
-
+    const [error, setError] = useState(null);
     const usernameRef = useRef(null);
+    const { t } = useTranslate();
+
+    const REGISTER_FORM = [
+    { input: { name: "username", type: "text", placeholder: t("pages.register.form.username.placeholder"), required: true }, label: { text: t("pages.register.form.username.label") } },
+    { input: { name: "name", type: "text", placeholder: t("pages.register.form.name.placeholder"), required: true }, label: { text: t("pages.register.form.name.label") } },
+    { input: { name: "firstName", type: "text", placeholder: t("pages.register.form.firstName.placeholder"), required: true }, label: { text: t("pages.register.form.firstName.label") } },
+    { input: { name: "lastName", type: "text", placeholder: t("pages.register.form.lastName.placeholder"), required: true }, label: { text: t("pages.register.form.lastName.label") } },
+    { input: { name: "email", type: "email", placeholder: t("pages.register.form.email.placeholder"), required: true }, label: { text: t("pages.register.form.email.label") } },
+    { input: { name: "password", type: "password", placeholder: t("pages.register.form.password.placeholder"), required: true }, label: { text: t("pages.register.form.password.label") } },
+    { input: { name: "phoneNumber", type: "tel", placeholder: t("pages.register.form.phoneNumber.placeholder"), required: true }, label: { text: t("pages.register.form.phoneNumber.label") } },
+    { input: { name: "address", type: "text", placeholder: t("pages.register.form.address.placeholder"), required: true }, label: { text: t("pages.register.form.address.label") } },
+    { input: { name: "role", type: "text", placeholder: t("pages.register.form.role.placeholder"), required: true }, label: { text: t("pages.register.form.role.label") } }
+];
 
     useEffect(() => {
         usernameRef.current.focus();
@@ -39,13 +42,13 @@ const Register = () => {
         register(form);
         setForm(INITIAL_FORM);
         usernameRef.current.focus();
-    },[]);
+    }, []);
 
     return (
         <Container className="flex items-center justify-center min-h-[140vh] px-6 py-6">
             <div className="w-full max-w-xl bg-white rounded-3xl shadow-xl border border-primary-light p-10 md:p-16 transition-all">
                 <h2 className="text-xl md:text-2xl font-title font-semibold text-center mb-8 text-primary-dark">
-                    Crea tu cuenta
+                    {t("pages.register.title")}
                 </h2>
 
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-8" onSubmit={onRegisterSubmit}>
@@ -72,22 +75,22 @@ const Register = () => {
                             type="submit"
                             className="px-8 py-2 btn-primary rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
                         >
-                            Regístrate
+                            {t("pages.register.button_register")}
                         </button>
                     </div>
 
-                    
+
                 </form>
 
                 <AuthError
-                        error={error}
-                        onRetry={() => setError(null)}
-                        onClear={() => setError(null)} />
+                    error={error}
+                    onRetry={() => setError(null)}
+                    onClear={() => setError(null)} />
 
                 <p className="text-center text-sm mt-4 text-primary-dark">
-                    ¿Ya tienes cuenta?{" "}
+                    {t("pages.register.questions_login")}{" "}
                     <Link to="/login" className="text-primary-light font-semibold hover:underline">
-                        Inicia sesión
+                        {t("pages.register.login")}
                     </Link>
                 </p>
             </div>

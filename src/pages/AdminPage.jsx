@@ -5,12 +5,14 @@ import { CommerceCard } from "../components/CommerceCard";
 import { useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { PageError } from "../components/PageError";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 const AdminPage = () => {
     const { commerces, loading } = useCommerce();
     const { user } = useContext(AuthContext);
     const [showScrollTop, setShowScrollTop] = useState(false);
     const navigate = useNavigate();
+    const { t } = useTranslate();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -35,7 +37,7 @@ const AdminPage = () => {
         return (
             <div className="flex items-center justify-center min-h-screen text-primary-dark">
                 <h1 className="text-2xl font-semibold animate-pulse">
-                    Cargando comercios...
+                    {t("commerces.loading")}
                 </h1>
             </div>
         );
@@ -55,12 +57,12 @@ const AdminPage = () => {
         >
             <div className="min-h-screen bg-neutral-warm py-12 px-6 flex flex-col gap-6">
                 <h1 className="text-4xl md:text-5xl font-extrabold text-primary-dark text-center">
-                    Tus Comercios
+                    {t("commerces.your_commerces")}
                 </h1>
 
                 {myCommerces.length === 0 && (
                     <p className="text-primary-dark text-center text-lg mt-6">
-                        No tienes comercios aún.
+                        {t("commerces.no_commerces")}
                     </p>
                 )}
 

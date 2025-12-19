@@ -4,11 +4,13 @@ import { useProduct } from "../core/products/ProductContext";
 import { useEffect, useMemo, useState } from "react";
 import { CommerceCard } from "../components/CommerceCard";
 import { ProductCard } from "../components/ProductCard";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 const Home = () => {
     const { commerces } = useCommerce();
     const { products } = useProduct();
     const [showScrollTop, setShowScrollTop] = useState(false);
+    const { t } = useTranslate();
 
     useEffect(() => {
         const handleScroll = () => setShowScrollTop(window.scrollY > 300);
@@ -20,12 +22,18 @@ const Home = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
-    
+
     const featuredCommerces = useMemo(() => commerces.slice(0, 5), [commerces]);
-    const featuredProducts = useMemo(() => products.slice(0, 5),[products]);
+    const featuredProducts = useMemo(() => products.slice(0, 5), [products]);
 
     const categoryLinks = useMemo(() =>
-        ["Alimentación", "Libros", "Hogar", "Deportes", "Belleza"].map(category => (
+        [
+            t("categories.food"),
+            t("categories.books"),
+            t("categories.home"),
+            t("categories.sports"),
+            t("categories.beauty"),
+        ].map(category => (
             <Link
                 key={category}
                 to={`/commerce?category=${category.toLowerCase()}`}
@@ -34,7 +42,7 @@ const Home = () => {
                 {category}
             </Link>
         ))
-    , []);
+        , [t]);
 
     const commerceCards = useMemo(() =>
         featuredCommerces.map(commerce => (
@@ -64,11 +72,11 @@ const Home = () => {
                         VeciMarket
                     </h1>
                     <p className="text-lg md:text-xl text-primary-dark drop-shadow">
-                        Descubre los mejores productos y locales de tu barrio.
+                        {t("pages.home.title")}
                     </p>
 
                     <p className="text-md md:text-lg text-primary-dark drop-shadow">
-                        Apoya el comercio local y encuentra ofertas exclusivas en tu zona. ¡Todo lo que necesitas, cerca de ti!
+                        {t("pages.home.subtitle")}
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-end">
@@ -76,13 +84,13 @@ const Home = () => {
                             to="/aboutUs"
                             className="btn-secondary bg-white/20 hover:bg-white/30 text-white border border-white rounded-xl px-6 py-2 transition-all"
                         >
-                            Conoce más
+                            t{t("pages.home.explore")}
                         </Link>
                         <Link
                             to="/register"
                             className="btn-primary bg-primary-dark hover:bg-primary-light text-[var(--color-mostaza)] rounded-xl px-6 py-2 font-medium transition-all"
                         >
-                            Regístrate
+                            {t("pages.home.register")}
                         </Link>
                     </div>
                 </div>
@@ -91,14 +99,14 @@ const Home = () => {
 
             <section className="py-16 px-6 text-center">
                 <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-primary">
-                    Categorías destacadas
+                    {t("pages.home.featured_categories")}
                 </h2>
                 <div className="flex flex-wrap justify-center gap-4">
                     {categoryLinks}
                 </div>
                 <div className="mt-10">
                     <Link to="/commerce" className="btn-secondary">
-                        Ver todas las categorías
+                        {t("pages.home.view_all_categories")}
                     </Link>
                 </div>
             </section>
@@ -113,7 +121,7 @@ const Home = () => {
                 </div>
                 <div className="mt-10 text-center">
                     <Link to="/commerce" className="btn-secondary">
-                        Ver todos los comercios
+                        {t("pages.home.featured_commerces")}
                     </Link>
                 </div>
             </section>
@@ -121,14 +129,14 @@ const Home = () => {
 
             <section className="py-16 px-6 max-w-7xl mx-auto">
                 <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-primary  text-center">
-                    Productos destacados
+                    {t("pages.home.featured_products")}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
                     {productCards}
                 </div>
                 <div className="mt-10 text-center">
                     <Link to="/commerce" className="btn-secondary">
-                        Ver más productos
+                        {t("pages.home.view_products")}
                     </Link>
                 </div>
             </section>
@@ -136,7 +144,7 @@ const Home = () => {
 
             <section className="py-16 px-6 max-w-7xl mx-auto text-center">
                 <h2 className="text-3xl md:text-4xl font-title font-semibold mb-6 text-primary">
-                    Ubicación de los comercios
+                    {t("pages.home.location.map_label")}
                 </h2>
                 <div className="w-full h-96 md:h-[500px] rounded-3xl overflow-hidden shadow-xl">
                     <iframe
@@ -153,17 +161,17 @@ const Home = () => {
 
             <section className="py-20 px-6 text-center max-w-4xl mx-auto">
                 <h2 className="text-3xl md:text-4xl font-title font-semibold mb-6 text-primary-dark">
-                    Contáctanos
+                    {t("pages.home.contact.contact_app")}
                 </h2>
                 <p className="text-primary-dark mb-10">
-                    ¿Tienes preguntas o sugerencias? Escríbenos y te responderemos lo antes posible.
+                    {t("pages.home.contact.questions")}
                 </p>
                 <div className="flex flex-col md:flex-row justify-center gap-6">
                     <a href="mailto:contacto@vecimarket.com" className="btn-primary">
-                        Enviar correo
+                        {t("pages.home.contact.email")}
                     </a>
                     <Link to="/contact" className="btn-secondary">
-                        Ir a la página de contacto
+                        {t("pages.home.contact.page")}
                     </Link>
                 </div>
             </section>

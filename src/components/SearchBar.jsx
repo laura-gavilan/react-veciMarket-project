@@ -1,7 +1,9 @@
 import { useCallback, useState } from "react"
+import { useTranslate } from "../translations/locales/useTranslate";
 
 export const SearchBar = ( { onSearch }) => {
     const [search, setSearch] = useState("");
+    const { t } = useTranslate();
 
     const handleInputChange = useCallback((event)=> {
         const value = event.target.value;
@@ -18,7 +20,7 @@ export const SearchBar = ( { onSearch }) => {
         <div className="mb-8 w-full md:w-1/2 relative">
                 <input
                     type="text"
-                    placeholder="Buscar producto..."
+                    placeholder={t("components.search")}
                     value={search}
                     onChange={handleInputChange}
                     className="w-full px-5 py-3 rounded-full border border-primary-dark bg-white text-primary-dark placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-accent shadow-sm transition-all duration-300"

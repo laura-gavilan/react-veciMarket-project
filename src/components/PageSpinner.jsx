@@ -1,5 +1,7 @@
+import { useTranslate } from "../translations/locales/useTranslate";
+
 export const PageSpinner = ({
-    message = "Cargando...",
+    message = t("components.loading"),
     size = "xl",
     color = "primary",
     className = "",
@@ -7,6 +9,7 @@ export const PageSpinner = ({
     containerClassName = "",
 }) => {
     const baseContainerClasses = "flex items-center justify-center";
+    const { t } = useTranslate();
 
     const containerClasses = fullPage
         ? `${baseContainerClasses} min-h-screen ${containerClassName}`
@@ -30,8 +33,6 @@ export const PageSpinner = ({
     return (
         <div className={containerClasses}>
             <div className="text-center flex flex-col items-center">
-
-                {/* Spinner */}
                 <div
                     className={`
                         animate-spin rounded-full border-4 border-current border-t-transparent 
@@ -40,8 +41,7 @@ export const PageSpinner = ({
                         ${className}
                     `}
                 />
-
-                {/* Mensaje opcional */}
+                
                 {message && (
                     <p className="text-muted mt-4 text-sm font-medium">
                         {message}

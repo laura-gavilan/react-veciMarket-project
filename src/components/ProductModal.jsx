@@ -1,15 +1,17 @@
 import { CartButton } from "./CartButton";
 import { useNavigate } from "react-router-dom";
 import { PageSpinner } from "./PageSpinner";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 export const ProductModal = ({ product, commerce, onClose, loading }) => {
     const navigate = useNavigate();
+    const { t } = useTranslate();
 
     if (loading && !product){
         return (
             <div className="flex items-center justify-center min-h-screen text-primary-dark">
                 <h1 className="text-2xl font-semibold animate-pulse">
-                    Cargando producto...
+                    {t("products.loading_modal")}
                 </h1>
                 <PageSpinner />
             </div>
@@ -49,7 +51,7 @@ export const ProductModal = ({ product, commerce, onClose, loading }) => {
                             onClick={() => navigate(`/commerce/${commerce._id}`)}
                             className="px-4 py-2 rounded-xl bg-[var(--color-mostaza)] text-[var(--color-burdeos-dark)] font-semibold hover:bg-yellow-400 transition"
                         >
-                            Ir al comercio
+                            {t("commerces.go_commerce")}
                         </button>
                     )}
                 </div>

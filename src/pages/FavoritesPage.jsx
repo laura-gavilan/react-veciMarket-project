@@ -4,10 +4,12 @@ import { CartButton } from "../components/CartButton.jsx";
 import { useMemo } from "react";
 import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
 import { PageError } from "../components/PageError.jsx";
+import { useTranslate } from "../translations/locales/useTranslate.js";
 
 const FavoritesPage = () => {
     const { favorites } = useFavorites();
     const hasFavorites = Array.isArray(favorites) && favorites.length > 0;
+    const { t } = useTranslate();
 
     const favoriteCards = useMemo(() => {
         return favorites.map((product, index) => (
@@ -49,12 +51,12 @@ const FavoritesPage = () => {
                 >
         <div className="max-w-6xl mx-auto px-6 py-10">
             <h1 className="text-3xl md:text-4xl font-title font-semibold mb-8 text-primary text-center">
-                Mis productos favoritos
+                {t("favorites.my_favorites")}
             </h1>
 
             {!hasFavorites && (
                 <p className="text-center text-gray-500 mt-4">
-                    No tienes productos favoritos.
+                    {t("favorites.no_favorites")}
                 </p>
             )}
 

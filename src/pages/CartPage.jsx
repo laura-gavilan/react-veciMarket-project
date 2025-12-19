@@ -6,6 +6,7 @@ import { CreditCardModal } from "../components/CreditCardModal.jsx";
 import { CartItems } from "../components/CartItems.jsx";
 import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
 import { PageError } from "../components/PageError.jsx";
+import { useTranslate } from "../translations/locales/useTranslate.js";
 
 
 const CartPage = () => {
@@ -23,6 +24,7 @@ const CartPage = () => {
     const [cardNumber, setCardNumber] = useState("");
     const [expiry, setExpiry] = useState("");
     const [cvc, setCvc] = useState("");
+    const { t } = useTranslate();
 
     const showToast = useCallback((message, duration = 3000) => {
         setToast(message);
@@ -47,7 +49,7 @@ const CartPage = () => {
 
     const openPaymentModal = () => {
         if (!user?._id) {
-            showToast("Debes iniciar sesión para finalizar la compra y ver tu pedido.");
+            showToast(t("toast.cart"));
             navigate("/login");
             return;
         }
@@ -58,7 +60,7 @@ const CartPage = () => {
 
     const confirmPayment = useCallback(async () => {
         if (cardNumber.length < 16 || expiry.length < 4 || cvc.length < 3) {
-            showToast("Introduce todos los datos de la tarjeta correctamente.");
+            showToast(t("toast.confirm_cart"));
             return;
         }
 
@@ -66,14 +68,14 @@ const CartPage = () => {
             const newOrder = await checkout();
             if (newOrder) {
                 setShowCardModal(false);
-                showToast("✅ Compra realizada correctamente");
+                showToast(t("toast.new_order"));
                 navigate("/orders");
             } else {
-                showToast("Ocurrió un error al finalizar la compra.");
+                showToast(t("toast.error_new_order"));
             }
         } catch (error) {
             console.error("Error:", error);
-            showToast("Error al procesar el pago.");
+            showToast(t("toast.error_pay"));
         }
     }, [cardNumber, expiry, cvc, showToast, checkout, navigate]);
 
@@ -81,8 +83,8 @@ const CartPage = () => {
     if (!cart || !cart.items || cart.items.length === 0) {
         return (
             <div className="p-8 text-center">
-                <h2 className="text-2xl font-semibold mb-2">🛒 Tu cesta está vacía</h2>
-                <p><a href="/commerce" className="underline">Agrega productos para comenzar tu compra.</a> </p>
+                <h2 className="text-2xl font-semibold mb-2">{t("cart.no_cart")}</h2>
+                <p><a href="/commerce" className="underline">{t("cart.add_products_cart")}</a> </p>
             </div>
         );
     }
@@ -100,9 +102,9 @@ const CartPage = () => {
             }
         >
             <div className="max-w-4xl mx-auto p-8">
-                <h2 className="text-3xl font-semibold mb-6 text-center text-primary">Mi cesta de la compra</h2>
+                <h2 className="text-3xl font-semibold mb-6 text-center text-primary">{t("cart.title")}</h2>
 
-                {loading && <p className="text-center text-primary-dark">Cargando...</p>}
+                {loading && <p className="text-center text-primary-dark">{t("components.loading")}</p>}
 
                 <div className="space-y-6">
                     {cartItems.map((item, index) => (
@@ -116,14 +118,14 @@ const CartPage = () => {
 
                 <div className="mt-10 flex flex-col md:flex-row justify-between items-center border-t border-primary-light pt-6">
                     <h3 className="text-2xl font-bold text-primary-dark">
-                        Total: <span className="text-accent-primary">{total.toFixed(2)} €</span>
+                        {t("cart.total")}: <span className="text-accent-primary">{total.toFixed(2)} €</span>
                     </h3>
                     <div className="flex justify-center mt-8">
                         <button
                             onClick={openPaymentModal}
                             className="btn-primary elevation w-full md:w-auto"
                         >
-                            Finalizar compra
+                            {t("cart.finish_cart")}
                         </button>
                     </div>
                 </div>

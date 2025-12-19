@@ -1,7 +1,9 @@
 import { memo, useCallback } from "react";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 export const CreditCardModal = memo(({ isOpen, onClose, onConfirm, cardNumber, setCardNumber, expiry, setExpiry, cvc, setCvc }) => {
     if (!isOpen) return null;
+    const { t } = useTranslate();
 
     const handleCardNumberChange = useCallback((event) => {
         setCardNumber(event.target.value)
@@ -27,9 +29,9 @@ export const CreditCardModal = memo(({ isOpen, onClose, onConfirm, cardNumber, s
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
             <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-sm">
 
-                <h3 className="text-xl font-semibold mb-4">Introduce tu tarjeta</h3>
+                <h3 className="text-xl font-semibold mb-4">{t("cart.card_intro")}</h3>
 
-                <label className="text-sm font-medium">Número de tarjeta</label>
+                <label className="text-sm font-medium">{t("cart.card_number")}</label>
                 <input
                     type="text"
                     value={cardNumber}
@@ -38,7 +40,7 @@ export const CreditCardModal = memo(({ isOpen, onClose, onConfirm, cardNumber, s
                     className="w-full p-2 border rounded-lg mb-4"
                 />
 
-                <label className="text-sm font-medium">Fecha de caducidad</label>
+                <label className="text-sm font-medium">{t("cart.card_date")}</label>
                 <input
                     type="text"
                     value={expiry}
@@ -61,14 +63,14 @@ export const CreditCardModal = memo(({ isOpen, onClose, onConfirm, cardNumber, s
                         onClick={handleClose}
                         className="px-4 py-2 bg-gray-300 rounded-lg"
                     >
-                        Cancelar
+                        {t("components.cancel")}
                     </button>
 
                     <button
                         onClick={handleConfirm}
                         className="px-4 py-2 bg-primary text-white rounded-lg"
                     >
-                        Pagar
+                        {t("cart.pay")}
                     </button>
                 </div>
             </div>

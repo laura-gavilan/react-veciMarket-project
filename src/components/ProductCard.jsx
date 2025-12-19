@@ -1,11 +1,13 @@
 import { memo, useCallback } from "react";
 import { CartButton } from "./CartButton";
 import { FavoriteButton } from "./FavoriteButton";
+import { useTranslate } from "../translations/locales/useTranslate";
 // import { ErrorBoundary } from "./ErrorBoundary";
 // import { PageError } from "./PageError";
 
 export const ProductCard = memo(({ product, commerce, onClick, isOwner, handleDelete }) => {
     let imageSrc = null;
+    const { t } = useTranslate();
 
     if (product.images?.[0]) {
         const img = product.images[0];
@@ -51,7 +53,7 @@ export const ProductCard = memo(({ product, commerce, onClick, isOwner, handleDe
                 </h3>
                 <p className="text-primary-dark mt-1 font-medium">{product.price} €</p>
                 {commerce && (
-                    <p className="text-gray-500 text-sm mt-1 truncate">Comercio: {commerce.name}</p>
+                    <p className="text-gray-500 text-sm mt-1 truncate">{t("commerces.commerces")}: {commerce.name}</p>
                 )}
 
                 <FavoriteButton product={product} />
@@ -64,7 +66,7 @@ export const ProductCard = memo(({ product, commerce, onClick, isOwner, handleDe
                             onClick={handleDeleteClick}
                             className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-xl text-sm"
                         >
-                            Eliminar
+                            {t("components.delete")}
                         </button>
                     )}
                 </div>

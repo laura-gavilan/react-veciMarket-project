@@ -70,7 +70,7 @@ const CommerceDetailsAdminPage = () => {
     if (!selectedCommerce)
         return (
             <div className="flex items-center justify-center min-h-screen text-primary-dark">
-                <h1 className="text-2xl font-semibold">No se encuentra el comercio</h1>
+                <h1 className="text-2xl font-semibold">{t("commerces.no_commerces")}</h1>
             </div>
         );
 
