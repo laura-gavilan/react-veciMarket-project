@@ -1,7 +1,9 @@
 import { forwardRef, useEffect, useRef } from "react";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 export const EditUserForm = forwardRef(({ form, setForm, onSubmit }, ref) => {
     const firstInputRef = useRef(null);
+    const {t} = useTranslate();
 
     useEffect(() => {
         if (firstInputRef.current) {

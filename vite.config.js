@@ -7,5 +7,8 @@ export default defineConfig({
         react(),
         tailwind()
     ],
+    resolve: {
+        extensions: ['.tsx', '.ts', '.jsx', '.js']
+    }
 });
 

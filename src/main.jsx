@@ -10,7 +10,7 @@ import { UserProvider } from './contexts/UserContext.jsx';
 import { FavoritesProvider } from './contexts/FavoritesContext.jsx';
 import { CartProvider } from './contexts/CartContext';
 import { OrdersProvider } from './contexts/OrdersContext.jsx';
-import { ErrorBoundary } from './components/ErrorBoundary.jsx';
+import { ErrorBoundary } from './components/ErrorBoundary.js';
 import { PageError } from './components/PageError.jsx';
 import "./translations/i18n.js";
 

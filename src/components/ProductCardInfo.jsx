@@ -1,7 +1,9 @@
 import { memo, useMemo } from "react";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 export const ProductCardInfo = memo(({ product, isOwner, commerceId, navigate, handleDelete }) => {
     if (!product) return null;
+    const {t} = useTranslate();
 
     const imageSrc = useMemo(() => {
         if (!product.images?.[0]) return null;

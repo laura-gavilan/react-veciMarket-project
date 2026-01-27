@@ -2,11 +2,13 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from './../core/user/useUser';
 import { EditUserForm } from "../components/EditUserForm";
+import { useTranslate } from "../translations/locales/useTranslate";
 
 const EditUserPage = () => {
     const { user, updateUserData, loading } = useUser();
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const { t } = useTranslate();
 
     const [form, setForm] = useState({
         username: user?.username || "",
@@ -58,7 +60,7 @@ const EditUserPage = () => {
             </button>
 
             <h1 className="text-3xl md:text-4xl font-title font-semibold mb-8 text-primary-dark text-center">
-                {t("user.edit_profile_user")}
+                {t("user.edit_profile_user", { name: user.name })}
             </h1>
 
             <EditUserForm
