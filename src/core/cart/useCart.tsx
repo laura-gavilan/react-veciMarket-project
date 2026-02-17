@@ -1,9 +1,9 @@
 import { useCallback, useContext, useMemo } from "react";
 import { CartContext } from "../../contexts/CartContext";
-
+import type { CartContextType } from "../../contexts/CartContext";
 
 export const useCart = () => {
-    const context = useContext(CartContext);
+    const context = useContext<CartContextType | null>(CartContext);
     if (!context) throw new Error("useCart must be used within a CartProvider");
 
     const { cart, loading, addItem, updateItem, removeItem, checkout } = context;

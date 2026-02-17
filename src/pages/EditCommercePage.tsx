@@ -5,14 +5,8 @@ import { EditCommerceForm } from "../components/EditCommerceForm";
 import { useRef } from "react";
 import { useTranslate } from "../translations/locales/useTranslate";
 import type { CommerceForm } from "../types/types";
+import { INITIAL_COMMERCE_FORM } from "../components/CreateCommerceForm";
 
-export const INITIAL_COMMERCE_FORM = {
-        name: "",
-        category: "all",
-        description: "",
-        image: "",
-        address: { street: "", city: "", phone: "", email: "", schedule: "" }
-    };
 
 const EditCommercePage = () => {
     const { commerceId } = useParams();

@@ -1,4 +1,8 @@
-import type { AuthErrorProps} from "../types/types";
+export type AuthErrorProps = {
+    error: string;
+    onRetry: () => void;
+    onClear: () => void;
+};
 
 export const AuthError = ({ error, onRetry, onClear }: AuthErrorProps)=> {
     if (!error) return null;

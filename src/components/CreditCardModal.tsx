@@ -1,7 +1,18 @@
 import { memo, useCallback } from "react";
 import { useTranslate } from "../translations/locales/useTranslate";
-import type  { CreditCardProps } from "../types/types";
 
+
+export type CreditCardProps = {
+    isOpen: boolean;
+    onClose: () => void;
+    onConfirm: () => void;
+    cardNumber: string;
+    setCardNumber: React.Dispatch<React.SetStateAction<string>>;
+    expiry: string;
+    setExpiry: React.Dispatch<React.SetStateAction<string>>;
+    cvc: string;
+    setCvc: React.Dispatch<React.SetStateAction<string>>;
+};
 
 
 export const CreditCardModal = memo<CreditCardProps>(({ isOpen, onClose, onConfirm, cardNumber, setCardNumber, expiry, setExpiry, cvc, setCvc }) => {

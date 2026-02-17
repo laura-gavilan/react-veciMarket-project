@@ -1,5 +1,14 @@
 import { memo, useCallback, useMemo } from "react";
-import type { CategoryFilterProps } from "../types/types";
+
+
+export interface CategoryFilterProps {
+    categories: string[];
+    categoryName: Record<string, string>;
+    selectedCategory: string;
+    setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
+    showProducts: boolean;
+    setShowProducts: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 
 export const CategoryFilter = memo(({ categories, categoryName, selectedCategory, setSelectedCategory, showProducts, setShowProducts}: CategoryFilterProps) => {

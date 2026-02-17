@@ -1,15 +1,20 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 import {
     addFavoriteToLocalStorage,
+    deleteFavoriteFromLocalStorage,
     getFavoritesFromLocalStorage,
     saveFavoritesInLocalStorage,
 } from "../core/favorites/favorites.service";
 import { useAuth } from "../core/auth/useAuth";
 import { addFavoriteApi, deleteFavoritesApi, getFavoritesApi } from "../core/favorites/favorites.api";
 import { useNavigate } from "react-router-dom";
-import type { ChildrenProps, Product, UseFavoritesProps } from "../types/types";
+import type { ChildrenProps, } from "../types/types";
+import type { UseFavorites } from "../core/favorites/useFavorites";
+import type { Product } from "../components/ProductCard";
 
-export const FavoritesContext = createContext<UseFavoritesProps | null>(null);
+
+
+export const FavoritesContext = createContext<UseFavorites | null>(null);
 
 export const FavoritesProvider = ({ children }: ChildrenProps) => {
     const { user } = useAuth();
@@ -19,15 +24,15 @@ export const FavoritesProvider = ({ children }: ChildrenProps) => {
     const [toast, setToast] = useState<string | null>(null);
 
     useEffect(() => {
+        if (!userId) {
+            setFavorites([]);
+            return;
+        }
         const loadFavorites = async () => {
             try {
-                if (!userId) {
-                    setFavorites([]);
-                    return;
-                }
-
                 const data = await getFavoritesApi(userId);
-                const serverFavs = Array.isArray(data.favoritos) ? data.favoritos : [];
+                console.log("Respuesta API", data)
+                const serverFavs: Product[] = Array.isArray(data.favoritos) ? data.favoritos : [];
                 setFavorites(serverFavs);
                 saveFavoritesInLocalStorage(userId, serverFavs);
             } catch (error) {
@@ -58,34 +63,40 @@ export const FavoritesProvider = ({ children }: ChildrenProps) => {
             return;
         };
 
+        const alreadyFavorite = favorites.some(f => f._id === product._id);
+        if (alreadyFavorite) {
+            showToast("Este producto ya está en favoritos");
+            return;
+        };
+
         try {
             await addFavoriteApi(userId, product._id);
-            setFavorites((prev) => [...prev, product]);
+            setFavorites(prev => [...prev, product]);
             addFavoriteToLocalStorage(userId, product);
             showToast(`${product.name} añadido a favoritos`);
         } catch (error) {
             console.error("Error en addFavorite", error);
             showToast("No se pudo añadir a favoritos");
         }
-    }, [userId, navigate, showToast]);
+    }, [userId, navigate, showToast, favorites]);
 
 
     const deleteFavorite = useCallback(async (productId: string) => {
-        if (!userId) {
-            return;
-        };
+        if (!userId) return;
 
         try {
             await deleteFavoritesApi(userId, productId);
-            const newFavorites = favorites.filter((favorite) => favorite._id !== productId);
-            setFavorites(newFavorites);
-            saveFavoritesInLocalStorage(userId, newFavorites);
+
+            setFavorites(prev => prev.filter(f => f._id !== productId));
+            deleteFavoriteFromLocalStorage(userId, productId);
+
             showToast("Favorito eliminado");
         } catch (error) {
             console.error("Error en deleteFavorite", error);
             showToast("No se pudo eliminar el favorito");
         }
     }, [userId, showToast]);
+
 
 
     const isFavorite = useCallback((productId: string): boolean => {
@@ -104,7 +115,7 @@ export const FavoritesProvider = ({ children }: ChildrenProps) => {
 
     const totalFavorites = favorites.length;
 
-    const contextValue: UseFavoritesProps = useMemo(() => ({ favorites, addFavorite, deleteFavorite, isFavorite, toggleFavorite, totalFavorites }), [favorites, addFavorite, deleteFavorite, isFavorite, toggleFavorite, totalFavorites]);
+    const contextValue: UseFavorites = useMemo(() => ({ favorites, addFavorite, deleteFavorite, isFavorite, toggleFavorite, totalFavorites }), [favorites, addFavorite, deleteFavorite, isFavorite, toggleFavorite, totalFavorites]);
 
     return (
         <FavoritesContext.Provider value={contextValue}>

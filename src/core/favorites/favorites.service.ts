@@ -1,4 +1,4 @@
-import type { Product } from "../../types/types";
+import type { Product } from "../../components/ProductCard";
 
 const FAVORITES_KEY = "favorites";
 
@@ -17,11 +17,11 @@ export const addFavoriteToLocalStorage = ((userId: string, favorite: Product) =>
     const data = JSON.parse(localStorage.getItem("favorites") || "{}");
     const favorites: Product[] = data[userId] || [];
 
-    const exists = favorites.some((favorite: Product) => favorite._id === favorite._id);
+    const exists = favorites.some((fav: Product) => fav._id === favorite._id);
     if (!exists) {
         favorites.push(favorite);
         data[userId] = favorites;
-        localStorage.setItem("favorites", JSON.stringify(data));
+        localStorage.setItem(FAVORITES_KEY, JSON.stringify(data));
     }
 });
 

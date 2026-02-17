@@ -3,11 +3,11 @@ import { useCart } from "../contexts/CartContext.jsx";
 import { useAuth } from "../core/auth/useAuth.jsx";
 import { useCallback, useMemo, useState } from "react";
 import { CreditCardModal } from "../components/CreditCardModal.jsx";
-import { CartItems } from "../components/CartItems.jsx";
+import { CartItems, type CartItemsType } from "../components/CartItems.jsx";
 import { ErrorBoundary } from "../components/ErrorBoundary.js";
 import { PageError } from "../components/PageError.jsx";
 import { useTranslate } from "../translations/locales/useTranslate.js";
-import type { CartItemProps } from "../types/types";
+
 
 
 const CartPage = () => {
@@ -26,7 +26,7 @@ const CartPage = () => {
         setTimeout(() => setToast(null), duration);
     }, []);
 
-    const cartItems = useMemo<CartItemProps[]>(() => {
+    const cartItems = useMemo<CartItemsType[]>(() => {
         if (!cart || !cart.items) return [];
         return cart.items.filter(item => item?.productId?._id);
     }, [cart]);
@@ -148,4 +148,5 @@ const CartPage = () => {
 };
 
 export default CartPage;
+
 

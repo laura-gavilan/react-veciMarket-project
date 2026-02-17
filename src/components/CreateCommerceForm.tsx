@@ -1,22 +1,25 @@
 import { useState} from "react"
 import { useTranslate } from "../translations/locales/useTranslate";
-import type { CommerceForm, CreateCommerceFormProps } from "../types/types";
+import type {  CommerceForm } from "../types/types";
+
+export type CreateCommerceFormProps = {
+    form: CommerceForm;
+    setForm: React.Dispatch<React.SetStateAction<CommerceForm>>;
+    onSubmit: (form: CommerceForm) => void | Promise<void>;
+};
+
+
+export const INITIAL_COMMERCE_FORM = {
+        name: "",
+        category: "all",
+        description: "",
+        image: "",
+        address: { street: "", city: "", phone: "", email: "", schedule: "" }
+    };
 
 export const CreateCommerceForm = ({ onSubmit }: CreateCommerceFormProps) => {
     const { t } = useTranslate();
-    const [form, setForm] = useState<CommerceForm>({
-        name: "",
-        description: "",
-        image: "",
-        address: {
-            street: "",
-            city: "",
-            phone: "",
-            email: "",
-            schedule: "",
-        },
-        isActive: true,
-    });
+    const [form, setForm] = useState<CommerceForm>(INITIAL_COMMERCE_FORM);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;

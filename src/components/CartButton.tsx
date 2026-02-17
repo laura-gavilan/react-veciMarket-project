@@ -1,10 +1,16 @@
 import { memo, useCallback, useState } from "react";
 import { useCart } from "../core/cart/useCart";
 import { useTranslate } from "../translations/locales/useTranslate";
-import type { CartButtonProps } from "../types/types";
+import type { Product } from "./ProductCard";
 
 
-export const CartButton = memo<CartButtonProps>(({ product }) => {
+export type CartButtonType = {
+    product: Product;
+    small?: boolean;
+};
+
+
+export const CartButton = memo<CartButtonType>(({ product }) => {
     const { addItem, loading } = useCart();
     const [toast, setToast] = useState<string | null>(null);
     const {t} = useTranslate();

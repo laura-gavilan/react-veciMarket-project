@@ -1,10 +1,15 @@
 import { useFavorites } from "../core/favorites/useFavorites";
-import type { FavoriteButtonProps, Product } from "../types/types";
+import type { Product } from "./ProductCard";
 
+
+
+export type FavoriteButtonProps = {
+    product: Product;
+}
 
 export const FavoriteButton = ({ product }: FavoriteButtonProps) => {
     const { favorites, addFavorite, deleteFavorite } = useFavorites();
-    const isFavorite: boolean = favorites.some((favorite: Product)=> favorite._id === product._id);
+    const isFavorite: boolean = favorites.some((fav: Product)=> fav._id === product._id);
 
 
     const toggleFavorite = (event: React.MouseEvent<HTMLButtonElement>) => {

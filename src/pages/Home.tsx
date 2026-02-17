@@ -1,0 +1,194 @@
+import { Link } from "react-router-dom";
+import { useCommerce } from "../core/commerce/CommerceContext";
+import { useProduct } from "../core/products/ProductContext";
+import { useEffect, useMemo, useState } from "react";
+import { CommerceCard } from "../components/CommerceCard";
+import { ProductCard } from "../components/ProductCard";
+import { useTranslate } from "../translations/locales/useTranslate";
+import type { Commerce } from "../types/types";
+import type { Product } from './../components/ProductCard';
+
+const Home = () => {
+    const { commerces } = useCommerce();
+    const { products } = useProduct();
+    const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
+    const { t } = useTranslate();
+
+    useEffect(() => {
+        const handleScroll = () => setShowScrollTop(window.scrollY > 300);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    const featuredCommerces: Commerce[] = useMemo(() => commerces.slice(0, 5), [commerces]);
+    const featuredProducts: Product[] = useMemo(() => products.slice(0, 5), [products]);
+
+    const categoryLinks = useMemo(() =>
+        [
+            t("categories.food"),
+            t("categories.books"),
+            t("categories.home"),
+            t("categories.sports"),
+            t("categories.beauty"),
+        ].map(category => (
+            <Link
+                key={category}
+                to={`/commerce?category=${category.toLowerCase()}`}
+                className="px-6 py-3 bg-accent-primary text-primary-dark font-semibold rounded-full shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300"
+            >
+                {category}
+            </Link>
+        ))
+        , [t]);
+
+    const commerceCards = useMemo(() =>
+        featuredCommerces.map((commerce: Commerce) => (
+            <Link key={commerce._id} to={`/commerce/${commerce._id}`} className="block">
+                <CommerceCard
+                    commerce={commerce}
+                    onClick={() => console.log("Clicked on", commerce.name)} />
+            </Link>
+        )), [featuredCommerces]);
+
+    const productCards = useMemo(() =>
+        featuredProducts.map((product: Product) => (
+            <Link key={product._id} to={`/commerce/${product.commerceId}`} className="block">
+                <ProductCard product={product} />
+            </Link>
+        )), [featuredProducts]);
+
+
+    return (
+        <div className="font-sans">
+            <section className="relative max-w-auto mx-auto px-6 py-30 shadow-2xl overflow-hidden">
+                <div
+                    className="absolute inset-0 bg-cover bg-right bg-no-repeat"
+                    style={{ backgroundImage: "url('/images/food.jpg')" }}
+                />
+
+                <div className="relative z-10 max-w-lg ml-auto text-primary space-y-4">
+                    <h1 className="text-5xl md:text-6xl font-title font-semibold drop-shadow-lg">
+                        VeciMarket
+                    </h1>
+                    <p className="text-lg md:text-xl text-primary-dark drop-shadow">
+                        {t("pages.home.title")}
+                    </p>
+
+                    <p className="text-md md:text-lg text-primary-dark drop-shadow">
+                        {t("pages.home.subtitle")}
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-end">
+                        <Link
+                            to="/aboutUs"
+                            className="btn-secondary bg-white/20 hover:bg-white/30 text-white border border-white rounded-xl px-6 py-2 transition-all"
+                        >
+                            t{t("pages.home.explore")}
+                        </Link>
+                        <Link
+                            to="/register"
+                            className="btn-primary bg-primary-dark hover:bg-primary-light text-[var(--color-mostaza)] rounded-xl px-6 py-2 font-medium transition-all"
+                        >
+                            {t("pages.home.register")}
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+
+            <section className="py-16 px-6 text-center">
+                <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-primary">
+                    {t("pages.home.featured_categories")}
+                </h2>
+                <div className="flex flex-wrap justify-center gap-4">
+                    {categoryLinks}
+                </div>
+                <div className="mt-10">
+                    <Link to="/commerce" className="btn-secondary">
+                        {t("pages.home.view_all_categories")}
+                    </Link>
+                </div>
+            </section>
+
+
+            <section className="py-16 px-6 max-auto mx-auto bg-gray-warm">
+                <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-primary text-center">
+                    {t("pages.home.featured_commerces")}
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
+                    {commerceCards}
+                </div>
+                <div className="mt-10 text-center">
+                    <Link to="/commerce" className="btn-secondary">
+                        {t("pages.home.featured_commerces")}
+                    </Link>
+                </div>
+            </section>
+
+
+            <section className="py-16 px-6 max-w-7xl mx-auto">
+                <h2 className="text-3xl md:text-4xl font-title font-semibold mb-10 text-primary  text-center">
+                    {t("pages.home.featured_products")}
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-stretch">
+                    {productCards}
+                </div>
+                <div className="mt-10 text-center">
+                    <Link to="/commerce" className="btn-secondary">
+                        {t("pages.home.view_products")}
+                    </Link>
+                </div>
+            </section>
+
+
+            <section className="py-16 px-6 max-w-7xl mx-auto text-center">
+                <h2 className="text-3xl md:text-4xl font-title font-semibold mb-6 text-primary">
+                    {t("pages.home.location.map_label")}
+                </h2>
+                <div className="w-full h-96 md:h-[500px] rounded-3xl overflow-hidden shadow-xl">
+                    <iframe
+                        src="https://www.google.com/maps/d/embed?mid=1v-LgmsYezLmRGLzZQu39nVbPfRPoJRs&ehbc=2E312F&noprof=1"
+                        className="w-full h-full border-0"
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="Mapa de comercios"
+                    />
+                </div>
+            </section>
+
+
+            <section className="py-20 px-6 text-center max-w-4xl mx-auto">
+                <h2 className="text-3xl md:text-4xl font-title font-semibold mb-6 text-primary-dark">
+                    {t("pages.home.contact.contact_app")}
+                </h2>
+                <p className="text-primary-dark mb-10">
+                    {t("pages.home.contact.questions")}
+                </p>
+                <div className="flex flex-col md:flex-row justify-center gap-6">
+                    <a href="mailto:contacto@vecimarket.com" className="btn-primary">
+                        {t("pages.home.contact.email")}
+                    </a>
+                    <Link to="/contact" className="btn-secondary">
+                        {t("pages.home.contact.page")}
+                    </Link>
+                </div>
+            </section>
+
+            {showScrollTop && (
+                <button
+                    onClick={scrollToTop}
+                    className="fixed bottom-6 right-6 bg-[var(--color-mostaza)] text-primary-dark p-3 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 z-50"
+                >
+                    ↑
+                </button>
+            )}
+        </div>
+    );
+};
+
+export default Home;

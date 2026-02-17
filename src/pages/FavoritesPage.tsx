@@ -1,17 +1,18 @@
 import { useFavorites } from "../core/favorites/useFavorites.js";
 import { FavoriteButton } from "../components/FavoriteButton.js";
 import { CartButton } from "../components/CartButton.js";
-import { useMemo, type FC } from "react";
+import { useMemo } from "react";
 import { ErrorBoundary } from "../components/ErrorBoundary.js";
 import { PageError } from "../components/PageError.js";
 import { useTranslate } from "../translations/locales/useTranslate.js";
-import type { Product } from "../types/types.js";
+import type { Product } from "../components/ProductCard.js";
 
-const FavoritesPage: FC = () => {
+
+const FavoritesPage  = () => {
     const { favorites } = useFavorites();
     const hasFavorites = Array.isArray(favorites) && favorites.length > 0;
     const { t } = useTranslate();
-
+    console.log("favorios", favorites);
     const favoriteCards = useMemo(() => {
         return favorites.map((product: Product, index: number) => (
                         <div

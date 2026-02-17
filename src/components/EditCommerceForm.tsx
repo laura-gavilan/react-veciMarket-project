@@ -1,7 +1,8 @@
 import { forwardRef, useImperativeHandle, useRef, type ChangeEvent, type Dispatch, type FormEvent, type SetStateAction } from "react";
 import { useTranslate } from "../translations/locales/useTranslate";
 import type { CommerceForm } from "../types/types";
-import { INITIAL_COMMERCE_FORM } from "../pages/EditCommercePage";
+import { INITIAL_COMMERCE_FORM } from "./CreateCommerceForm";
+
 
 
 export type EditCommerceFormProps = {

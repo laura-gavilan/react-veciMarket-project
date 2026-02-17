@@ -1,13 +1,16 @@
 import { createContext, useEffect, useMemo, useState } from "react";
 import { getUserLocalStorage } from "../core/auth/auth.service";
-import type { ChildrenProps, UserProps } from "../types/types";
-import type { AuthContextProps } from './../types/types';
+import type { ChildrenProps, User } from "../types/types";
 
+export interface AuthContextType {
+    user: User | null;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
+};
 
-export const AuthContext = createContext<AuthContextProps | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: ChildrenProps) => {
-    const [user, setUser] = useState<UserProps | null>(null);
+    const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         const user = getUserLocalStorage();

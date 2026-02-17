@@ -1,6 +1,17 @@
 import { memo, useMemo } from "react";
 import { useTranslate } from "../translations/locales/useTranslate";
-import type { PageErrorProps } from "../types/types";
+
+
+export type PageErrorProps = {
+    title?: string;
+    message: string;
+    icon?: string;
+    onRetry?: () => void;
+    retryText?: string;
+    className?: string,
+    containerClassName?: string;
+    fullPage?: boolean;
+};
 
 
 export const PageError = memo<PageErrorProps>(({title, message, icon = "⚠️",onRetry,retryText,className = "",containerClassName = "",fullPage = false,}) => {

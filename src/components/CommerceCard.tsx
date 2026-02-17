@@ -1,13 +1,21 @@
 import { memo, useMemo } from "react";
 import { useTranslate } from "../translations/locales/useTranslate";
-import type { CommerceProps, SlugProps } from "../types/types";
+import type { Commerce } from "../types/types";
 
 
+export type SlugType = {
+    [key: string]: string;
+};
 
-export const CommerceCard = memo<CommerceProps>(({ commerce, onClick }) => {
+export type CommerceCardProps = {
+    commerce: Commerce;
+    onClick: () => void;
+};
+
+export const CommerceCard = memo<CommerceCardProps>(({ commerce, onClick }) => {
     const { t } = useTranslate();
 
-    const slugToKey: SlugProps = {
+    const slugToKey: SlugType = {
         "suelas": "suelas",
         "sabores-del-barrio": "neighborhood_flavors",
         "tinta-y-papel": "ink_and_paper",

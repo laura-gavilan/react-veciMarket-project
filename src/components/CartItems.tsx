@@ -1,25 +1,49 @@
 import { memo, useCallback } from "react";
 import { useTranslate } from "../translations/locales/useTranslate";
-import type { CartComponentsProps } from "../types/types";
+
+
+export type ProductType = {
+    _id: string;
+    name: string;
+    description?: string;
+    price: number;
+    images?: string[];
+}
+export type CartItemsType = {
+    productId: ProductType;
+    qty: number;
+    priceSnapshot?: number;
+    // price?: number;
+    name?: string,
+    id?: string,
+    _id?: string
+};
+
+export type CartComponentsProps = {
+    item: CartItemsType;
+    updateItem: (productId: string, qty: number) => Promise<void>;
+    removeItem: (productId: string) => Promise<void>;
+};
+
 
 export const CartItems = memo<CartComponentsProps>(({ item, updateItem, removeItem }) => {
     const { t } = useTranslate();
 
-    const decrease = useCallback(() => {
+    const decrease = useCallback((): void => {
         if (item.productId?._id) {
             updateItem(item.productId._id, item.qty - 1);
         }
     }, [item, updateItem]);
 
-    const increase = useCallback(() => {
+    const increase = useCallback((): void => {
         if (item.productId?._id) {
             updateItem(item.productId._id, item.qty + 1)
         };
     }, [item, updateItem]);
 
-    const handleRemove = useCallback(() : void => { //es necesario poner void?
+    const handleRemove = useCallback(async (): Promise<void> => { //es necesario poner void?
         if (item.productId?._id) {
-            removeItem(item.productId._id)
+            await removeItem(item.productId._id)
         };
     }, [item, removeItem]);
 

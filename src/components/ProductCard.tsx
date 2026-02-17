@@ -2,9 +2,26 @@ import { memo, useCallback } from "react";
 import { CartButton } from "./CartButton";
 import { FavoriteButton } from "./FavoriteButton";
 import { useTranslate } from "../translations/locales/useTranslate";
-import type { ProductCardProps } from "../types/types";
 
+export interface Product {
+    _id: string;
+    name: string;
+    description?: string;
+    price: number;
+    image?: string[];
+    images?: string[];
+    // newFavorites?: Product[];
+    category?: string;
+    commerceId?: string;
+};
 
+export type ProductCardProps = {
+    product: Product,
+    commerce?: { name: string };
+    onClick?: () => void;
+    isOwner?: boolean;
+    handleDelete?: (productId: string) => void;
+};
 
 export const ProductCard = memo<ProductCardProps>(({ product, commerce, onClick, isOwner, handleDelete }) => {
     let image: string | null = null;
@@ -21,7 +38,9 @@ export const ProductCard = memo<ProductCardProps>(({ product, commerce, onClick,
 
     const handleDeleteClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
-        handleDelete(product._id);
+        if (handleDelete) {
+            handleDelete(product._id);
+        }
     }, [handleDelete, product._id]);
 
 

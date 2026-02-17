@@ -1,9 +1,19 @@
 import { useCallback, useContext, useMemo } from "react";
 import { FavoritesContext } from "../../contexts/FavoritesContext";
-import type { Product, UseFavoritesProps  } from "../../types/types";
+import type { Product } from "../../components/ProductCard";
 
 
-export const useFavorites = (): UseFavoritesProps => {
+export type UseFavorites = {
+    favorites: Product[];
+    addFavorite: (product: Product) => Promise<void>;
+    deleteFavorite: (productId: string) => Promise<void>;
+    isFavorite: (productId: string) => boolean;
+    toggleFavorite: (product: Product) => void;
+    totalFavorites: number;
+};
+
+
+export const useFavorites = (): UseFavorites => {
     const context = useContext(FavoritesContext);
 
     if (!context) {

@@ -17,15 +17,26 @@ import {
 } from "../core/cart/cart.service.js";
 
 import { useAuth } from "../core/auth/useAuth.jsx";
-import { addOrderToLocalStorage } from "../core/orders/orders.service.js";
 import { useOrdersContext } from "./OrdersContext.jsx";
+import type { Cart, ChildrenProps, Orders } from "../types/types.js";
+import type { OrderDataType } from "../core/orders/useOrders.js";
+import type { ProductType } from "../components/CartItems.js";
 
-import type { Cart, CartContextValue, ChildrenProps, Product } from "../types/types.js";
+export interface CartContextType {
+    cart: Cart | null;
+    loading: boolean;
+    fetchCart: () => Promise<void>;
+    addItem: (product: ProductType, qty: number) => Promise<void>;
+    updateItem: (productId: string, qty: number) => Promise<void>;
+    removeItem: (productId: string) => Promise<void>;
+    checkout: () => Promise<Orders | null>;
+    clearCart: () => Promise<void>;
+};
 
 
-export const CartContext = createContext<CartContextValue | null>(null);
+export const CartContext = createContext<CartContextType | null>(null);
 
-export const useCart = (): CartContextValue => {
+export const useCart = (): CartContextType => {
     const context = useContext(CartContext);
     if (!context) throw new Error("useCart must be used within a CartProvider");
     return context;
@@ -35,11 +46,9 @@ export const CartProvider = ({ children }: ChildrenProps) => {
     const { user } = useAuth();
     const userId = user?._id;
     const { addOrder } = useOrdersContext();
-
     const [cart, setCart] = useState<Cart | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [toast, setToast] = useState<string | null>(null);
-
     const showToast = useCallback((message: string, duration: number = 3000) => {
         setToast(message);
         setTimeout(() => setToast(null), duration);
@@ -68,13 +77,14 @@ export const CartProvider = ({ children }: ChildrenProps) => {
                 return;
             }
 
-
+            //Logueado
             let carts: Cart[] = (await getCartsApi(userId)) || [];
             carts = carts.filter(cart => cart.userId === userId);
-            let activeCart: Cart = carts.find(cart => cart.status === "active") || (await createCartApi({ userId, status: "active" }));
+
+            let activeCart = carts.find(cart => cart.status === "active") || (await createCartApi({ userId, status: "active" })) as Cart;
             activeCart.items = activeCart.items?.filter(item => item?.productId?._id) || [];
 
-            
+
             const guestCart = getCartsFromLocalStorage("guest")?.[0];
             if (guestCart?.items?.length) {
                 for (const guestItem of guestCart.items) {
@@ -87,7 +97,7 @@ export const CartProvider = ({ children }: ChildrenProps) => {
                     } else {
                         activeCart.items.push({ ...guestItem });
                         await addItemToCartApi(activeCart._id, {
-                            productId: guestItem.productId._id,
+                            productId: guestItem.productId,
                             qty: guestItem.qty,
                             priceSnapshot: guestItem.priceSnapshot
                         });
@@ -109,20 +119,22 @@ export const CartProvider = ({ children }: ChildrenProps) => {
     }, [userId, storageKey]);
 
 
-    const updateCartState = useCallback((update: (prevCart: Cart) => Cart): Cart | undefined => {
-        let newCart: Cart | undefined;
-        setCart(prevCart => {
-            if (!prevCart) return prevCart;
-            newCart = update(prevCart);
-            addCartToLocalStorage(userId || "guest", newCart);
-            return newCart;
+    const updateCartState = useCallback((update: (prevCart: Cart) => Cart): Cart | null => {
+        let result: Cart | null = null;
+        setCart(prev => {
+            if (!prev) return prev;
+            const updated = update(prev);
+            result = updated;
+            addCartToLocalStorage(userId || "guest", updated);
+            return updated;
         });
-        return newCart;
+
+        return result;
     }, [userId]);
 
 
     const addItem = useCallback(
-        async (product: Product, qty: number = 1): Promise<void> => {
+        async (product: ProductType, qty: number = 1): Promise<void> => {
             if (!product?._id) return showToast("Producto inválido");
 
             const newCart = updateCartState(prevCart => {
@@ -135,7 +147,7 @@ export const CartProvider = ({ children }: ChildrenProps) => {
             try {
                 const cartId = newCart?._id || (userId ? undefined : "guest-cart");
                 if (userId && cartId) {
-                    await addItemToCartApi(cartId, { productId: product._id, qty, priceSnapshot: product.price });
+                    await addItemToCartApi(cartId, { productId: { ...product }, qty, priceSnapshot: product.price });
                 } else {
                     addOrUpdateItemInCartLocal("guest", "guest-cart", { productId: { ...product }, qty, priceSnapshot: product.price });
                 }
@@ -147,7 +159,7 @@ export const CartProvider = ({ children }: ChildrenProps) => {
         [userId, showToast, updateCartState]
     );
 
-    
+
     const updateItem = useCallback(
         async (productId: string, qty: number): Promise<void> => {
             const newCart = updateCartState(prevCart => ({
@@ -160,7 +172,7 @@ export const CartProvider = ({ children }: ChildrenProps) => {
                 if (userId && cartId) {
                     await updateCartItemApi(cartId, productId, { qty });
                 } else {
-                    addOrUpdateItemInCartLocal("guest", "guest-cart", { productId, qty });
+                    addOrUpdateItemInCartLocal("guest", "guest-cart", { productId: { _id: productId, name: "", price: 0 }, qty });
                 }
             } catch (error) {
                 console.error("Error al actualizar producto", error);
@@ -168,7 +180,7 @@ export const CartProvider = ({ children }: ChildrenProps) => {
             }
         }, [userId, showToast, updateCartState]);
 
-    
+
     const removeItem = useCallback(
         async (productId: string): Promise<void> => {
             const newCart = updateCartState(prevCart => ({
@@ -199,66 +211,35 @@ export const CartProvider = ({ children }: ChildrenProps) => {
     }, [cart, removeItem]);
 
 
-    const checkout = useCallback(async (): Promise<unknown> => {
+    const checkout = useCallback(async (): Promise<Orders | null> => {
         if (!cart || !cart.items.length || cart.status === "ordered") return null;
 
-        const newOrder = {
+        const newOrder: OrderDataType = {
             userId: user?._id || "guest",
-            items: cart.items.map(i => ({
-                productId: i.productId._id,
-                name: i.productId.name,
-                qty: i.qty,
-                price: i.priceSnapshot,
-            })),
+            items: cart.items
+                .filter(item => item.productId?._id)
+                .map(item => ({
+                    productId: item.productId._id!,
+                    qty: item.qty,
+                    priceSnapshot: item.priceSnapshot ?? item.productId.price ?? 0,
+                })),
+            notes: cart.notes || "",
             status: "pending",
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
         };
 
-        if (user?._id && addOrder) {
-            try {
-                const result = await addOrder(newOrder);
-                await clearCart();
-                const newCart = await createCartApi({ userId, status: "active" });
-                setCart(newCart);
-                addCartToLocalStorage(userId, newCart);
-                return result;
-            } catch (error) {
-                console.error("Error al crear la orden del usuario:", error);
-                return null;
-            }
-        };
-        
-        const emptyCart: Cart = {
-            _id: cart._id || "guest-cart",
-            items: [],
-            status: "ordered",
-            createdAt: cart.createdAt || new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        };
-
-        addOrderToLocalStorage(newOrder);
-        await clearCart();
-        setCart(emptyCart);
-        saveCartsInLocalStorage("guest", [emptyCart]);
-        showToast("✅ Compra realizada como invitado. Para ver el estado de tu pedido debes registrarte o iniciar sesión.");
-
-        return newOrder;
-
-    }, [cart, userId, addOrder, clearCart, user, showToast])
+        try {
+            const result = await addOrder(newOrder);
+            await clearCart();
+            return result;
+        } catch (e) {
+            console.error("Error checkout", e);
+            return null;
+        }
+    }, [cart, user, addOrder, clearCart]);
 
 
-    const contextValue = useMemo<CartContextValue>(() => ({
-        cart,
-        loading,
-        fetchCart,
-        addItem,
-        updateItem,
-        removeItem,
-        clearCart,
-        checkout
-    }), [cart, loading, fetchCart, addItem, updateItem, removeItem, clearCart, checkout]);
 
+    const contextValue = useMemo<CartContextType>(() => ({ cart, loading, fetchCart, addItem, updateItem, removeItem, clearCart, checkout }), [cart, loading, fetchCart, addItem, updateItem, removeItem, clearCart, checkout]);
     useEffect(() => {
         fetchCart();
     }, [fetchCart]);

@@ -1,8 +1,12 @@
 import { memo, useMemo } from "react";
 import { useTranslate } from "../translations/locales/useTranslate";
-import type { CommerceProps } from "../types/types";
+import type { Commerce } from "../types/types";
 
-export const CommerceHeader = memo<CommerceProps>(({ commerce }) => {
+export type CommerceHeaderType = {
+    commerce: Commerce;
+};
+
+export const CommerceHeader = memo<CommerceHeaderType>(({ commerce }) => {
     const { street, city, phone, email, schedule } = commerce?.address || {};
     const  { t} = useTranslate();
     
@@ -13,10 +17,10 @@ export const CommerceHeader = memo<CommerceProps>(({ commerce }) => {
         return img.startsWith("/")
             ? img
             : `/commerces/${img}`;
-    }, [commerce.image, commerce.images]);
+    }, [commerce.image, commerce.images?.length]);
 
     return (
-        <div className="flex flex-col bg-white rounded-3xl shadow-lg p-10 border items-center border-primary-light hover:shadow-2xl transition-all duration-300">
+        <div className="group flex flex-col bg-white rounded-3xl shadow-lg p-10 border items-center border-primary-light hover:shadow-2xl transition-all duration-300">
             {imageSrc && (
                 <img
                     src={imageSrc}
