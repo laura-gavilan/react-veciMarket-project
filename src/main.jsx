@@ -5,12 +5,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { StrictMode } from 'react';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import { CommerceProvider } from './core/commerce/CommerceContext.jsx';
-import { ProductProvider } from './core/products/ProductContext.jsx';
+import { ProductProvider } from './core/products/ProductContext.js';
 import { UserProvider } from './contexts/UserContext.jsx';
 import { FavoritesProvider } from './contexts/FavoritesContext.jsx';
 import { CartProvider } from './contexts/CartContext';
 import { OrdersProvider } from './contexts/OrdersContext.jsx';
-import { ErrorBoundary } from './components/ErrorBoundary.jsx';
+import { ErrorBoundary } from './components/ErrorBoundary.js';
 import { PageError } from './components/PageError.jsx';
 import "./translations/i18n.js";
 

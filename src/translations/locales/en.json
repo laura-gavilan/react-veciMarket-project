@@ -175,7 +175,6 @@
         "your_commerces": "Your shops",
         "name": "{{commerce}}",
         "loading": "Loading shops...",
-        "description": "{{description}}",
         "edit_commerce": "✏️ Edit shop",
         "create_product": "➕ Create product",
         "delete_commerce": "🗑️ Delete shop",
@@ -187,6 +186,28 @@
             "phone": "Phone",
             "email": "Email",
             "schedule": "Schedule"
+        },
+        "commerce_names": {
+            "suelas": "Suelas Shoes",
+            "neighborhood_flavors": "Neighborhood Flavors",
+            "ink_and_paper": "Ink & Paper",
+            "curls_studio": "Curls Studio",
+            "sport_zone": "Sport Zone",
+            "decor_home": "Decor Home",
+            "pet_world": "Pet World",
+            "home_appliances": "Home Appliances",
+            "golden_wheat_bakery": "Golden Wheat Bakery"
+        },
+        "commerce_descriptions": {
+            "suelas": "At Suelas you will find quality footwear for all ages. We combine design, comfort, and style in every pair, offering durable shoes with the perfect fit for everyday life.",
+            "neighborhood_flavors": "A local shop dedicated to fresh and handmade products. At Neighborhood Flavors you will find freshly baked bread, traditional cheeses, and olive oil from local producers, all with an authentic homemade taste.",
+            "ink_and_paper": "Ink & Paper is a modern stationery shop with classic charm. We offer office supplies and creative items for students, artists, and professionals who enjoy quality paper and writing tools.",
+            "curls_studio": "A modern hair salon specializing in hair care, personalized cuts, and beauty treatments. Our team combines style, technique, and high-quality products.",
+            "sport_zone": "Sport Zone is your trusted sports store. We offer equipment, footwear, and accessories for those who enjoy staying active, from beginners to experienced athletes.",
+            "decor_home": "A store specializing in details that transform your home. We offer a carefully curated selection of decorative items that combine style, warmth, and functionality.",
+            "pet_world": "Pet World is a store dedicated to caring for your pets. We offer food, accessories, and care products for dogs, cats, and other animals, ensuring their well-being and happiness.",
+            "home_appliances": "Home Appliances offers the latest gadgets and household appliances, combining technology and functionality for everyday life.",
+            "golden_wheat_bakery": "An artisan bakery with over 20 years in the neighborhood, famous for its freshly baked bread and traditional pastries."
         }
     },
     "form": {

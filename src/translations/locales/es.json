@@ -187,6 +187,28 @@
             "phone": "Teléfono",
             "email": "Email",
             "schedule": "Horario"
+        },
+        "commerce_names": {
+            "suelas": "Suelas",
+            "neighborhood_flavors": "Sabores del barrio",
+            "ink_and_paper": "Tinta & Papel",
+            "curls_studio": "Rizos",
+            "sport_zone": "SportZone",
+            "decor_home": "DecoraCasa",
+            "pet_world": "PetWorld",
+            "home_appliances": "Electro Hogar",
+            "golden_wheat_bakery": "Panadería El Trigo Dorado"
+        },
+        "commerce_descriptions": {
+            "suelas": "En Suelas encontrarás calzado de calidad para todas las edades. Combinamos diseño, comodidad y estilo en cada par, ofreciendo zapatos duraderos y con el mejor ajuste para tu día a día.",
+            "neighborhood_flavors": "Tienda local dedicada a productos frescos y artesanales. En Sabores del barrio encontrarás pan recién hecho, quesos tradicionales y aceite de oliva de productores locales, todo con el auténtico sabor de casa.",
+            "ink_and_paper": "Tinta & Papel es una papelería moderna con encanto clásico. Ofrecemos materiales de oficina y artículos creativos para estudiantes, artistas y profesionales que disfrutan del papel y la escritura de calidad.",
+            "curls_studio": "Peluquería moderna especializada en cuidado capilar, cortes personalizados y tratamientos de belleza. Nuestro equipo combina estilo, técnica y productos de alta calidad.",
+            "sport_zone": "SportZone es tu tienda deportiva de confianza. Ofrecemos equipamiento, calzado y accesorios para quienes disfrutan mantenerse activos, desde principiantes hasta atletas experimentados.",
+            "decor_home": "Tienda especializada en detalles que transforman tu hogar. Ofrecemos una cuidada selección de artículos decorativos que combinan estilo, calidez y funcionalidad.",
+            "pet_world": "PetWorld es una tienda dedicada a mimar a tus mascotas. Ofrecemos alimentos, accesorios y productos de cuidado para perros, gatos y otros animales, asegurando su bienestar y felicidad.",
+            "home_appliances": "Electro Hogar ofrece los últimos gadgets y electrodomésticos para tu hogar, combinando tecnología y funcionalidad para tu día a día.",
+            "golden_wheat_bakery": "Panadería artesanal con más de 20 años en el barrio, famosa por su pan recién horneado y sus dulces tradicionales."
         }
     },
     "form": {

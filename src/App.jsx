@@ -7,7 +7,7 @@ import { useAuth } from './core/auth/useAuth.jsx';
 import { PageSpinner } from './components/PageSpinner.jsx';
 import { AuthError } from './components/AuthError.jsx';
 import { PageError } from './components/PageError.jsx';
-import { ErrorBoundary } from './components/ErrorBoundary.jsx';
+import { ErrorBoundary } from './components/ErrorBoundary.js';
 import { lazy, Suspense } from 'react';
 
 
